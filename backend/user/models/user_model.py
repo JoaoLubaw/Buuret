@@ -48,7 +48,7 @@ class Ret(models.Model):
 
     def reret_count(self):
         return self.rerets.count()
-
+      
     def replies_count(self):
         return self.replies.count()
 
