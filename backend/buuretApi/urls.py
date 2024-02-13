@@ -16,13 +16,19 @@ Including another URLconf
 """
 import debug_toolbar
 from django.contrib import admin
-from django.urls import path, re_path, include
+from django.urls import path, include
 from rest_framework.authtoken.views import obtain_auth_token
+from rest_framework.routers import DefaultRouter
+from user.viewsets import UserViewSet
+from django.conf import settings
+from django.conf.urls.static import static
 
+router = DefaultRouter()
+router.register(r'users', UserViewSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('__debug__/', include(debug_toolbar.urls)),
-    re_path('users/', include('user.urls')),
-    path('api-token-auth/', obtain_auth_token, name='api_token_auth')
-]
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
+    path('', include(router.urls)),
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

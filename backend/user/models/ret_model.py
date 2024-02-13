@@ -1,5 +1,6 @@
 from django.db import models
-from user.models import User
+from .user_model import User
+
 
 class Ret(models.Model):
     id = models.AutoField(primary_key=True)
@@ -12,7 +13,7 @@ class Ret(models.Model):
     replies = models.ManyToManyField('self', symmetrical=False, related_name='replyto', blank=True)
     rerets = models.ManyToManyField(User, related_name='rerets', blank=True)
     isreret = models.BooleanField(default=False)
-    refbuu = models.ForeignKey('user.buu', on_delete=models.SET_NULL, null=True, blank=True, related_name='ret_responses')
+    refbuu = models.ForeignKey('user.Buu', on_delete=models.SET_NULL, null=True, blank=True, related_name='ret_responses')
 
     def likes_count(self):
         return self.likes.count()

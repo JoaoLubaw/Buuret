@@ -7,8 +7,8 @@ class User(models.Model):
     email = models.CharField(max_length=100, unique=True)
     password = models.CharField(max_length=20)
     description = models.TextField(max_length=100)
-    followers = models.ManyToManyField('self', symmetrical=False, related_name='following')
-    following = models.ManyToManyField('self', related_name='followers')
+    followers = models.ManyToManyField('self', symmetrical=False, related_name='followers_set')
+    following = models.ManyToManyField('self', related_name='following_set')
     background = models.ImageField(upload_to='users_backgrounds', blank=True, null=True)
     profile = models.ImageField(upload_to='users_profiles', blank=True, null=True)
 
@@ -29,3 +29,6 @@ class User(models.Model):
 
     def rets_count(self):
         return self.rets.count()
+
+    def buus_received_count(self):
+        return self.buus_received.count()
