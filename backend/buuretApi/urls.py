@@ -18,7 +18,8 @@ import debug_toolbar
 from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 
-import buser.views
+from buser.views import update
+
 from buser.viewsets import BuserViewSet, RetViewSet,BuuViewSet
 from django.urls import path, include
 
@@ -35,12 +36,13 @@ router = DefaultRouter()
 router.register(r'busers', BuserViewSet)
 router.register(r'rets', RetViewSet)
 router.register(r'buus', BuuViewSet, basename='buus')
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('__debug__/', include(debug_toolbar.urls)),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
-    path("update_server/", buser.views.update(), name="update"),
+    path("update_server/", update, name="update"),
     path('', include(router.urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
