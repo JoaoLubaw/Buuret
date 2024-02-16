@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from user.models import Ret
+from buser.models import Ret
 
 
 class RetSerializer(serializers.ModelSerializer):

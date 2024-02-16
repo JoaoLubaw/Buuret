@@ -2,9 +2,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from user.models import Buser, Buu, Ret
-from user.serializers import BuserSerializer, BuuSerializer, RetSerializer
-from user.permissions import IsUserOrReadOnly
+from buser.models import Buser
+from buser.serializers import BuserSerializer
+from buser.permissions import IsUserOrReadOnly
 
 class BuserViewSet(ModelViewSet):
     queryset = Buser.objects.all().order_by('id')
@@ -13,19 +13,12 @@ class BuserViewSet(ModelViewSet):
     def get_permissions(self):
         if self.action == 'create':
             return [AllowAny()]
-        elif self.action in ['update', 'partial_update']:
+        elif self.action in ['update', 'partial_update', 'destroy']:
             return [IsAuthenticated(), IsUserOrReadOnly()]
         else:
             return [IsAuthenticated()]
 
     def list(self, request, *args, **kwargs):
-        user_instance = request.user
-        serializer = self.get_serializer(user_instance)
-        buus_received = Buu.objects.filter(receiver=user_instance)
-        buus_serializer = BuuSerializer(buus_received, many=True)
-        rets = Ret.objects.filter(buu__in=buus_received)
-        rets_serializer = RetSerializer(rets, many=True)
-        serialized_data = serializer.data
-        serialized_data['buus'] = buus_serializer.data
-        serialized_data['rets'] = rets_serializer.data
-        return Response(serialized_data, status=status.HTTP_200_OK)
+        queryset = self.get_queryset()  # Obter todos os usuários
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

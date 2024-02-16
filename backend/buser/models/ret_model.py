@@ -13,7 +13,7 @@ class Ret(models.Model):
     replies = models.ManyToManyField('self', symmetrical=False, related_name='replyto', blank=True)
     rerets = models.ManyToManyField(Buser, related_name='rerets', blank=True)
     isreret = models.BooleanField(default=False)
-    refbuu = models.ForeignKey('Buser.Buu', on_delete=models.SET_NULL, null=True, blank=True, related_name='ret_responses')
+    refbuu = models.ForeignKey('buser.Buu', on_delete=models.SET_NULL, null=True, blank=True, related_name='ret_responses')
 
     def likes_count(self):
         return self.likes.count()

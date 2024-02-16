@@ -1,6 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
-from user.models import Ret
-from user.serializers import RetSerializer
+from buser.models import Ret
+from buser.serializers import RetSerializer
 
 class RetViewSet(ModelViewSet):
     serializer_class = RetSerializer

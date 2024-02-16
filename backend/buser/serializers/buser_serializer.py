@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from user.models import Buser
+from buser.models import Buser
 
 class BuserSerializer(serializers.ModelSerializer):
     followers_count = serializers.ReadOnlyField()
@@ -9,5 +9,5 @@ class BuserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Buser
-        fields = ['id', 'username', 'email', 'description', 'followers', 'following', 'background', 'profile',
+        fields = ['id', 'username', 'password', 'email', 'description', 'followers', 'following', 'background', 'profile',
                   'followers_count', 'following_count', 'rets_count', 'rets', 'buus_received', 'liked', 'buus_received_count']

@@ -7,19 +7,19 @@ class Buser(models.Model):
     email = models.CharField(max_length=100, unique=True)
     password = models.CharField(max_length=20)
     description = models.TextField(max_length=100)
-    followers = models.ManyToManyField('self', symmetrical=False, related_name='followers_set')
-    following = models.ManyToManyField('self', related_name='following_set')
-    background = models.ImageField(upload_to='users_backgrounds', blank=True, null=True)
-    profile = models.ImageField(upload_to='users_profiles', blank=True, null=True)
+    followers = models.ManyToManyField('self', symmetrical=False, related_name='followers_set', blank=True, default=[])
+    following = models.ManyToManyField('self', related_name='following_set', blank=True, default=[])
+    background = models.ImageField(upload_to='busers_backgrounds', blank=True, null=True)
+    profile = models.ImageField(upload_to='busers_profiles', blank=True, null=True)
 
-    def follow(self, user):
-        self.following.add(user)
+    def follow(self, buser):
+        self.following.add(buser)
 
-    def unfollow(self, user):
-        self.following.remove(user)
+    def unfollow(self, buser):
+        self.following.remove(buser)
 
-    def is_following(self, user):
-        return self.following.filter(pk=user.pk).exists()
+    def is_following(self, buser):
+        return self.following.filter(pk=buser.pk).exists()
 
     def followers_count(self):
         return self.followers.count()
