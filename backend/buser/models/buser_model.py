@@ -15,6 +15,7 @@ class Buser(models.Model):
     background = models.ImageField(upload_to='busers_backgrounds', blank=True, null=True)
     profile = models.ImageField(upload_to='busers_profiles', blank=True, null=True)
 
+
     def follow(self, buser):
         self.following.add(buser)
 
