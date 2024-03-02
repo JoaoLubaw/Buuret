@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-6eik@_i!*j5%b0gyr3b!a0-=_l)ej6+aav8)7$0!!im9^5wcj3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['joaolubaw.pythonanywhere.com', 'localhost']
+ALLOWED_HOSTS = ['joaolubaw.pythonanywhere.com', 'localhost', 'https://buuret.vercel.app']
 
 
 # Application definition
@@ -59,6 +59,10 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware"
+]
+
+CORS_ORIGIN_WHITELIST = [
+    'https://buuret.vercel.app',
 ]
 
 ROOT_URLCONF = "buuretApi.urls"

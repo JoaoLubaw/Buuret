@@ -9,5 +9,5 @@ class BuserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Buser
-        fields = ['id', 'username', 'password', 'email', 'description', 'followers', 'following', 'background', 'profile',
+        fields = ['id', 'username', 'password', 'email' 'birthdate', 'telephone', 'name',  'description', 'followers', 'following', 'background', 'profile',
                   'followers_count', 'following_count', 'rets_count', 'rets', 'buus_received', 'liked', 'buus_received_count']

@@ -7,4 +7,4 @@ class BuuSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Buu
-        fields = ['id', 'sender', 'receiver', 'content']
+        fields = ['id', 'sender', 'receiver', 'content', 'opened']
