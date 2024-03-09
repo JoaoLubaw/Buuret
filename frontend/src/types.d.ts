@@ -5,7 +5,7 @@ export declare type Buser = {
   password?: string
   email?: string
   birthdate?: string
-  phone?: string
+  telephone?: string | null
   description?: string
   followers?: Buser[]
   followers_count?: number

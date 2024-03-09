@@ -42,10 +42,13 @@ INSTALLED_APPS = [
     "rest_framework",
     'corsheaders',
     "django_extensions",
-    "buser",  # Alterei 'user' para 'buser'
+    "buser",
     'rest_framework_simplejwt',
     "debug_toolbar"
 ]
+
+AUTH_USER_MODEL = 'buser.Buser'
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
