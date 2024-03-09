@@ -18,18 +18,18 @@ import OpenEye from '../../assets/images/eye-open.svg'
 import CloseEye from '../../assets/images/eye-close.svg'
 import LogoNT from '../../assets/images/logoSemTexto.png'
 import Close from '../../assets/images/x.svg'
+import { useAuth } from '../../contexts/authContext'
 
 const Home = () => {
   const [showPassword, setShowPassword] = useState(false)
-  const [password, setPassword] = useState('')
   const [isOpen, setIsOpen] = useState(false)
+  const { loginBuser, registerBuser } = useAuth()
 
   const closeCreate = () => {
     setIsOpen(false)
   }
 
-  const togglePasswordVisibility = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
+  const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
   }
 
@@ -95,14 +95,14 @@ const Home = () => {
     }),
 
     onSubmit: (values) => {
-      console.log({
-        name: values.name,
-        usermame: values.username,
-        email: values.email,
-        telephone: values.telephone,
-        password: values.password,
-        birthdate: values.date
-      })
+      registerBuser(
+        values.name,
+        values.username,
+        values.email,
+        values.telephone,
+        values.password,
+        values.date
+      )
       closeCreate()
     }
   })
@@ -116,6 +116,16 @@ const Home = () => {
     return hasError
   }
 
+  const loginForm = useFormik({
+    initialValues: {
+      email: '',
+      password: ''
+    },
+    onSubmit: (values) => {
+      loginBuser(values.email, values.password)
+    }
+  })
+
   return (
     <>
       <HomeContainer>
@@ -126,16 +136,23 @@ const Home = () => {
             Se permita <span>ser</span> você.
           </h2>
 
-          <form className="login">
-            <input type="email" name="email" id="email" placeholder="Email" />
+          <form className="login" onSubmit={loginForm.handleSubmit}>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="Email"
+              value={loginForm.values.email}
+              onChange={loginForm.handleChange}
+            />
 
             <div className="passwordInput">
               <input
                 type={showPassword ? 'text' : 'password'}
                 name="password"
                 id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={loginForm.values.password}
+                onChange={loginForm.handleChange}
                 placeholder="Senha"
               />
               <button onClick={togglePasswordVisibility}>

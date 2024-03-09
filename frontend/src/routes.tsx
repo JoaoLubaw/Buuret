@@ -5,13 +5,19 @@ import Profile from './pages/Profile'
 import MyBuus from './pages/MyBuus'
 import RetDetail from './pages/RetDetail'
 
+const Private = ({ Item }: { Item: React.ComponentType }) => {
+  const signed = false
+
+  return signed ? <Item /> : <Home />
+}
+
 const Rotas = () => (
   <Routes>
-    <Route path="/" element={<Home />}></Route>
-    <Route path="/tl" element={<Timeline />}></Route>
-    <Route path="/profile" element={<Profile />}></Route>
-    <Route path="/buus" element={<MyBuus />}></Route>
-    <Route path="/ret" element={<RetDetail />}></Route>
+    <Route path="/" element={<Home />} />
+    <Route path="/home" element={<Private Item={Timeline} />} />
+    <Route path="/profile" element={<Private Item={Profile} />} />
+    <Route path="/buus" element={<Private Item={MyBuus} />} />
+    <Route path="/ret" element={<Private Item={RetDetail} />} />
   </Routes>
 )
 
