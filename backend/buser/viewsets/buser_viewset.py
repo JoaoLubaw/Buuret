@@ -17,8 +17,3 @@ class BuserViewSet(ModelViewSet):
             return [IsAuthenticated(), IsUserOrReadOnly()]
         else:
             return [IsAuthenticated()]
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()  # Obter todos os usuários
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
