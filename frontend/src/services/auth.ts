@@ -26,7 +26,7 @@ export const registerAPI = async (
   phone?: string
 ) => {
   try {
-    const data = await axios.post<Buser>(apiURL + '/busers/', {
+    const data = await axios.post<Buser>(apiURL + 'busers/', {
       email: email,
       password: password,
       name: name,
