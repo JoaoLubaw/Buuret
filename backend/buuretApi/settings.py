@@ -63,6 +63,7 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_WHITELIST = [
     'https://buuret.vercel.app',
+    'http://localhost:3000'
 ]
 
 ROOT_URLCONF = "buuretApi.urls"
