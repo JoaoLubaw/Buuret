@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     "debug_toolbar"
 ]
+
 AUTH_USER_MODEL = 'buser.Buser'
 
 
