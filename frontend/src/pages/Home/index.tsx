@@ -19,6 +19,7 @@ import CloseEye from '../../assets/images/eye-close.svg'
 import LogoNT from '../../assets/images/logoSemTexto.png'
 import Close from '../../assets/images/x.svg'
 import { useAuth } from '../../contexts/authContext'
+import { Buu, Ret } from '../../types'
 
 const Home = () => {
   const [showPassword, setShowPassword] = useState(false)
@@ -40,16 +41,21 @@ const Home = () => {
       email: '',
       password: '',
       password2: '',
-      date: '',
-      telephone: '',
-      terms: false
+      birthdate: '',
+      terms: false,
+      description: '',
+      buus_received: [] as Buu[],
+      liked: [] as Ret[],
+      rets: [] as Ret[],
+      telephone: ''
     },
     validationSchema: Yup.object({
       name: Yup.string()
         .min(5, 'O nome precisa ter ao menos 5 caracteres')
         .required('O campo é obrigatório'),
       username: Yup.string()
-        .min(5, 'O username precisa ter ao menos 5 caracteres')
+        .min(5, 'O username precisa ter entre 5-20 caracteres')
+        .max(20, 'O username precisa ter entre 5-20 caracteres')
         .required('As pessoas vão te achar por este username'),
       email: Yup.string()
         .email('E-mail inválido')
@@ -65,7 +71,7 @@ const Home = () => {
       password2: Yup.string()
         .oneOf([Yup.ref('password')], 'As senhas são diferentes')
         .required('Você precisa confirmar sua senha'),
-      date: Yup.string()
+      birthdate: Yup.string()
         .required('A data de nascimento é obrigatória')
         .test('age', 'Você deve ter pelo menos 18 anos', (value) => {
           const [day, month, year] = value.split('/')
@@ -96,13 +102,18 @@ const Home = () => {
 
     onSubmit: (values) => {
       registerBuser(
+        values.email,
+        values.password,
         values.name,
         values.username,
-        values.email,
-        values.telephone,
-        values.password,
-        values.date
+        values.birthdate,
+        values.buus_received,
+        values.description,
+        values.liked,
+        values.rets,
+        values.telephone
       )
+
       closeCreate()
     }
   })
@@ -118,11 +129,11 @@ const Home = () => {
 
   const loginForm = useFormik({
     initialValues: {
-      email: '',
+      username: '',
       password: ''
     },
     onSubmit: (values) => {
-      loginBuser(values.email, values.password)
+      loginBuser(values.username, values.password)
     }
   })
 
@@ -138,11 +149,11 @@ const Home = () => {
 
           <form className="login" onSubmit={loginForm.handleSubmit}>
             <input
-              type="email"
-              name="email"
-              id="email"
-              placeholder="Email"
-              value={loginForm.values.email}
+              type="username"
+              name="username"
+              id="username"
+              placeholder="Username"
+              value={loginForm.values.username}
               onChange={loginForm.handleChange}
             />
 
@@ -292,20 +303,21 @@ const Home = () => {
                 <div className="input-container">
                   <InputMask
                     type="text"
-                    name="date"
-                    id="date"
-                    className={checkInputHasError('date') ? 'error' : ''}
-                    value={newUserForm.values.date}
+                    name="birthdate"
+                    id="birthdate"
+                    className={checkInputHasError('birthdate') ? 'error' : ''}
+                    value={newUserForm.values.birthdate}
                     onChange={newUserForm.handleChange}
                     onBlur={newUserForm.handleBlur}
                     placeholder="Data de Nascimento"
                     mask="99/99/9999"
                   />
-                  {newUserForm.errors.date && newUserForm.touched.date && (
-                    <div className="error-message">
-                      {newUserForm.errors.date}
-                    </div>
-                  )}
+                  {newUserForm.errors.birthdate &&
+                    newUserForm.touched.birthdate && (
+                      <div className="error-message">
+                        {newUserForm.errors.birthdate}
+                      </div>
+                    )}
                 </div>
                 <div className="input-container">
                   <InputMask

@@ -1,13 +1,13 @@
 import axios from 'axios'
 import { handleError } from '../Helpers/ErrorHandle'
-import { Buser } from '../types'
+import { Buser, Buu, Ret } from '../types'
 
 const apiURL = 'http://joaolubaw.pythonanywhere.com/'
 
-export const loginAPI = async (email: string, password: string) => {
+export const loginAPI = async (username: string, password: string) => {
   try {
     const data = await axios.post<Buser>(apiURL + 'api/token/', {
-      email: email,
+      username: username,
       password: password
     })
 
@@ -23,7 +23,11 @@ export const registerAPI = async (
   name: string,
   username: string,
   birthdate: string,
-  phone?: string
+  buus_received: Buu[],
+  description: string,
+  liked: Ret[],
+  rets: Ret[],
+  telephone?: string
 ) => {
   try {
     const data = await axios.post<Buser>(apiURL + 'busers/', {
@@ -32,7 +36,11 @@ export const registerAPI = async (
       name: name,
       username: username,
       birthdate: birthdate,
-      phone: phone
+      buus_received: buus_received,
+      description: description,
+      liked: liked,
+      rets: rets,
+      telephone: telephone
     })
 
     return data

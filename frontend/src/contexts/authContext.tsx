@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react'
-import { Buser } from '../types'
+import { Buser, Buu, Ret } from '../types'
 import { useNavigate } from 'react-router-dom'
 import { loginAPI, registerAPI } from '../services/auth'
 import { toast } from 'react-toastify'
@@ -14,9 +14,13 @@ type BuserContextType = {
     name: string,
     username: string,
     birthdate: string,
-    phone?: string | undefined
+    buus_received: Buu[],
+    description: string,
+    liked: Ret[],
+    rets: Ret[],
+    telephone?: string | undefined
   ) => void
-  loginBuser: (email: string, password: string) => void
+  loginBuser: (username: string, password: string) => void
   logout: () => void
   isLoggedIn: () => boolean
 }
@@ -48,36 +52,54 @@ export const BuserProvider = ({ children }: Props) => {
     name: string,
     username: string,
     birthdate: string,
-    phone?: string
+    buus_received: Buu[],
+    description: string,
+    liked: Ret[],
+    rets: Ret[],
+    telephone?: string | undefined
   ) => {
-    await registerAPI(email, username, password, name, birthdate, phone).then(
-      (res) => {
-        if (res) {
-          if (res && res.data && res.data.token) {
-            localStorage.setItem('token', res.data.token)
-          }
-
-          const buserObj = {
-            username: res?.data.username,
-            email: res?.data.email,
-            birthdate: res?.data.birthdate,
-            name: res?.data.name,
-            phone: res?.data.phone || ''
-          }
-          localStorage.setItem('buser', JSON.stringify(buserObj))
-          if (res && res.data && res.data.token !== undefined) {
-            setToken(res.data.token)
-          }
-          setBuser(buserObj)
-          toast.success('Bem vindo!')
-          navigate('/home')
+    await registerAPI(
+      email,
+      password,
+      name,
+      username,
+      birthdate,
+      buus_received,
+      description,
+      liked,
+      rets,
+      telephone
+    ).then((res) => {
+      if (res) {
+        if (res && res.data && res.data.token) {
+          localStorage.setItem('token', res.data.token)
         }
+
+        const buserObj = {
+          email: res?.data.email,
+          password: res?.data.password,
+          name: res?.data.name,
+          username: res?.data.username,
+          birthdate: res?.data.birthdate,
+          buus_received: res?.data.buusReceived,
+          description: res?.data.description,
+          liked: res?.data.liked,
+          rets: res?.data.rets,
+          telephone: res?.data.telephone
+        }
+        localStorage.setItem('buser', JSON.stringify(buserObj))
+        if (res && res.data && res.data.token !== undefined) {
+          setToken(res.data.token)
+        }
+        setBuser(buserObj)
+        toast.success('Bem vindo!')
+        navigate('/home')
       }
-    )
+    })
   }
 
-  const loginBuser = async (email: string, password: string) => {
-    await loginAPI(email, password).then((res) => {
+  const loginBuser = async (username: string, password: string) => {
+    await loginAPI(username, password).then((res) => {
       if (res) {
         if (res && res.data && res.data.token) {
           localStorage.setItem('token', res.data.token)
@@ -85,7 +107,7 @@ export const BuserProvider = ({ children }: Props) => {
 
         const buserObj = {
           username: res?.data.username,
-          email: res?.data.email
+          password: res?.data.password
         }
         localStorage.setItem('buser', JSON.stringify(buserObj))
         if (res && res.data && res.data.token !== undefined) {
