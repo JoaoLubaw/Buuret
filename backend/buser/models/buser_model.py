@@ -9,7 +9,7 @@ class Buser(models.Model):
     birthdate = models.CharField(max_length=10)
     telephone = models.CharField(max_length=20, blank=True, null=True)
     password = models.CharField(max_length=20)
-    description = models.TextField(max_length=100)
+    description = models.TextField(max_length=100, blank=True)
     followers = models.ManyToManyField('self', symmetrical=False, related_name='followers_set', blank=True, default=[])
     following = models.ManyToManyField('self', related_name='following_set', blank=True, default=[])
     background = models.ImageField(upload_to='busers_backgrounds', blank=True, null=True)
