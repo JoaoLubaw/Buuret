@@ -42,7 +42,7 @@ const Home = () => {
       password: '',
       password2: '',
       birthdate: '',
-      teletelephone: '',
+      telephone: '',
       terms: false,
       rets: [],
       description: '',
@@ -92,7 +92,7 @@ const Home = () => {
           return age >= 18
         }),
 
-      teletelephone: Yup.string()
+      telephone: Yup.string()
         .min(15, 'Isso não parece um número válido')
         .max(15, 'Isso não parece um número válido'),
       terms: Yup.boolean()
@@ -102,15 +102,15 @@ const Home = () => {
 
     onSubmit: (values) => {
       registerBuser(
+        values.email,
+        values.password,
         values.name,
         values.username,
-        values.email,
-        values.teletelephone,
-        values.password,
         values.birthdate,
         values.buus_received,
         values.description,
-        values.liked
+        values.liked,
+        values.telephone
       )
 
       closeCreate()
@@ -321,21 +321,19 @@ const Home = () => {
                 <div className="input-container">
                   <InputMask
                     type="text"
-                    name="teletelephone"
-                    id="teletelephone"
-                    className={
-                      checkInputHasError('teletelephone') ? 'error' : ''
-                    }
-                    value={newUserForm.values.teletelephone}
+                    name="telephone"
+                    id="telephone"
+                    className={checkInputHasError('telephone') ? 'error' : ''}
+                    value={newUserForm.values.telephone}
                     onChange={newUserForm.handleChange}
                     onBlur={newUserForm.handleBlur}
                     placeholder="Telefone"
                     mask="(99) 99999-9999"
                   />
-                  {newUserForm.errors.teletelephone &&
-                    newUserForm.touched.teletelephone && (
+                  {newUserForm.errors.telephone &&
+                    newUserForm.touched.telephone && (
                       <div className="error-message">
-                        {newUserForm.errors.teletelephone}
+                        {newUserForm.errors.telephone}
                       </div>
                     )}
                 </div>

@@ -24,7 +24,7 @@ export const registerAPI = async (
   username: string,
   birthdate: string,
   buus_received: Buu[],
-  description: '',
+  description: string,
   liked: Ret[],
   telephone?: string
 ) => {
@@ -35,10 +35,10 @@ export const registerAPI = async (
       name: name,
       username: username,
       birthdate: birthdate,
-      telephone: telephone,
-      buus_received: [] as Buu[],
-      description: '',
-      liked: [] as Ret[]
+      buus_received: buus_received,
+      description: description,
+      liked: liked,
+      telephone: telephone
     })
 
     return data

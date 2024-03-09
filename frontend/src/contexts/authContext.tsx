@@ -54,13 +54,13 @@ export const BuserProvider = ({ children }: Props) => {
     buus_received: Buu[],
     description: string,
     liked: Ret[],
-    telephone?: string
+    telephone?: string | undefined
   ) => {
     await registerAPI(
       email,
-      username,
       password,
       name,
+      username,
       birthdate,
       buus_received,
       description,
@@ -73,11 +73,15 @@ export const BuserProvider = ({ children }: Props) => {
         }
 
         const buserObj = {
-          username: res?.data.username,
           email: res?.data.email,
-          birthdate: res?.data.birthdate,
+          password: res?.data.password,
           name: res?.data.name,
-          telephone: res?.data.telephone || ''
+          username: res?.data.username,
+          birthdate: res?.data.birthdate,
+          buus_received: res?.data.buusReceived,
+          description: res?.data.description,
+          liked: res?.data.liked,
+          telephone: res?.data.telephone
         }
         localStorage.setItem('buser', JSON.stringify(buserObj))
         if (res && res.data && res.data.token !== undefined) {
