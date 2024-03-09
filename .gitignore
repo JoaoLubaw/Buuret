@@ -1,0 +1,5 @@
+**.idea
+**/env
+**/__pycache__
+frontend/node_modules
+backend/db.sqlite3
