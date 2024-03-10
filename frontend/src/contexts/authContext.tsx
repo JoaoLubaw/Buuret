@@ -92,8 +92,8 @@ export const BuserProvider = ({ children }: Props) => {
           setToken(res.data.token)
         }
         setBuser(buserObj)
-        toast.success('Bem vindo!')
-        navigate('/home')
+        toast.success('Cadastro pronto! Agora é só entrar.')
+        navigate('/login')
       }
     })
   }
@@ -101,21 +101,19 @@ export const BuserProvider = ({ children }: Props) => {
   const loginBuser = async (username: string, password: string) => {
     await loginAPI(username, password).then((res) => {
       if (res) {
-        if (res && res.data && res.data.token) {
+        if (res.data && res.data.token) {
           localStorage.setItem('token', res.data.token)
+          setToken(res.data.token)
         }
 
         const buserObj = {
-          username: res?.data.username,
-          password: res?.data.password
+          username: res.data.username,
+          password: res.data.password
         }
         localStorage.setItem('buser', JSON.stringify(buserObj))
-        if (res && res.data && res.data.token !== undefined) {
-          setToken(res.data.token)
-        }
         setBuser(buserObj)
         toast.success('Bem vindo!')
-        navigate('/home')
+        navigate('/')
       }
     })
   }
@@ -129,7 +127,7 @@ export const BuserProvider = ({ children }: Props) => {
     localStorage.removeItem('buser')
     setBuser(null)
     setToken('')
-    navigate('/')
+    navigate('/login')
   }
 
   return (
