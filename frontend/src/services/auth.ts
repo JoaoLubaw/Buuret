@@ -2,7 +2,7 @@ import axios from 'axios'
 import { handleError } from '../Helpers/ErrorHandle'
 import { Buser, Buu, Ret } from '../types'
 
-const apiURL = 'http://joaolubaw.pythonanywhere.com/'
+const apiURL = 'https://joaolubaw.pythonanywhere.com/'
 
 export const loginAPI = async (username: string, password: string) => {
   try {
