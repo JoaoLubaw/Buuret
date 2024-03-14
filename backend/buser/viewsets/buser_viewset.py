@@ -7,8 +7,13 @@ from buser.serializers import BuserSerializer
 from buser.permissions import IsUserOrReadOnly
 
 class BuserViewSet(ModelViewSet):
-    queryset = Buser.objects.all().order_by('id')
     serializer_class = BuserSerializer
+
+    def get_queryset(self):
+        if self.action == 'list':
+            return Buser.objects.filter(id=self.request.user.id)
+        else:
+            return Buser.objects.all().order_by('id')
 
     def get_permissions(self):
         if self.action == 'create':
