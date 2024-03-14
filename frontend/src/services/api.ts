@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 const api = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://joaolubaw.pythonanywhere.com/'
+    baseUrl: 'https://joaolubaw.pythonanywhere.com/'
   }),
   endpoints: (builder) => ({
     getBusers: builder.query({

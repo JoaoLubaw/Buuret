@@ -31,7 +31,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 router = DefaultRouter()
-router.register(r'busers', BuserViewSet)
+router.register(r'busers', BuserViewSet, basename='buser')
 router.register(r'rets', RetViewSet)
 router.register(r'buus', BuuViewSet, basename='buus')
 

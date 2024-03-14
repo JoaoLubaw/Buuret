@@ -19,15 +19,6 @@ class Buser(AbstractUser):
             self.password = self.validate_password(self.password)
         super().save(*args, **kwargs)
 
-    def validate_password(self, value: str) -> str:
-        """
-        Hash value passed by user.
-
-        :param value: password of a user
-        :return: a hashed version of the password
-        """
-        return make_password(value)
-
     def follow(self, buser):
         self.following.add(buser)
 

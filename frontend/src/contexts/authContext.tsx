@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react'
 import { Buser, Buu, Ret } from '../types'
 import { useNavigate } from 'react-router-dom'
-import { loginAPI, registerAPI } from '../services/auth'
+import { fetchBuserData, loginAPI, registerAPI } from '../services/auth'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 
@@ -32,8 +32,8 @@ const BuserContext = createContext<BuserContextType>({} as BuserContextType)
 export const BuserProvider = ({ children }: Props) => {
   const navigate = useNavigate()
   const [token, setToken] = useState<string | null>(null)
-  const [buser, setBuser] = useState<Buser | null>(null)
   const [isReady, setIsReady] = useState(false)
+  const [buser, setBuser] = useState<Buser | null>(null)
 
   useEffect(() => {
     const buser = localStorage.getItem('buser')
@@ -91,32 +91,23 @@ export const BuserProvider = ({ children }: Props) => {
         if (res && res.data && res.data.token !== undefined) {
           setToken(res.data.token)
         }
-        setBuser(buserObj)
-        toast.success('Bem vindo!')
-        navigate('/home')
+        toast.success('Cadastro pronto! Agora é só entrar.')
+        navigate('/login')
       }
     })
   }
 
   const loginBuser = async (username: string, password: string) => {
     await loginAPI(username, password).then((res) => {
-      if (res) {
-        if (res && res.data && res.data.token) {
-          localStorage.setItem('token', res.data.token)
-        }
+      if (res && res.data) {
+        localStorage.setItem('token', res.data.access)
+        setToken(res.data.access)
 
-        const buserObj = {
-          username: res?.data.username,
-          password: res?.data.password
-        }
-        localStorage.setItem('buser', JSON.stringify(buserObj))
-        if (res && res.data && res.data.token !== undefined) {
-          setToken(res.data.token)
-        }
-        setBuser(buserObj)
-        toast.success('Bem vindo!')
-        navigate('/home')
+        fetchBuserData(res.data.access)
       }
+
+      toast.success('Bem vindo!')
+      navigate('/')
     })
   }
 
@@ -129,12 +120,19 @@ export const BuserProvider = ({ children }: Props) => {
     localStorage.removeItem('buser')
     setBuser(null)
     setToken('')
-    navigate('/')
+    navigate('/login')
   }
 
   return (
     <BuserContext.Provider
-      value={{ loginBuser, buser, token, logout, isLoggedIn, registerBuser }}
+      value={{
+        loginBuser,
+        buser,
+        token,
+        logout,
+        isLoggedIn,
+        registerBuser
+      }}
     >
       {isReady ? children : null}
     </BuserContext.Provider>

@@ -5,6 +5,7 @@ import Home from '../../assets/images/home.svg'
 import Ghost from '../../assets/images/ghost.svg'
 import Profile from '../../assets/images/user.svg'
 import Test from '../../assets/images/teste.jpg'
+import { useAuth } from '../../contexts/authContext'
 
 export type Props = {
   openPopMakeRet: () => void
@@ -12,6 +13,7 @@ export type Props = {
 }
 
 const LeftSidebar = ({ openPopMakeRet, page }: Props) => {
+  const { isLoggedIn, logout, buser } = useAuth()
   return (
     <LeftContainer>
       <img className="logo" src={Logo} alt="Buuret" />
@@ -50,7 +52,7 @@ const LeftSidebar = ({ openPopMakeRet, page }: Props) => {
             <span>@jaozinlubaw</span>
           </div>
         </div>
-        <button>...</button>
+        <button onClick={logout}>...</button>
       </div>
     </LeftContainer>
   )
