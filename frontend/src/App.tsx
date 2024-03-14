@@ -9,8 +9,8 @@ import { BuserProvider } from './contexts/authContext'
 function App() {
   return (
     <>
-      <ToastContainer />
       <BrowserRouter>
+        <ToastContainer />
         <BuserProvider>
           <GlobalCss />
           <Rotas />

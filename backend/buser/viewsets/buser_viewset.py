@@ -5,10 +5,16 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from buser.models import Buser
 from buser.serializers import BuserSerializer
 from buser.permissions import IsUserOrReadOnly
+from rest_framework import permissions
 
 class BuserViewSet(ModelViewSet):
-    queryset = Buser.objects.all().order_by('id')
     serializer_class = BuserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        token_user = self.request.user
+        return Buser.objects.filter(id=token_user.id)
+
 
     def get_permissions(self):
         if self.action == 'create':

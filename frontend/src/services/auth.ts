@@ -1,19 +1,38 @@
 import axios from 'axios'
 import { handleError } from '../Helpers/ErrorHandle'
-import { Buser, Buu, Ret } from '../types'
+import { Buser, Buu, LoginBuser, Ret } from '../types'
 
-const apiURL = 'http://joaolubaw.pythonanywhere.com/'
+const apiURL = 'https://joaolubaw.pythonanywhere.com/'
 
 export const loginAPI = async (username: string, password: string) => {
   try {
-    const data = await axios.post<Buser>(apiURL + 'api/token/', {
+    const data = await axios.post<LoginBuser>(apiURL + 'api/token/', {
       username: username,
       password: password
     })
 
+    console.log(data)
+
     return data
   } catch (error) {
     handleError(error)
+  }
+}
+
+export const fetchBuserData = async (token: string) => {
+  try {
+    const response = await axios.get(apiURL + 'busers/', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    const userData = response.data
+    console.log(userData)
+
+    localStorage.setItem('buser', JSON.stringify(userData))
+  } catch (error) {
+    console.error('Erro ao obter os dados do usuário:', error)
   }
 }
 

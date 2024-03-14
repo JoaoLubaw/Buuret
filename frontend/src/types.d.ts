@@ -1,10 +1,10 @@
 export declare type Buser = {
-  id?: number
-  username?: string
-  name?: string
-  password?: string
-  email?: string
-  birthdate?: string
+  id: number
+  username: string
+  name: string
+  password: string
+  email: string
+  birthdate: string
   telephone?: string | null
   description?: string
   followers?: Buser[]
@@ -18,6 +18,12 @@ export declare type Buser = {
   buusReceived?: Buus[]
   liked?: Ret[]
   token?: string
+}
+
+export declare type LoginBuser = {
+  username: string
+  password: string
+  access: string
 }
 
 export declare type Ret = {
