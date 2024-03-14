@@ -10,6 +10,9 @@ class BuserViewSet(ModelViewSet):
     queryset = Buser.objects.all().order_by('id')
     serializer_class = BuserSerializer
 
+    def get_queryset(self):
+        return Buser.objects.filter(id=self.request.user.id)
+
     def get_permissions(self):
         if self.action == 'create':
             return [AllowAny()]
