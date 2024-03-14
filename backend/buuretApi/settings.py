@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
 from pathlib import Path
+import random
 from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -21,8 +22,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-6eik@_i!*j5%b0gyr3b!a0-=_l)ej6+aav8)7$0!!im9^5wcj3"
+def generate_secret_key():
+    chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
+    return ''.join(random.SystemRandom().choice(chars) for _ in range(50))
 
+SECRET_KEY = generate_secret_key()
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -47,8 +51,7 @@ INSTALLED_APPS = [
     "debug_toolbar"
 ]
 
-AUTH_USER_MODEL = 'buser.Buser'
-
+AUTH_USER_MODEL = 'buser.buser'
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -149,7 +152,7 @@ REST_FRAMEWORK = {
 }
 
 JWT_AUTH = {
-    'JWT_SECRET_KEY': 'django-insecure-6eik@_i!*j5%b0gyr3b!a0-=_l)ej6+aav8)7$0!!im9^5wcj3',
+    'JWT_SECRET_KEY': SECRET_KEY,
     'JWT_ALGORITHM': 'HS256',
     'JWT_EXPIRATION_DELTA': timedelta(days=1),
 }

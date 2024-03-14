@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.hashers import make_password
+
 
 class Buser(AbstractUser):
     name = models.CharField(max_length=100)
@@ -11,6 +13,11 @@ class Buser(AbstractUser):
     background = models.ImageField(upload_to='busers_backgrounds', blank=True, null=True)
     profile = models.ImageField(upload_to='busers_profiles', blank=True, null=True)
     is_active = models.BooleanField(default=True)
+
+    def save(self, *args, **kwargs):
+        if self.password and not self.pk:
+            self.password = self.validate_password(self.password)
+        super().save(*args, **kwargs)
 
     def follow(self, buser):
         self.following.add(buser)
