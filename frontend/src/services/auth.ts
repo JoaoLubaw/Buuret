@@ -27,10 +27,30 @@ export const fetchBuserData = async (token: string) => {
       }
     })
 
-    const userData = response.data
-    console.log(userData)
+    const userData = response.data.results[0]
+    console.log('userData:', userData)
 
     localStorage.setItem('buser', JSON.stringify(userData))
+    localStorage.setItem('buserID', userData.id)
+
+    return userData.id // Retorna o ID do usuário
+  } catch (error) {
+    console.error('Erro ao obter os dados do usuário:', error)
+  }
+}
+
+export const getBuserData = async (token: string, userId: string) => {
+  try {
+    const response = await axios.get(apiURL + 'busers/' + userId + '/', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    const buserData = response.data
+    console.log('buserData:', buserData)
+
+    return buserData
   } catch (error) {
     console.error('Erro ao obter os dados do usuário:', error)
   }

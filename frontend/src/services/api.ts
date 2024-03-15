@@ -17,6 +17,13 @@ const api = createApi({
     getBuus: builder.query({
       query: () => 'buus/'
     }),
+    updateBuu: builder.mutation({
+      query: ({ id, newData }) => ({
+        url: `buus/${id}/`,
+        method: 'PUT',
+        body: newData
+      })
+    }),
     createUser: builder.mutation({
       query: (buser) => ({
         url: 'users/',
@@ -56,7 +63,8 @@ export const {
   useCreateUserMutation,
   useUpdateUserMutation,
   useSendBuuMutation,
-  useMakeRetMutation
+  useMakeRetMutation,
+  useUpdateBuuMutation
 } = api
 
 export default api

@@ -6,6 +6,7 @@ import Ghost from '../../assets/images/ghost.svg'
 import Profile from '../../assets/images/user.svg'
 import Test from '../../assets/images/teste.jpg'
 import { useAuth } from '../../contexts/authContext'
+import { useNavigate } from 'react-router-dom'
 
 export type Props = {
   openPopMakeRet: () => void
@@ -14,23 +15,25 @@ export type Props = {
 
 const LeftSidebar = ({ openPopMakeRet, page }: Props) => {
   const { isLoggedIn, logout, buser } = useAuth()
+  const navigate = useNavigate()
+
   return (
     <LeftContainer>
       <img className="logo" src={Logo} alt="Buuret" />
       <div className="buttons">
-        <button className="PageButton">
+        <button className="PageButton" onClick={() => navigate('/')}>
           <img src={Home} alt="Home" />
           <span className={page === 'timeline' ? 'active' : ''}>
             Página Inicial
           </span>
         </button>
 
-        <button className="PageButton">
+        <button className="PageButton" onClick={() => navigate('/buus')}>
           <img src={Ghost} alt="Fantasma" />
           <span className={page === 'buus' ? 'active' : ''}>Meus Buus</span>
         </button>
 
-        <button className="PageButton">
+        <button className="PageButton" onClick={() => navigate('/profile')}>
           <img src={Profile} alt="Perfil" />
           <span className={page === 'profile' ? 'active' : ''}>Perfil</span>
         </button>
@@ -46,10 +49,13 @@ const LeftSidebar = ({ openPopMakeRet, page }: Props) => {
 
       <div className="profile">
         <div className="profile-infos">
-          <img src={Test} alt="Imagem de perfil" />
+          <img
+            src={buser?.profile ? buser.profile : Test}
+            alt="Imagem de perfil"
+          />
           <div className="username">
-            <h4>João Lubaw</h4>
-            <span>@jaozinlubaw</span>
+            <h4>{buser?.name}</h4>
+            <span>@{buser?.username}</span>
           </div>
         </div>
         <button onClick={logout}>...</button>

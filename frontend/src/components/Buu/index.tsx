@@ -1,40 +1,43 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { BuuContainer } from './styles'
-
 import Ghost from '../../assets/images/ghost.svg'
 import Reply from '../../assets/images/reply.svg'
 
 type Props = {
   Response?: boolean
+  content?: string
+  openned?: boolean
+  handleOpen?: () => void
+  id?: number // Adicione a propriedade "id" para identificar exclusivamente cada Buu
 }
 
-const Buu = ({ Response }: Props) => {
-  const [openned, setOpenned] = useState(false)
+const Buu = ({ Response, content, openned = false, handleOpen, id }: Props) => {
+  const [opennedBuu, setOpennedBuu] = useState(openned)
 
-  const OpenBuu = () => {
-    setOpenned(true)
+  const toggleOpen = () => {
+    setOpennedBuu((prevOpenned) => !prevOpenned) // Alterna entre true e false
+    handleOpen && handleOpen() // Chama a função para atualizar o estado na API
   }
 
   return (
-    <BuuContainer className={Response ? 'Response' : ''} openned={openned}>
+    <BuuContainer className={Response ? 'Response' : ''} openned={opennedBuu}>
       <div
-        onClick={() => OpenBuu()}
-        className={openned ? 'oppened card' : 'toOpen card'}
+        onClick={toggleOpen}
+        className={opennedBuu ? 'oppened card' : 'toOpen card'}
       >
-        <span>
-          lore maodsa oahdfasodj a aifba fdabaibs da bndaisb ibaf aisbf iabs
-          fibas ifba iabs iabd
-        </span>
+        <span>{content}</span>
         <img
           src={Ghost}
-          className={openned ? 'oppenedIMG ghost' : 'ghost'}
+          className={opennedBuu ? 'oppenedIMG ghost' : 'ghost'}
           alt="Buu"
         />
       </div>
       {!Response && (
         <>
           <div
-            className={openned ? 'buttonWrapper' : 'toOpenButton buttonWrapper'}
+            className={
+              opennedBuu ? 'buttonWrapper' : 'toOpenButton buttonWrapper'
+            }
           >
             <button>
               <img src={Reply} alt="Responda" /> Responder em Ret

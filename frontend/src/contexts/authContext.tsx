@@ -1,7 +1,12 @@
 import React, { createContext, useEffect, useState } from 'react'
 import { Buser, Buu, Ret } from '../types'
 import { useNavigate } from 'react-router-dom'
-import { fetchBuserData, loginAPI, registerAPI } from '../services/auth'
+import {
+  fetchBuserData,
+  getBuserData,
+  loginAPI,
+  registerAPI
+} from '../services/auth'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 
@@ -81,7 +86,7 @@ export const BuserProvider = ({ children }: Props) => {
           name: res?.data.name,
           username: res?.data.username,
           birthdate: res?.data.birthdate,
-          buus_received: res?.data.buusReceived,
+          buus_received: res?.data.buus_received,
           description: res?.data.description,
           liked: res?.data.liked,
           rets: res?.data.rets,

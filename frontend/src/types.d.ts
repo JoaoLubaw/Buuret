@@ -15,7 +15,7 @@ export declare type Buser = {
   background?: string
   profile?: string
   rets?: Ret[]
-  buusReceived?: Buus[]
+  buus_received?: Buus[]
   liked?: Ret[]
   token?: string
 }

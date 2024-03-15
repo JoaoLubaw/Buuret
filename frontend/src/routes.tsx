@@ -18,7 +18,7 @@ const Rotas = () => (
       }
     />
     <Route
-      path="/profile"
+      path="/:username"
       element={
         <ProtectedRoute>
           <Profile />

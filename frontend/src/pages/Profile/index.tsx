@@ -6,12 +6,17 @@ import { ProfileContainer } from './styles'
 import Test from '../../assets/images/teste.jpg'
 import Buu from '../../assets/images/ghost.svg'
 import Ret from '../../components/Ret'
+import { useParams } from 'react-router-dom'
+import { useGetaBuserQuery } from '../../services/api'
 
 const Profile = () => {
   const [text, setText] = useState('')
+  const { data: buser, isLoading, isError } = useGetaBuserQuery(id)
   const textareaRef = React.createRef<HTMLTextAreaElement>()
 
   const handleChange = () => {
+    const { username } = useParams()
+
     const textarea = textareaRef.current
     if (textarea) {
       textarea.style.height = 'auto'

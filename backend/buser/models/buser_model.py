@@ -16,7 +16,7 @@ class Buser(AbstractUser):
 
     def save(self, *args, **kwargs):
         if self.password and not self.pk:
-            self.password = self.validate_password(self.password)
+            self.password = make_password(self.password)
         super().save(*args, **kwargs)
 
     def follow(self, buser):
