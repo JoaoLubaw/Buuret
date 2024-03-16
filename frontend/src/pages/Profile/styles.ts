@@ -64,6 +64,8 @@ export const ProfileContainer = styled.div`
 
       .description {
         margin-top: 8px;
+        padding-bottom: 4px;
+
         textarea {
           font-family: 'Roboto', Sans-Serif;
           font-size: 16px;

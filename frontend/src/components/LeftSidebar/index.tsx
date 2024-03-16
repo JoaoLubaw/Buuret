@@ -33,7 +33,10 @@ const LeftSidebar = ({ openPopMakeRet, page }: Props) => {
           <span className={page === 'buus' ? 'active' : ''}>Meus Buus</span>
         </button>
 
-        <button className="PageButton" onClick={() => navigate('/profile')}>
+        <button
+          className="PageButton"
+          onClick={() => navigate(`/${buser?.username}`)}
+        >
           <img src={Profile} alt="Perfil" />
           <span className={page === 'profile' ? 'active' : ''}>Perfil</span>
         </button>

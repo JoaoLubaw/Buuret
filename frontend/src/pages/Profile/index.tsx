@@ -1,81 +1,117 @@
-import React, { useState } from 'react'
-
+import React, { useState, useEffect } from 'react'
 import Layout from '../../components/Layout'
 import { ProfileContainer } from './styles'
-
 import Test from '../../assets/images/teste.jpg'
 import Buu from '../../assets/images/ghost.svg'
 import Ret from '../../components/Ret'
 import { useParams } from 'react-router-dom'
-import { useGetaBuserQuery } from '../../services/api'
+import { useGetaBuserQuery, useUpdateUserMutation } from '../../services/api'
+import { Buser } from '../../types'
 
 const Profile = () => {
+  const { username } = useParams()
+  const [edit, setEdit] = useState(false)
+  const loggedBuser = JSON.parse(localStorage.getItem('buser') || '{}') as Buser
+
+  const { data: buser, isLoading, error } = useGetaBuserQuery(username || '')
+
   const [text, setText] = useState('')
-  const { data: buser, isLoading, isError } = useGetaBuserQuery(id)
   const textareaRef = React.createRef<HTMLTextAreaElement>()
 
-  const handleChange = () => {
-    const { username } = useParams()
+  useEffect(() => {
+    setText(buser?.description || '')
+  }, [buser])
 
-    const textarea = textareaRef.current
-    if (textarea) {
-      textarea.style.height = 'auto'
-      textarea.style.height = textarea.scrollHeight + 'px'
-    }
+  const [updateBuser] = useUpdateUserMutation()
+
+  const handleSave = async () => {
+    await updateBuser({ username, description: text })
+    setEdit(false)
   }
+
+  const handleCancel = () => {
+    setText(buser?.description || '')
+    setEdit(false)
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setText(e.target.value)
+  }
+
   return (
     <Layout page="profile">
-      <ProfileContainer>
-        <header>
-          <h2>@jaozinlubaw</h2>
-        </header>
-        <div className="hero">
-          <img src={Test} alt="Tela de fundo" className="background" />
-          <div className="profile-info">
-            <img src={Test} alt="Avatar" className="profile" />
-            <div className="user-edit">
-              <div className="username">
-                <h2>jaozin lubaw</h2>
-                <span>@jaozinlubaw</span>
+      {buser && (
+        <ProfileContainer>
+          <header>
+            <h2>@{buser.username}</h2>
+          </header>
+          <div className="hero">
+            <img src={Test} alt="Tela de fundo" className="background" />
+            <div className="profile-info">
+              <img src={Test} alt="Avatar" className="profile" />
+              <div className="user-edit">
+                <div className="username">
+                  <h2>{buser.name}</h2>
+                  <span>@{buser.username}</span>
+                </div>
+
+                {buser.username === loggedBuser.username && (
+                  <>
+                    {!edit ? (
+                      <button onClick={() => setEdit(true)}>
+                        Editar Perfil
+                      </button>
+                    ) : (
+                      <div className="EditButtons">
+                        <button onClick={handleSave}>Salvar</button>
+                        <button onClick={handleCancel}>Cancelar</button>
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
-              <button>Editar Perfil</button>
+              <div className="description">
+                {!edit ? (
+                  <p>{buser.description}</p>
+                ) : (
+                  <textarea
+                    ref={textareaRef}
+                    onChange={handleChange}
+                    value={text}
+                  ></textarea>
+                )}
+              </div>
+              <div className="count">
+                <div className="followers">
+                  <h4>
+                    <span>{buser.followers_count}</span> seguidores
+                  </h4>
+                </div>
+                <div className="following">
+                  <h4>
+                    <span>{buser.following_count}</span> seguindo
+                  </h4>
+                </div>
+                <button>Seguir</button>
+              </div>
             </div>
-            <div className="description">
-              <textarea
-                ref={textareaRef}
-                value="Sou só mais uma variante | INPFT-T | 19y importante é viver né"
-              ></textarea>
-            </div>
-            <div className="count">
-              <div className="followers">
-                <h4>
-                  <span>1000</span> seguidores
-                </h4>
-              </div>
-              <div className="following">
-                <h4>
-                  <span>1000</span> seguindo
-                </h4>
-              </div>
-              <button>Seguir</button>
+
+            <form action="" className="buuSender">
+              <textarea></textarea>
+              <button>
+                Enviar Buu <img src={Buu} alt="Fantasma" />
+              </button>
+            </form>
+
+            <div className="footer">
+              <h3>Rets</h3>
             </div>
           </div>
-
-          <form action="" className="buuSender">
-            <textarea></textarea>
-            <button>
-              Enviar Buu <img src={Buu} alt="Fantasma" />
-            </button>
-          </form>
-
-          <div className="footer">
-            <h3>Rets</h3>
-          </div>
-        </div>
-        <Ret />
-        <Ret />
-        <Ret />
-      </ProfileContainer>
+          <Ret />
+          <Ret />
+          <Ret />
+        </ProfileContainer>
+      )}
     </Layout>
   )
 }

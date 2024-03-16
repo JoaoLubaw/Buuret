@@ -31,9 +31,8 @@ export const fetchBuserData = async (token: string) => {
     console.log('userData:', userData)
 
     localStorage.setItem('buser', JSON.stringify(userData))
-    localStorage.setItem('buserID', userData.id)
 
-    return userData.id // Retorna o ID do usuário
+    return userData.username // Retorna o ID do usuário
   } catch (error) {
     console.error('Erro ao obter os dados do usuário:', error)
   }

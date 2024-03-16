@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Buser, Buu } from '../../types'
+import { Buu } from '../../types'
 import { useGetaBuserQuery } from '../../services/api'
-import { useAuth } from '../../contexts/authContext'
 
 interface BuusState {
   buus: Buu[] | null
@@ -17,19 +16,17 @@ const buusSlice = createSlice({
   initialState,
   reducers: {
     setBuus: (state, action: PayloadAction<Buu[]>) => {
-      const { buser } = useAuth()
-      const buserID = buser?.id
-      const { data, isLoading, isError } = useGetaBuserQuery(buserID)
-
-      const getBuus = data.received_bus
-
       state.buus = action.payload
     }
   }
 })
 
-// Exporte as actions geradas pelo slice
 export const { setBuus } = buusSlice.actions
 
-// Exporte o reducer do slice
+export const fetchBuus = (username: string) => async (dispatch: any) => {
+  const { data } = await useGetaBuserQuery(username)
+  const buus = data?.buus_received || [] // Verifica se data é undefined e fornece um array vazio como padrão
+  dispatch(setBuus(buus))
+}
+
 export default buusSlice.reducer

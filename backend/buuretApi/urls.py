@@ -41,7 +41,7 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
-    path('busers/<str:username>/', BuserViewSet.as_view({'get': 'retrieve'}), name='buser-detail'),
+    path('busers/<str:username>/', BuserViewSet.as_view({'get': 'retrieve', 'put': 'update'}), name='buser-detail'),
     path("update_server/", views.update, name="update"),
     path('', include(router.urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,15 +1,27 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { Buser } from '../types'
 
 const api = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://joaolubaw.pythonanywhere.com/'
+    baseUrl: 'https://joaolubaw.pythonanywhere.com/',
+    prepareHeaders: (headers, { getState }) => {
+      // Recuperando o token do localStorage
+      const token = localStorage.getItem('token')
+
+      // Se houver um token, adicione-o ao cabeçalho de autorização
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`)
+      }
+
+      return headers
+    }
   }),
   endpoints: (builder) => ({
     getBusers: builder.query({
       query: () => 'busers/'
     }),
-    getaBuser: builder.query({
-      query: (id) => `busers/${id}/`
+    getaBuser: builder.query<Buser, string>({
+      query: (username) => `busers/${username}/`
     }),
     getRets: builder.query({
       query: () => 'rets/'
@@ -46,8 +58,8 @@ const api = createApi({
       })
     }),
     updateUser: builder.mutation({
-      query: ({ id, newData }) => ({
-        url: `busers/${id}/`,
+      query: ({ username, newData }) => ({
+        url: `busers/${username}/`,
         method: 'PUT',
         body: newData
       })

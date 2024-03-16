@@ -14,4 +14,6 @@ const store = configureStore({
 export default store
 
 // Defina o tipo RootState para tipagem
-export type RootReducer = ReturnType<typeof store.getState>
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
+export type AppThunk = ThunkAction<void, RootState, null, Action<string>>

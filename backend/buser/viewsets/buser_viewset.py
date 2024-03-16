@@ -14,18 +14,12 @@ class BuserViewSet(ModelViewSet):
     lookup_field = 'username'  # Especifica que o campo 'username' será usado para buscar na URL
 
     def get_queryset(self):
-        username = self.kwargs.get('username')  # Pega o username da URL, se existir
-        id = self.kwargs.get('id')  # Pega o id da URL, se existir
+        # Retorna todos os usuários para administradores
+        if self.request.user.is_staff:
+            return Buser.objects.all()
 
-        if username:  # Se username estiver presente na URL, filtra por username
-            return Buser.objects.filter(username=username)
-
-        if id:  # Se id estiver presente na URL, filtra por id
-            return Buser.objects.filter(id=id)
-
-        # Caso contrário, retorna o usuário associado ao token
-        token_user = self.request.user
-        return Buser.objects.filter(id=token_user.id)
+        # Retorna o usuário autenticado
+        return Buser.objects.filter(id=self.request.user.id)
 
     def get_permissions(self):
         if self.action == 'create':
@@ -34,3 +28,14 @@ class BuserViewSet(ModelViewSet):
             return [IsAuthenticated(), IsUserOrReadOnly()]
         else:
             return [IsAuthenticated()]
+
+    def get_object(self):
+        # Retorna o usuário autenticado ao solicitar o perfil
+        if self.action == 'retrieve':
+            return self.request.user
+
+        return super().get_object()
+
+    def perform_update(self, serializer):
+        # Atualiza o perfil do usuário autenticado
+        serializer.save()
