@@ -32,6 +32,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['joaolubaw.pythonanywhere.com', 'localhost', 'https://buuret.vercel.app', 'http://localhost:3000', '127.0.0.1']
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://web.postman.co'
+]
+
+CSRF_COOKIE_SECURE = False
 
 # Application definition
 

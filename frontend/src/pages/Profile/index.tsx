@@ -14,6 +14,7 @@ const Profile = () => {
   const loggedBuser = JSON.parse(localStorage.getItem('buser') || '{}') as Buser
 
   const { data: buser, isLoading, error } = useGetaBuserQuery(username || '')
+  console.log('param:' + username + 'data:' + JSON.stringify(buser))
 
   const [text, setText] = useState('')
   const textareaRef = React.createRef<HTMLTextAreaElement>()

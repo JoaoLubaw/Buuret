@@ -18,14 +18,6 @@ const Rotas = () => (
       }
     />
     <Route
-      path="/:username"
-      element={
-        <ProtectedRoute>
-          <Profile />
-        </ProtectedRoute>
-      }
-    />
-    <Route
       path="/buus"
       element={
         <ProtectedRoute>
@@ -38,6 +30,14 @@ const Rotas = () => (
       element={
         <ProtectedRoute>
           <RetDetail />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/:username"
+      element={
+        <ProtectedRoute>
+          <Profile />
         </ProtectedRoute>
       }
     />

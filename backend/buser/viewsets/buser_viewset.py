@@ -1,41 +1,55 @@
-from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from buser.models import Buser
 from buser.serializers import BuserSerializer
 from buser.permissions import IsUserOrReadOnly
-from rest_framework import permissions
 
 
 class BuserViewSet(ModelViewSet):
     serializer_class = BuserSerializer
-    permission_classes = [permissions.IsAuthenticated]
-    lookup_field = 'username'  # Especifica que o campo 'username' será usado para buscar na URL
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'username'
 
     def get_queryset(self):
-        # Retorna todos os usuários para administradores
-        if self.request.user.is_staff:
-            return Buser.objects.all()
-
-        # Retorna o usuário autenticado
-        return Buser.objects.filter(id=self.request.user.id)
+        username = self.kwargs.get('username', None)
+        if username is not None:
+            return Buser.objects.filter(username=username)
+        else:
+            if self.request.user.is_staff:
+                return Buser.objects.all()
+            else:
+                return Buser.objects.none()
 
     def get_permissions(self):
         if self.action == 'create':
             return [AllowAny()]
-        elif self.action in ['update', 'partial_update', 'destroy']:
+        elif self.action in ['update', 'partial_update', 'destroy', 'follow', 'unfollow']:
             return [IsAuthenticated(), IsUserOrReadOnly()]
         else:
             return [IsAuthenticated()]
 
-    def get_object(self):
-        # Retorna o usuário autenticado ao solicitar o perfil
-        if self.action == 'retrieve':
-            return self.request.user
-
-        return super().get_object()
-
     def perform_update(self, serializer):
-        # Atualiza o perfil do usuário autenticado
         serializer.save()
+
+    def follow(self, request, *args, **kwargs):
+        user_to_follow = self.get_object()
+        if user_to_follow != request.user:  # Verificar se não está seguindo a si mesmo
+            request.user.following.add(user_to_follow)
+            return Response({'message': f'Você está seguindo {user_to_follow.username} agora.'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'Você não pode seguir a si mesmo.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    def unfollow(self, request, *args, **kwargs):
+        user_to_unfollow = self.get_object()
+        request.user.following.remove(user_to_unfollow)
+        return Response({'message': f'Você não está mais seguindo {user_to_unfollow.username}.'}, status=status.HTTP_200_OK)
+
+    def suggested_users(self, request):
+        # Aqui você pode definir a lógica para buscar os usuários sugeridos
+        # Por exemplo, você pode buscar os usuários mais populares com base no número de seguidores
+        suggested_users = Buser.objects.annotate(followers_count=Count('followers')).order_by('-followers_count')[:10]
+
+        serializer = self.get_serializer(suggested_users, many=True)
+        return Response(serializer.data)
