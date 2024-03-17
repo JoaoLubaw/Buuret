@@ -18,6 +18,7 @@ export declare type Buser = {
   buus_received?: Buus[]
   liked?: Ret[]
   token?: string
+  is_active: boolean
 }
 
 export declare type LoginBuser = {

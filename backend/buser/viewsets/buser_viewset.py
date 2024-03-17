@@ -1,3 +1,4 @@
+import random
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -47,9 +48,14 @@ class BuserViewSet(ModelViewSet):
         return Response({'message': f'Você não está mais seguindo {user_to_unfollow.username}.'}, status=status.HTTP_200_OK)
 
     def suggested_users(self, request):
-        # Aqui você pode definir a lógica para buscar os usuários sugeridos
-        # Por exemplo, você pode buscar os usuários mais populares com base no número de seguidores
-        suggested_users = Buser.objects.annotate(followers_count=Count('followers')).order_by('-followers_count')[:10]
+        # Obter todos os usuários
+        all_users = Buser.objects.all()
+
+        # Embaralhar a lista de usuários
+        random.shuffle(all_users)
+
+        # Limitar a lista aos primeiros 10 usuários (ou menos, se houver menos de 10)
+        suggested_users = all_users[:3]
 
         serializer = self.get_serializer(suggested_users, many=True)
         return Response(serializer.data)

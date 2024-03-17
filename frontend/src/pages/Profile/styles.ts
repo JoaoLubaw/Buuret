@@ -18,9 +18,15 @@ export const ProfileContainer = styled.div`
 
   .hero {
     .background {
-      max-height: 10vw;
+      height: 10vw;
       width: 100%;
       object-fit: cover;
+    }
+
+    .change-background-button {
+      position: absolute; /* Adiciona posicionamento absoluto */
+      top: 10px; /* Define a distância do topo */
+      right: 10px; /* Define a distância da direita */
     }
 
     .profile-info {
@@ -28,9 +34,12 @@ export const ProfileContainer = styled.div`
 
       .profile {
         height: 8vw;
+        width: 8vw;
+        background-size: cover; /* faz a imagem preencher todo o contêiner */
         border-radius: 50%;
         margin-top: -4vw;
         border: 1px solid ${colors.white};
+        object-fit: cover;
       }
 
       .user-edit {
@@ -51,10 +60,26 @@ export const ProfileContainer = styled.div`
       }
 
       .username {
+        width: 80%;
+
         h4 {
+          font-family: 'Roboto', Sans-Serif;
           font-size: 20px;
           font-weight: bold;
+          width: 100%;
         }
+
+        textarea {
+          font-family: 'Roboto', Sans-Serif;
+          font-size: 20px;
+          font-weight: bold;
+          resize: none;
+          border: none;
+          width: 100%;
+          height: 24px;
+          margin-bottom: 0;
+        }
+
         span {
           font-size: 12px;
           font-weight: normal;
@@ -64,7 +89,9 @@ export const ProfileContainer = styled.div`
 
       .description {
         margin-top: 8px;
-        padding-bottom: 4px;
+        padding-bottom: 24px;
+        min-height: 64px; /* Defina uma altura mínima */
+        width: 100%;
 
         textarea {
           font-family: 'Roboto', Sans-Serif;
@@ -108,13 +135,14 @@ export const ProfileContainer = styled.div`
       align-items: center;
 
       textarea {
+        font-family: 'Roboto', Sans-Serif;
         width: 70%;
         font-size: 16px;
         border: 1px solid ${colors.blue};
         border-radius: 10px;
         height: 64px;
         resize: none;
-        padding: 4px;
+        padding: 6px;
       }
 
       button {

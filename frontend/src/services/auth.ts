@@ -19,28 +19,29 @@ export const loginAPI = async (username: string, password: string) => {
   }
 }
 
-export const fetchBuserData = async (token: string) => {
+export const fetchBuserData = async (token: string, username: string) => {
   try {
-    const response = await axios.get(apiURL + 'busers/', {
+    const response = await axios.get(apiURL + 'busers/' + username + '/', {
       headers: {
         Authorization: `Bearer ${token}`
       }
     })
 
-    const userData = response.data.results[0]
+    console.log('response:', response)
+
+    const userData = response.data
     console.log('userData:', userData)
 
     localStorage.setItem('buser', JSON.stringify(userData))
-
-    return userData.username // Retorna o ID do usuário
+    return userData.username // Retorna o user do usuário
   } catch (error) {
     console.error('Erro ao obter os dados do usuário:', error)
   }
 }
 
-export const getBuserData = async (token: string, userId: string) => {
+export const getBuserData = async (token: string, username: string) => {
   try {
-    const response = await axios.get(apiURL + 'busers/' + userId + '/', {
+    const response = await axios.get(apiURL + 'busers/' + username + '/', {
       headers: {
         Authorization: `Bearer ${token}`
       }

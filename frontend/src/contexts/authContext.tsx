@@ -108,7 +108,8 @@ export const BuserProvider = ({ children }: Props) => {
         localStorage.setItem('token', res.data.access)
         setToken(res.data.access)
 
-        fetchBuserData(res.data.access)
+        localStorage.setItem('BuserUsername', username)
+        fetchBuserData(res.data.access, username)
       }
 
       toast.success('Bem vindo!')

@@ -26,9 +26,11 @@ const MyBuus = () => {
     const fetchBuus = async () => {
       try {
         if (token) {
-          const userId = await fetchBuserData(token)
-          const buusData = await getBuserData(token, userId)
-          setBuus(buusData.buus_received)
+          const buserUsername = localStorage.getItem('BuserUsername')
+          if (buserUsername) {
+            const buusData = await getBuserData(token, buserUsername)
+            setBuus(buusData.buus_received)
+          }
         }
       } catch (error) {
         console.error('Erro ao obter os Buus:', error)

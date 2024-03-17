@@ -63,6 +63,19 @@ const api = createApi({
         method: 'PUT',
         body: newData
       })
+    }),
+    follow: builder.mutation({
+      query: (username) => ({
+        url: `users/${username}/follow/`,
+        method: 'POST'
+      })
+    }),
+
+    unfollow: builder.mutation({
+      query: (username) => ({
+        url: `users/${username}/unfollow/`,
+        method: 'POST'
+      })
     })
   })
 })
@@ -76,7 +89,9 @@ export const {
   useUpdateUserMutation,
   useSendBuuMutation,
   useMakeRetMutation,
-  useUpdateBuuMutation
+  useUpdateBuuMutation,
+  useFollowMutation,
+  useUnfollowMutation
 } = api
 
 export default api
