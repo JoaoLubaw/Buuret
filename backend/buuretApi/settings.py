@@ -74,6 +74,8 @@ CORS_ORIGIN_WHITELIST = [
     'https://buuret.vercel.app'
 ]
 
+CSRF_COOKIE_NAME = "csrftoken"
+
 CSRF_TRUSTED_ORIGINS = [
     'https://web.postman.co',
     'http://localhost:3000',

@@ -13,6 +13,7 @@ import {
   useUpdateUserMutation
 } from '../../services/api'
 import { Buser } from '../../types'
+import Cookies from 'js-cookie'
 
 const Profile = () => {
   const { username } = useParams()
@@ -137,7 +138,14 @@ const Profile = () => {
 
   const handleFollow = async () => {
     try {
-      await follow({ username: buser?.username }) // Chama a mutação para seguir o usuário
+      const csrftoken = Cookies.get('csrftoken') // Obtém o token CSRF do cookie
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken // Define o token CSRF no cabeçalho
+        }
+      }
+      await follow({ username: buser?.username }, config) // Chama a mutação para seguir o usuário
     } catch (error) {
       console.error('Erro ao seguir o usuário:', error)
     }
@@ -145,7 +153,9 @@ const Profile = () => {
 
   const handleUnfollow = async () => {
     try {
-      await unfollow({ username: buser?.username }) // Chama a mutação para parar de seguir o usuário
+      await unfollow({
+        username: buser?.username
+      }) // Chama a mutação para parar de seguir o usuário
     } catch (error) {
       console.error('Erro ao parar de seguir o usuário:', error)
     }
