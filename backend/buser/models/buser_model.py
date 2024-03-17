@@ -9,7 +9,7 @@ class Buser(AbstractUser):
     telephone = models.CharField(max_length=20, blank=True, null=True)
     description = models.TextField(max_length=100, blank=True)
     followers = models.ManyToManyField('self', symmetrical=False, related_name='followers_set', blank=True, default=[])
-    following = models.ManyToManyField('self', related_name='following_set', blank=True, default=[])
+    following = models.ManyToManyField('self', symmetrical=False, related_name='following_set', blank=True, default=[])
     background = models.ImageField(upload_to='busers_backgrounds', blank=True, null=True)
     profile = models.ImageField(upload_to='busers_profiles', blank=True, null=True)
     is_active = models.BooleanField(default=True)
@@ -21,9 +21,11 @@ class Buser(AbstractUser):
 
     def follow(self, buser):
         self.following.add(buser)
+        self.save()  # Salvar o objeto para persistir a mudança no banco de dados
 
     def unfollow(self, buser):
         self.following.remove(buser)
+        self.save()  # Salvar o objeto para persistir a mudança no banco de dados
 
     def is_following(self, buser):
         return self.following.filter(pk=buser.pk).exists()

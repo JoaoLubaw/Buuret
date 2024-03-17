@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { Buser } from '../types'
+import Cookies from 'js-cookie'
 
 const api = createApi({
   baseQuery: fetchBaseQuery({
@@ -7,10 +8,16 @@ const api = createApi({
     prepareHeaders: (headers, { getState }) => {
       // Recuperando o token do localStorage
       const token = localStorage.getItem('token')
+      const csrftoken = Cookies.get('csrftoken')
+
+      console.log('csrf:   ' + csrftoken)
 
       // Se houver um token, adicione-o ao cabeçalho de autorização
       if (token) {
         headers.set('Authorization', `Bearer ${token}`)
+      }
+      if (csrftoken) {
+        headers.set('X-CSRFToken', csrftoken)
       }
 
       return headers
@@ -66,14 +73,14 @@ const api = createApi({
     }),
     follow: builder.mutation({
       query: (username) => ({
-        url: `users/${username}/follow/`,
+        url: `busers/${username}/follow/`,
         method: 'POST'
       })
     }),
 
     unfollow: builder.mutation({
       query: (username) => ({
-        url: `users/${username}/unfollow/`,
+        url: `busers/${username}/unfollow/`,
         method: 'POST'
       })
     })
