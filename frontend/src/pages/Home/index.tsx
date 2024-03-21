@@ -20,11 +20,14 @@ import LogoNT from '../../assets/images/logoSemTexto.png'
 import Close from '../../assets/images/x.svg'
 import { useAuth } from '../../contexts/authContext'
 import { Buu, Ret } from '../../types'
+import { useNavigate } from 'react-router-dom'
 
 const Home = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const { loginBuser, registerBuser } = useAuth()
+  const { isLoggedIn } = useAuth()
+  const navigate = useNavigate()
 
   const closeCreate = () => {
     setIsOpen(false)
@@ -134,6 +137,9 @@ const Home = () => {
     },
     onSubmit: (values) => {
       loginBuser(values.username, values.password)
+      if (isLoggedIn() == true) {
+        navigate('/')
+      }
     }
   })
 

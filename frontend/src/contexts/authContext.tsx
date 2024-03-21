@@ -110,10 +110,9 @@ export const BuserProvider = ({ children }: Props) => {
 
         localStorage.setItem('BuserUsername', username)
         fetchBuserData(res.data.access, username)
+        toast.success('Bem vindo!')
+        navigate('/')
       }
-
-      toast.success('Bem vindo!')
-      navigate('/')
     })
   }
 

@@ -27,6 +27,11 @@ class BuserViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     lookup_field = 'username'
 
+    class BuserViewSet(ModelViewSet):
+        serializer_class = BuserSerializer
+        permission_classes = [IsAuthenticated]
+        lookup_field = 'username'
+
     def get_queryset(self):
         username = self.kwargs.get('username', None)
         if username is not None:
@@ -78,13 +83,14 @@ class BuserViewSet(ModelViewSet):
 
     def suggested_users(self, request):
         # Obter todos os usuários
-        all_users = Buser.objects.all()
+        all_users = list(Buser.objects.all())
 
         # Embaralhar a lista de usuários
         random.shuffle(all_users)
 
-        # Limitar a lista aos primeiros 10 usuários (ou menos, se houver menos de 10)
-        suggested_users = all_users[:3]
+        suggested_users = all_users[:4]
 
         serializer = self.get_serializer(suggested_users, many=True)
         return Response(serializer.data)
+
+

@@ -136,17 +136,23 @@ const Profile = () => {
     }
   }
 
-  const handleFollow = async () => {
+  const handleFollow = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
     try {
-      await follow(buser?.username) // Chama a mutação para seguir o usuário
+      await follow(buser?.username)
+      window.location.reload()
+      // Chama a mutação para seguir o usuário
     } catch (error) {
       console.error('Erro ao seguir o usuário:', error)
     }
   }
 
-  const handleUnfollow = async () => {
+  const handleUnfollow = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
     try {
-      await unfollow(buser?.username) // Chama a mutação para parar de seguir o usuário
+      await unfollow(buser?.username)
+      window.location.reload()
+      // Chama a mutação para parar de seguir o usuário
     } catch (error) {
       console.error('Erro ao parar de seguir o usuário:', error)
     }
@@ -278,11 +284,19 @@ const Profile = () => {
                 </div>
 
                 {loggedBuser &&
-                loggedBuser.following &&
-                loggedBuser.following.includes(buser) ? (
+                buser &&
+                loggedBuser.username !== buser.username &&
+                buser.followers &&
+                buser.followers.some(
+                  (follower) => follower === loggedBuser.id
+                ) ? (
                   <button onClick={handleUnfollow}>Parar de Seguir</button>
                 ) : (
-                  <button onClick={handleFollow}>Seguir</button>
+                  loggedBuser &&
+                  buser &&
+                  loggedBuser.username !== buser.username && (
+                    <button onClick={handleFollow}>Seguir</button>
+                  )
                 )}
               </div>
             </div>

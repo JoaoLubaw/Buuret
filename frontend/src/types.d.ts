@@ -7,11 +7,11 @@ export declare type Buser = {
   birthdate: string
   telephone?: string | null
   description?: string
-  followers?: Buser[]
+  followers?: number[]
   followers_count?: number
   following_count?: number
   buus_received_count?: number
-  following?: Buser[]
+  following?: number[]
   background?: string
   profile?: string
   rets?: Ret[]
