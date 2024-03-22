@@ -34,6 +34,7 @@ export const RightSidebarContainer = styled.aside`
     img {
       opacity: 50%;
       height: 24px;
+      width: 24px;
       margin-right: 8px;
     }
 
@@ -80,6 +81,8 @@ export const RightSidebarContainer = styled.aside`
 
       img {
         height: 56px;
+        width: 56px;
+        object-fit: cover;
         border-radius: 50%;
       }
 

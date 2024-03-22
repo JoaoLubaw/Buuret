@@ -25,16 +25,12 @@ const api = createApi({
   }),
   endpoints: (builder) => ({
     getBusers: builder.query({
-      query: () => 'busers/'
+      query: () => ({
+        url: 'busers/sugg/'
+      })
     }),
     getaBuser: builder.query<Buser, string>({
       query: (username) => `busers/${username}/`
-    }),
-    getRets: builder.query({
-      query: () => 'rets/'
-    }),
-    getBuus: builder.query({
-      query: () => 'buus/'
     }),
     updateBuu: builder.mutation({
       query: ({ id, newData }) => ({
@@ -90,8 +86,6 @@ const api = createApi({
 export const {
   useGetBusersQuery,
   useGetaBuserQuery,
-  useGetRetsQuery,
-  useGetBuusQuery,
   useCreateUserMutation,
   useUpdateUserMutation,
   useSendBuuMutation,

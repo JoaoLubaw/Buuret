@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from buser.models import Buser
 from buser.serializers import BuserSerializer
 from rest_framework import permissions
-import random
+from django.db.models import Q
 
 
 class IsFollowingOrReadOnly(permissions.BasePermission):
@@ -83,12 +83,12 @@ class BuserViewSet(ModelViewSet):
 
     def suggested_users(self, request):
         # Obter todos os usuários
-        all_users = list(Buser.objects.all())
+        logged_buser = request.user
 
-        # Embaralhar a lista de usuários
-        random.shuffle(all_users)
-
-        suggested_users = all_users[:4]
+        # Obter todos os usuários excluindo o usuário logado e os usuários seguidos pelo usuário logado
+        suggested_users = Buser.objects.exclude(
+            Q(id=logged_buser.id) | Q(followers=logged_buser)
+        ).order_by('?')[:4]  # Ordenar aleatoriamente e pegar os primeiros 4
 
         serializer = self.get_serializer(suggested_users, many=True)
         return Response(serializer.data)
