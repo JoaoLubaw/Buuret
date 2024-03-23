@@ -10,7 +10,6 @@ class Ret(models.Model):
     content = models.TextField(max_length=300)
     media = models.ImageField(upload_to='ret_media', blank=True, null=True)
     comret = models.BooleanField(default=False)
-    replies = models.ManyToManyField('self', symmetrical=False, related_name='replyto', blank=True)
     replyto = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='replies')
     rerets = models.ManyToManyField(Buser, related_name='rerets', blank=True)
     isreret = models.BooleanField(default=False)
