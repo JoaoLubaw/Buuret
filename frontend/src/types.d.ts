@@ -29,7 +29,7 @@ export declare type LoginBuser = {
 
 export declare type Ret = {
   id?: number
-  user: number | undefined
+  user: number | undefined | Buser
   likes?: Buser[] | null
   datetime?: Date
   content: string

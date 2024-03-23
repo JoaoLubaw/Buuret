@@ -8,6 +8,7 @@ import Comment from '../../assets/images/comment.svg'
 import Share from '../../assets/images/share.svg'
 import ReRet from '../../assets/images/retweet.svg'
 import Buu from '../Buu'
+import { Buser } from '../../types'
 
 type Props = {
   isReret?: boolean
@@ -15,6 +16,8 @@ type Props = {
   Media?: boolean
   Detail?: boolean
   ResponseVisualization?: boolean
+  content: string
+  buser: Buser | undefined | number
 }
 
 const Ret = ({
@@ -22,14 +25,16 @@ const Ret = ({
   Media,
   RefBuu,
   Detail,
-  ResponseVisualization
+  ResponseVisualization,
+  content,
+  buser
 }: Props) => {
   return (
     <RetContainer className={Detail ? 'detail' : ''}>
       <img src={Test} alt="Imagem de Perfil" className="avatar" />
       <div className="content">
         <div className="header">
-          <h3 className="name">João Lubaw</h3>
+          <h3 className="name">{buser?.name}</h3>
           <span className="username">@joaolubaw</span>
           <span className="divisor">-</span>
           <span className="time">1 min</span>
@@ -42,11 +47,7 @@ const Ret = ({
               <Buu Response />
             </div>
           )}
-          Esse projeto está sendo feito de uma maneira que akskadks kaskdaks
-          dkak sdka dkaks dkad kaks dkadk aksd kak asdk jad hauifg ajdgfjasd
-          bfasgf ja bfvuav fbvauvfd ab Esse projeto está sendo feito de uma
-          maneira que akskadks kaskdaks dkak sdka dkaks dkad kaks dkadk aksd kak
-          asdk jad hauifg ajdgfjasd bfasgf ja bfvuav fbvauvfd ab
+          {content}
         </div>
 
         {Media && <img className="media" src={Test} alt="Imagem" />}

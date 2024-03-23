@@ -4,6 +4,7 @@ import { MakeRetContainer } from './style'
 import React, { ReactEventHandler, useState } from 'react'
 import { useMakeRetMutation } from '../../services/api'
 import { Buser, Buu, Ret } from '../../types'
+import { toast } from 'react-toastify'
 
 type Props = {
   Pop?: boolean
@@ -27,24 +28,32 @@ const MakeRet = ({ Pop, Detail }: Props) => {
     refbuu: null
   })
 
-  const handleRetIT = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault()
-    setRetToPost({
-      ...retToPost,
-      content: text
-    })
-    console.log(retToPost)
-
-    makeRet(retToPost)
-  }
-
-  const handleChange = () => {
+  const handleChange = (e: {
+    target: { value: React.SetStateAction<string> }
+  }) => {
     const textarea = textareaRef.current
+
+    const newText = e.target.value.toString()
+    setText(e.target.value)
+
+    const updatedRet = { ...retToPost, content: newText }
+    setRetToPost(updatedRet)
+
     if (textarea) {
       textarea.style.height = 'auto'
       textarea.style.height = textarea.scrollHeight + 'px'
     }
   }
+
+  const handleRetIT = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    makeRet(retToPost)
+    setText('')
+
+    console.log(retToPost)
+    toast.success('Ret feito!')
+  }
+
   return (
     <MakeRetContainer>
       <img src={Test} alt="Imagem de Perfil" />
@@ -52,12 +61,9 @@ const MakeRet = ({ Pop, Detail }: Props) => {
       <form>
         <textarea
           ref={textareaRef}
-          value={text}
           className={Pop ? 'Pop' : ''}
-          onChange={(e) => {
-            setText(e.target.value)
-            handleChange()
-          }}
+          onChange={(e) => handleChange(e)}
+          value={text}
           placeholder={
             Detail ? 'O que você quer responder?' : 'No que você está pensando?'
           }

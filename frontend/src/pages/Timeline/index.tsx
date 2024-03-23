@@ -16,7 +16,10 @@ const Timeline = () => {
           <h2>Página Inicial</h2>
         </header>
         <MakeRet />
-        {data && data.map((ret: RetType) => <Ret key={ret.id} />)}
+        {data &&
+          data.map((ret: RetType) => (
+            <Ret buser={ret.user} content={ret.content} key={ret.id} />
+          ))}
       </TimelineContainer>
     </Layout>
   )
