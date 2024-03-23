@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Layout from '../../components/Layout'
 import { ProfileContainer } from './styles'
-import Test from '../../assets/images/teste.jpg'
+import DefaultProfile from '../../assets/images/DefaultProfile.jpg'
+import DefaultBackground from '../../assets/images/DefaultBackgound.jpg'
 import Buu from '../../assets/images/ghost.svg'
 import Ret from '../../components/Ret'
 import { useParams } from 'react-router-dom'
@@ -13,7 +14,6 @@ import {
   useUpdateUserMutation
 } from '../../services/api'
 import { Buser } from '../../types'
-import Cookies from 'js-cookie'
 
 const Profile = () => {
   const { username } = useParams()
@@ -175,7 +175,11 @@ const Profile = () => {
                     className="background"
                   />
                 ) : (
-                  <img src={Test} alt="background" className="background" />
+                  <img
+                    src={DefaultBackground}
+                    alt="background"
+                    className="background"
+                  />
                 )}
                 <input
                   type="file"
@@ -193,7 +197,11 @@ const Profile = () => {
                     className="background"
                   />
                 ) : (
-                  <img src={Test} alt="Tela de fundo" className="background" />
+                  <img
+                    src={DefaultBackground}
+                    alt="Tela de fundo"
+                    className="background"
+                  />
                 )}
               </>
             )}
@@ -204,7 +212,11 @@ const Profile = () => {
                   {buser.profile ? (
                     <img src={buser.profile} alt="Avatar" className="profile" />
                   ) : (
-                    <img src={Test} alt="Avatar" className="profile" />
+                    <img
+                      src={DefaultProfile}
+                      alt="Avatar"
+                      className="profile"
+                    />
                   )}
                   <input
                     type="file"
@@ -217,7 +229,11 @@ const Profile = () => {
                   {buser.profile ? (
                     <img src={buser.profile} alt="Avatar" className="profile" />
                   ) : (
-                    <img src={Test} alt="Avatar" className="profile" />
+                    <img
+                      src={DefaultProfile}
+                      alt="Avatar"
+                      className="profile"
+                    />
                   )}
                 </>
               )}

@@ -4,7 +4,7 @@ import Logo from '../../assets/images/logoComTexto.png'
 import Home from '../../assets/images/home.svg'
 import Ghost from '../../assets/images/ghost.svg'
 import Profile from '../../assets/images/user.svg'
-import Test from '../../assets/images/teste.jpg'
+import DefaultProfile from '../../assets/images/DefaultProfile.jpg'
 import { useAuth } from '../../contexts/authContext'
 import { useNavigate } from 'react-router-dom'
 
@@ -53,7 +53,7 @@ const LeftSidebar = ({ openPopMakeRet, page }: Props) => {
       <div className="profile">
         <div className="profile-infos">
           <img
-            src={buser?.profile ? buser.profile : Test}
+            src={buser?.profile ? buser.profile : DefaultProfile}
             alt="Imagem de perfil"
           />
           <div className="username">

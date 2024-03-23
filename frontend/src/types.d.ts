@@ -28,18 +28,18 @@ export declare type LoginBuser = {
 }
 
 export declare type Ret = {
-  id: number
-  user: Buser
-  likes?: Buser[]
-  datetime: Date
+  id?: number
+  user: number | undefined
+  likes?: Buser[] | null
+  datetime?: Date
   content: string
-  media?: string
-  comret?: boolean
-  replies?: Ret[]
-  replyto?: Ret
-  rerets?: Buser[]
+  media?: string | null
+  comret?: boolean | null
+  replies?: Ret[] | null
+  replyto?: Ret | null
+  rerets?: Buser[] | null
   isreret?: boolean
-  refbuu?: Buu
+  refbuu?: Buu | null
 }
 
 export declare type Buu = {

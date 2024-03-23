@@ -1,7 +1,9 @@
 import Test from '../../assets/images/teste.jpg'
 import Img from '../../assets/images/Img.svg'
 import { MakeRetContainer } from './style'
-import React, { useState } from 'react'
+import React, { ReactEventHandler, useState } from 'react'
+import { useMakeRetMutation } from '../../services/api'
+import { Buser, Buu, Ret } from '../../types'
 
 type Props = {
   Pop?: boolean
@@ -9,8 +11,32 @@ type Props = {
 }
 
 const MakeRet = ({ Pop, Detail }: Props) => {
+  const loggedBuser = JSON.parse(localStorage.getItem('buser') || '{}') as Buser
+  const [makeRet, { isLoading, isError, error }] = useMakeRetMutation()
   const [text, setText] = useState('')
   const textareaRef = React.createRef<HTMLTextAreaElement>()
+  const [retToPost, setRetToPost] = useState<Ret>({
+    user: loggedBuser?.id,
+    likes: [],
+    content: '',
+    media: null,
+    comret: false,
+    replies: [],
+    rerets: [],
+    isreret: false,
+    refbuu: null
+  })
+
+  const handleRetIT = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    setRetToPost({
+      ...retToPost,
+      content: text
+    })
+    console.log(retToPost)
+
+    makeRet(retToPost)
+  }
 
   const handleChange = () => {
     const textarea = textareaRef.current
@@ -39,7 +65,7 @@ const MakeRet = ({ Pop, Detail }: Props) => {
 
         <div className="footer">
           <img src={Img} alt="Importar Imagens" />
-          <button>Ret-it</button>
+          <button onClick={handleRetIT}>Ret-it</button>
         </div>
       </form>
     </MakeRetContainer>

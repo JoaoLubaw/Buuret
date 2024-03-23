@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { Buser } from '../types'
+import { Buser, Ret } from '../types'
 import Cookies from 'js-cookie'
 
 const api = createApi({
@@ -28,6 +28,9 @@ const api = createApi({
       query: () => ({
         url: 'busers/sugg/'
       })
+    }),
+    getTimeline: builder.query<Ret[], string>({
+      query: () => `rets/timeline/`
     }),
     getaBuser: builder.query<Buser, string>({
       query: (username) => `busers/${username}/`
@@ -73,7 +76,6 @@ const api = createApi({
         method: 'POST'
       })
     }),
-
     unfollow: builder.mutation({
       query: (username) => ({
         url: `busers/${username}/unfollow/`,
@@ -92,6 +94,7 @@ export const {
   useMakeRetMutation,
   useUpdateBuuMutation,
   useFollowMutation,
+  useGetTimelineQuery,
   useUnfollowMutation
 } = api
 

@@ -3,8 +3,12 @@ import Ret from '../../components/Ret'
 import Layout from '../../components/Layout'
 
 import { TimelineContainer } from './styles'
+import { useGetTimelineQuery } from '../../services/api'
+import { Ret as RetType } from '../../types'
 
 const Timeline = () => {
+  const { data, isLoading, error } = useGetTimelineQuery('')
+
   return (
     <Layout page="timeline">
       <TimelineContainer className="timeline">
@@ -12,12 +16,7 @@ const Timeline = () => {
           <h2>Página Inicial</h2>
         </header>
         <MakeRet />
-        <Ret />
-        <Ret Media />
-        <Ret isReret />
-        <Ret RefBuu />
-        <Ret />
-        <Ret />
+        {data && data.map((ret: RetType) => <Ret key={ret.id} />)}
       </TimelineContainer>
     </Layout>
   )

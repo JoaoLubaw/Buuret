@@ -58,6 +58,7 @@ export const RightSidebarContainer = styled.aside`
     justify-content: space-between;
     border-top: 1px solid RGB(1, 1, 1, 0.05);
     margin-bottom: 6px;
+    cursor: pointer;
 
     button {
       background:none;
