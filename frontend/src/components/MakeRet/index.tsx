@@ -17,7 +17,7 @@ const MakeRet = ({ Pop, Detail }: Props) => {
   const [text, setText] = useState('')
   const textareaRef = React.createRef<HTMLTextAreaElement>()
   const [retToPost, setRetToPost] = useState<Ret>({
-    user: loggedBuser?.id,
+    user: loggedBuser,
     likes: [],
     content: '',
     media: null,

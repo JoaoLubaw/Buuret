@@ -17,7 +17,7 @@ type Props = {
   Detail?: boolean
   ResponseVisualization?: boolean
   content: string
-  buser: Buser | undefined | number
+  buser: Buser | undefined
 }
 
 const Ret = ({
