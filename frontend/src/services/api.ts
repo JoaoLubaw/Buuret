@@ -29,6 +29,11 @@ const api = createApi({
         url: 'busers/sugg/'
       })
     }),
+    getBuus: builder.query({
+      query: () => ({
+        url: 'buus/'
+      })
+    }),
     getTimeline: builder.query<Ret[], string>({
       query: () => `rets/timeline/`
     }),
@@ -95,7 +100,8 @@ export const {
   useUpdateBuuMutation,
   useFollowMutation,
   useGetTimelineQuery,
-  useUnfollowMutation
+  useUnfollowMutation,
+  useGetBuusQuery
 } = api
 
 export default api

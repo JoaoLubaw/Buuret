@@ -10,6 +10,8 @@ export const RetContainer = styled.div`
 
   .avatar {
     height: 48px;
+    width: 48px;
+    object-fit: cover;
     border-radius: 50%;
   }
 
@@ -41,6 +43,7 @@ export const RetContainer = styled.div`
 
   .content {
     margin-left: 8px;
+    width: 80%;
   }
 
   .buuResponse {

@@ -6,8 +6,8 @@ class BuserSerializer(serializers.ModelSerializer):
     following_count = serializers.ReadOnlyField()
     buus_received_count = serializers.ReadOnlyField()
     rets_count = serializers.ReadOnlyField()
-    rets = 'RetSerializer'  # Reference changed to string
-    buus_received = 'BuuSerializer'  # Reference changed to string
+    rets = 'RetSerializer'
+    buus_received = 'BuuSerializer'
     following = serializers.SerializerMethodField()
     followers = serializers.SerializerMethodField()
 

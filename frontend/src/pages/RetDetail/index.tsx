@@ -15,10 +15,8 @@ const RetDetail = () => {
           </button>
           <h2>Ret</h2>
         </header>
-        <Ret Detail />
+        {/*<Ret Detail />*/}
         <MakeRet Detail />
-        <Ret />
-        <Ret />
       </RetDetailContainer>
     </Layout>
   )

@@ -5,6 +5,7 @@ import { MyBuusContainer } from './styles'
 import Buu from '../../components/Buu'
 import { fetchBuserData, getBuserData } from '../../services/auth'
 import { useUpdateBuuMutation } from '../../services/api'
+import { useGetaBuserQuery, useGetBuusQuery } from '../../services/api'
 
 const MyBuus = () => {
   const [buus, setBuus] = useState<BuuType[]>([]) // Defina um estado para armazenar os Buus
@@ -29,6 +30,7 @@ const MyBuus = () => {
           const buserUsername = localStorage.getItem('BuserUsername')
           if (buserUsername) {
             const buusData = await getBuserData(token, buserUsername)
+
             setBuus(buusData.buus_received)
           }
         }

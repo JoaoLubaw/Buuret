@@ -18,7 +18,15 @@ const Timeline = () => {
         <MakeRet />
         {data &&
           data.map((ret: RetType) => (
-            <Ret buser={ret.user} content={ret.content} key={ret.id} />
+            <Ret
+              datetime={ret.datetime ? ret.datetime : ''}
+              buser={ret.user}
+              content={ret.content}
+              key={ret.id}
+              reret_count={ret.reret_count}
+              likes_count={ret.likes_count}
+              replies_count={ret.replies_count}
+            />
           ))}
       </TimelineContainer>
     </Layout>

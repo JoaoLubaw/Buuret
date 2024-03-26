@@ -31,7 +31,7 @@ export declare type Ret = {
   id?: number
   user: Buser | undefined
   likes?: Buser[] | null
-  datetime?: Date
+  datetime?: Date | undefined
   content: string
   media?: string | null
   comret?: boolean | null
@@ -40,6 +40,9 @@ export declare type Ret = {
   rerets?: Buser[] | null
   isreret?: boolean
   refbuu?: Buu | null
+  likes_count?: number
+  replies_count?: number
+  reret_count?: number
 }
 
 export declare type Buu = {

@@ -22,7 +22,7 @@ const PopMakeRet = ({ closePopMakeRet, response, buuResponse }: Props) => {
             <img src={Close} alt="fechar" />
           </button>
         </header>
-        {response && <Ret ResponseVisualization />}
+        {/*response && <Ret buser={buser} content="" ResponseVisualization />*/}
         {buuResponse && (
           <div className="buuVisualizer">
             <Buu Response />

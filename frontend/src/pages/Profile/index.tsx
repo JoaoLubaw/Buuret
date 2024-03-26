@@ -331,7 +331,19 @@ const Profile = () => {
               <h3>Rets</h3>
             </div>
           </div>
-          {buser && buser.rets && buser.rets.map((ret) => <Ret key={ret.id} />)}
+          {buser &&
+            buser.rets &&
+            buser.rets.map((ret) => (
+              <Ret
+                datetime={ret.datetime ? ret.datetime : ''}
+                buser={ret.user}
+                content={ret.content}
+                key={ret.id}
+                likes_count={ret.likes_count}
+                replies_count={ret.replies_count}
+                reret_count={ret.reret_count}
+              />
+            ))}
         </ProfileContainer>
       )}
     </Layout>
