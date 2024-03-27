@@ -17,7 +17,7 @@ type Props = {
   id: number | undefined
   isReret?: boolean
   RefBuu?: boolean
-  Media?: boolean
+  Media?: string
   Detail?: boolean
   ResponseVisualization?: boolean
   content: string
@@ -27,6 +27,7 @@ type Props = {
   replies_count: number | undefined
   reret_count: number | undefined
   likes: number[] | null | undefined
+  openMediaZoom: (mediaUrl: string) => void
 }
 
 const Ret = ({
@@ -42,13 +43,20 @@ const Ret = ({
   likes_count,
   replies_count,
   reret_count,
-  likes
+  likes,
+  openMediaZoom
 }: Props) => {
   const formattedDatetime = datetime ? format(datetime, 'dd/MM/yyyy HH:mm') : ''
   const [likeRetMutation] = useLikeRetMutation()
   const [likesCount, setLikesCount] = useState(likes_count)
   const loggedBuser = JSON.parse(localStorage.getItem('buser') || '{}') as Buser
   const [liked, setLiked] = useState(likes?.includes(loggedBuser.id))
+
+  const handleMediaClick = () => {
+    if (Media) {
+      openMediaZoom(Media)
+    }
+  }
 
   const handleLike = () => {
     if (id !== undefined) {
@@ -90,7 +98,15 @@ const Ret = ({
           {content}
         </div>
 
-        {Media && <img className="media" src={DefaultProfile} alt="Imagem" />}
+        {Media && (
+          <img
+            onClick={handleMediaClick}
+            className="media"
+            src={Media}
+            alt="Imagem"
+          />
+        )}
+
         {!ResponseVisualization && (
           <div className="footer">
             <button

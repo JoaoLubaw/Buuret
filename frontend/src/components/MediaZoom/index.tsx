@@ -1,15 +1,24 @@
 import { Overlay } from '../../pages/Home/styles'
-
-import Test from '../../assets/images/teste.jpg'
 import Close from '../../assets/images/x.svg'
 import { MediaZoomContainer } from './style'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
-const MediaZoom = () => {
-  const [isOpen, setIsOpen] = useState(false)
+type Props = {
+  mediaURL: string | null
+  Open: boolean
+  close: () => void
+}
+
+const MediaZoom = ({ mediaURL, close, Open }: Props) => {
+  const [isOpen, setIsOpen] = useState(Open)
+
+  useEffect(() => {
+    setIsOpen(Open)
+  }, [Open])
 
   const closeMedia = () => {
     setIsOpen(false)
+    close()
   }
 
   return (
@@ -22,7 +31,9 @@ const MediaZoom = () => {
               <button className="close" onClick={closeMedia}>
                 <img src={Close} alt="Fechar" />
               </button>
-              <img className="media" src={Test} alt="imagem" />
+              {mediaURL && (
+                <img className="media" src={mediaURL} alt="imagem" />
+              )}
             </div>
           </MediaZoomContainer>
         </>

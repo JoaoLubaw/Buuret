@@ -7,6 +7,7 @@ export const MediaZoomContainer = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 1000;
 
   justify-content: center;
   content-align: center;

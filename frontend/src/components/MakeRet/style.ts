@@ -23,6 +23,37 @@ export const MakeRetContainer = styled.div`
       min-height: 100px;
       font-size: 20px;
     }
+
+    .SelectedImageDIV {
+      width: 100%;
+      margin-bottom: 16px;
+      align-items: center;
+      position: relative;
+
+      .SelectedImage {
+        width: 80%;
+        margin: 0 auto;
+        position: relative;
+
+        img {
+          width: 100%;
+        }
+
+        button,
+        .exclude {
+          width: 16px;
+          height: 16px;
+          background: none;
+          border: none;
+        }
+
+        button {
+          position: absolute;
+          right: -20px;
+          top: 2px;
+        }
+      }
+    }
   }
 
   .avatar {
@@ -40,6 +71,8 @@ export const MakeRetContainer = styled.div`
 
     img {
       height: 28px;
+      width: 28px;
+      cursor: pointer;
     }
 
     button {

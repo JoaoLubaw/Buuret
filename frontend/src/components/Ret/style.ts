@@ -59,7 +59,7 @@ export const RetContainer = styled.div`
 
   .media {
     width: 90%;
-    height: 336px;
+    max-height: 100%;
     object-fit: cover;
     border-radius: 50px;
     margin-top: 12px;

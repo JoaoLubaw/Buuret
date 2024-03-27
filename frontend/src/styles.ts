@@ -28,6 +28,10 @@ export const GlobalCss = createGlobalStyle`
   list-style: none;
 }
 
+img {
+  user-select: none;
+}
+
 input:focus, textarea:focus, select:focus {
   outline: none;
 }

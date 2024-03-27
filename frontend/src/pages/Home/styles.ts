@@ -95,6 +95,7 @@ export const Footer = styled.footer`
 
 export const Overlay = styled.div`
   position: fixed;
+  user-select: none;
   top: 0;
   left: 0;
   width: 100%;
@@ -104,6 +105,7 @@ export const Overlay = styled.div`
   cursor: pointer;
   transition: opacity 0.3s ease;
   pointer-events: auto;
+  z-index: 990;
 `
 
 export const CreateAccount = styled.div`

@@ -29,11 +29,11 @@ export declare type LoginBuser = {
 
 export declare type Ret = {
   id?: number
-  user: Buser | undefined
+  user?: Buser | undefined
   likes?: number[] | null
   datetime?: Date | undefined
   content: string
-  media?: string | null
+  media?: string | null | file
   comret?: boolean | null
   replies?: Ret[] | null
   replyto?: Ret | null

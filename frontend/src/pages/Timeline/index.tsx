@@ -3,11 +3,26 @@ import Ret from '../../components/Ret'
 import Layout from '../../components/Layout'
 
 import { TimelineContainer } from './styles'
-import { useGetTimelineQuery } from '../../services/api'
+import { useGetTimelineQuery, useMakeRetMutation } from '../../services/api'
 import { Ret as RetType } from '../../types'
+import { toast } from 'react-toastify'
+import { useState } from 'react'
+import MediaZoom from '../../components/MediaZoom'
 
 const Timeline = () => {
   const { data, isLoading, error } = useGetTimelineQuery('')
+  const [selectedMedia, setSelectedMedia] = useState<string | null>(null) // Estado para controlar a imagem selecionada
+  const [openMedia, setOpenMedia] = useState(false)
+
+  const openMediaZoom = (mediaUrl: string) => {
+    setSelectedMedia(mediaUrl)
+    setOpenMedia(true)
+  }
+
+  const closeMediaZoom = () => {
+    setSelectedMedia(null)
+    setOpenMedia(false)
+  }
 
   return (
     <Layout page="timeline">
@@ -28,8 +43,15 @@ const Timeline = () => {
               replies_count={ret.replies_count}
               id={ret.id}
               likes={ret.likes}
+              Media={ret.media}
+              openMediaZoom={openMediaZoom} // Passar a função como prop
             />
           ))}
+        <MediaZoom
+          mediaURL={selectedMedia}
+          Open={openMedia}
+          close={closeMediaZoom}
+        />
       </TimelineContainer>
     </Layout>
   )

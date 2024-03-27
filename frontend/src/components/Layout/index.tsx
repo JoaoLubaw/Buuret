@@ -36,7 +36,6 @@ const Layout: React.FC<Props> = ({ children, page }: Props) => {
       <LeftSidebar page={page} openPopMakeRet={openPopMakeRet} />
       <MainContainer>{children}</MainContainer>
       <RightSidebar />
-      <MediaZoom />
       {showPopMakeRet && <PopMakeRet closePopMakeRet={closePopMakeRet} />}
     </>
   )

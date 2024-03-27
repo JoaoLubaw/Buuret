@@ -16,6 +16,7 @@ import {
 } from '../../services/api'
 import { Buser, Ret as RetType } from '../../types'
 import { toast } from 'react-toastify'
+import MediaZoom from '../../components/MediaZoom'
 
 const Profile = () => {
   const { username } = useParams()
@@ -35,6 +36,19 @@ const Profile = () => {
   const [name, setName] = useState('')
   const [profileImage, setProfileImage] = useState<File | null>(null)
   const [backgroundImage, setBackgroundImage] = useState<File | null>(null)
+
+  const [selectedMedia, setSelectedMedia] = useState<string | null>(null)
+  const [openMedia, setOpenMedia] = useState(false)
+
+  const openMediaZoom = (mediaUrl: string) => {
+    setSelectedMedia(mediaUrl)
+    setOpenMedia(true)
+  }
+
+  const closeMediaZoom = () => {
+    setSelectedMedia(null)
+    setOpenMedia(false)
+  }
 
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -337,6 +351,7 @@ const Profile = () => {
             buserRets &&
             buserRets.map((ret) => (
               <Ret
+                openMediaZoom={openMediaZoom}
                 id={ret.id}
                 datetime={ret.datetime ? ret.datetime : ''}
                 buser={ret.user}
@@ -346,8 +361,16 @@ const Profile = () => {
                 replies_count={ret.replies_count}
                 reret_count={ret.reret_count}
                 likes={ret.likes}
+                Media={ret.media}
               />
             ))}
+          {selectedMedia && (
+            <MediaZoom
+              mediaURL={selectedMedia}
+              Open={openMedia}
+              close={closeMediaZoom}
+            />
+          )}
         </ProfileContainer>
       )}
     </Layout>
