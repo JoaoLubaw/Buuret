@@ -40,6 +40,11 @@ const api = createApi({
     getaBuser: builder.query<Buser, string>({
       query: (username) => `busers/${username}/`
     }),
+    getaBuserRets: builder.query<Ret[], string>({
+      query: (username) =>
+        `https://joaolubaw.pythonanywhere.com/rets/?user__username=${username}/`,
+      transformResponse: (response: any) => response.results
+    }),
     updateBuu: builder.mutation({
       query: ({ id, newData }) => ({
         url: `buus/${id}/`,
@@ -86,6 +91,12 @@ const api = createApi({
         url: `busers/${username}/unfollow/`,
         method: 'POST'
       })
+    }),
+    likeRet: builder.mutation({
+      query: (retID: string) => ({
+        url: `rets/${retID}/like/`,
+        method: 'POST'
+      })
     })
   })
 })
@@ -101,7 +112,9 @@ export const {
   useFollowMutation,
   useGetTimelineQuery,
   useUnfollowMutation,
-  useGetBuusQuery
+  useGetBuusQuery,
+  useLikeRetMutation,
+  useGetaBuserRetsQuery
 } = api
 
 export default api

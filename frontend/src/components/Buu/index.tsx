@@ -15,7 +15,7 @@ const Buu = ({ Response, content, openned = false, handleOpen, id }: Props) => {
   const [opennedBuu, setOpennedBuu] = useState(openned)
 
   const toggleOpen = () => {
-    setOpennedBuu((prevOpenned) => !prevOpenned) // Alterna entre true e false
+    setOpennedBuu(true)
     handleOpen && handleOpen() // Chama a função para atualizar o estado na API
   }
 

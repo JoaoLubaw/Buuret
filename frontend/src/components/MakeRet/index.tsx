@@ -1,4 +1,4 @@
-import Test from '../../assets/images/teste.jpg'
+import DefaultProfile from '../../assets/images/DefaultProfile.jpg'
 import Img from '../../assets/images/Img.svg'
 import { MakeRetContainer } from './style'
 import React, { ReactEventHandler, useState } from 'react'
@@ -56,7 +56,15 @@ const MakeRet = ({ Pop, Detail }: Props) => {
 
   return (
     <MakeRetContainer>
-      <img src={Test} alt="Imagem de Perfil" />
+      {loggedBuser.profile ? (
+        <img
+          className="avatar"
+          src={loggedBuser.profile}
+          alt="Imagem de Perfil"
+        />
+      ) : (
+        <img className="avatar" src={DefaultProfile} alt="Imagem de Perfil" />
+      )}
 
       <form>
         <textarea

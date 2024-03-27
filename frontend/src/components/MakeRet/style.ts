@@ -25,8 +25,10 @@ export const MakeRetContainer = styled.div`
     }
   }
 
-  img {
+  .avatar {
     height: 56px;
+    width: 56px;
+    object-fit: cover;
     border-radius: 50%;
   }
 

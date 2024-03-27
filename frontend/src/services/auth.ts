@@ -30,7 +30,6 @@ export const fetchBuserData = async (token: string, username: string) => {
     console.log('response:', response)
 
     const userData = response.data
-    console.log('userData:', userData)
 
     localStorage.setItem('buser', JSON.stringify(userData))
     return userData.username // Retorna o user do usuário

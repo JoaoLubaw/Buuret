@@ -9,28 +9,28 @@ import { useParams } from 'react-router-dom'
 import {
   useFollowMutation,
   useGetaBuserQuery,
+  useGetaBuserRetsQuery,
   useSendBuuMutation,
   useUnfollowMutation,
   useUpdateUserMutation
 } from '../../services/api'
-import { Buser } from '../../types'
+import { Buser, Ret as RetType } from '../../types'
+import { toast } from 'react-toastify'
 
 const Profile = () => {
   const { username } = useParams()
   const [updateBuser] = useUpdateUserMutation()
   const [sendBuu] = useSendBuuMutation()
   const [edit, setEdit] = useState(false)
-
   const loggedBuser = JSON.parse(localStorage.getItem('buser') || '{}') as Buser
 
   const [follow] = useFollowMutation()
   const [unfollow] = useUnfollowMutation()
-
-  const { data: buser, isLoading, error } = useGetaBuserQuery(username || '')
-  console.log('param:' + username + 'data:' + JSON.stringify(buser))
+  const { data: buser } = useGetaBuserQuery(username || '')
+  const { data: buserRets } = useGetaBuserRetsQuery(username || '')
+  console.log(buserRets)
 
   const [buuText, setBuuText] = useState('')
-
   const [text, setText] = useState('')
   const [name, setName] = useState('')
   const [profileImage, setProfileImage] = useState<File | null>(null)
@@ -131,6 +131,8 @@ const Profile = () => {
         content: buuText,
         opened: false
       })
+      setBuuText('')
+      toast.success('Buu enviado!')
     } catch (error) {
       console.error('Erro ao enviar o Buu:', error)
     }
@@ -331,10 +333,11 @@ const Profile = () => {
               <h3>Rets</h3>
             </div>
           </div>
-          {buser &&
-            buser.rets &&
-            buser.rets.map((ret) => (
+          {buserRets &&
+            buserRets &&
+            buserRets.map((ret) => (
               <Ret
+                id={ret.id}
                 datetime={ret.datetime ? ret.datetime : ''}
                 buser={ret.user}
                 content={ret.content}
@@ -342,6 +345,7 @@ const Profile = () => {
                 likes_count={ret.likes_count}
                 replies_count={ret.replies_count}
                 reret_count={ret.reret_count}
+                likes={ret.likes}
               />
             ))}
         </ProfileContainer>

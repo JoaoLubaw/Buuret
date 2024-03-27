@@ -10,8 +10,11 @@ import ReRet from '../../assets/images/retweet.svg'
 import Buu from '../Buu'
 import { Buser } from '../../types'
 import { format } from 'date-fns'
+import { useLikeRetMutation } from '../../services/api'
+import { useState } from 'react'
 
 type Props = {
+  id: number | undefined
   isReret?: boolean
   RefBuu?: boolean
   Media?: boolean
@@ -23,9 +26,11 @@ type Props = {
   likes_count: number | undefined
   replies_count: number | undefined
   reret_count: number | undefined
+  likes: number[] | null | undefined
 }
 
 const Ret = ({
+  id,
   isReret,
   Media,
   RefBuu,
@@ -36,9 +41,29 @@ const Ret = ({
   datetime,
   likes_count,
   replies_count,
-  reret_count
+  reret_count,
+  likes
 }: Props) => {
   const formattedDatetime = datetime ? format(datetime, 'dd/MM/yyyy HH:mm') : ''
+  const [likeRetMutation] = useLikeRetMutation()
+  const [likesCount, setLikesCount] = useState(likes_count)
+  const loggedBuser = JSON.parse(localStorage.getItem('buser') || '{}') as Buser
+  const [liked, setLiked] = useState(likes?.includes(loggedBuser.id))
+
+  const handleLike = () => {
+    if (id !== undefined) {
+      const idToString = id.toString()
+      likeRetMutation(idToString)
+      console.log(likes)
+
+      if (liked) {
+        setLikesCount(likesCount ? likesCount - 1 : 0)
+      } else {
+        setLikesCount(likesCount !== undefined ? likesCount + 1 : 1)
+      }
+      setLiked(!liked)
+    }
+  }
 
   return (
     <RetContainer className={Detail ? 'detail' : ''}>
@@ -68,9 +93,16 @@ const Ret = ({
         {Media && <img className="media" src={DefaultProfile} alt="Imagem" />}
         {!ResponseVisualization && (
           <div className="footer">
-            <button className="footer-item like">
-              <img src={Like} alt="curtir" className="icon" />
-              <span>{likes_count}</span>
+            <button
+              onClick={handleLike} // Remove o argumento id
+              className="footer-item like"
+            >
+              {liked ? (
+                <img src={LikeIsLiked} alt="curtir" className="icon" />
+              ) : (
+                <img src={Like} alt="curtir" className="icon" />
+              )}
+              <span>{likesCount}</span>
             </button>
             <button className="footer-item comment">
               <img src={Comment} alt="comentar" className="icon" />

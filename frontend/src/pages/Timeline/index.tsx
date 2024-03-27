@@ -26,6 +26,8 @@ const Timeline = () => {
               reret_count={ret.reret_count}
               likes_count={ret.likes_count}
               replies_count={ret.replies_count}
+              id={ret.id}
+              likes={ret.likes}
             />
           ))}
       </TimelineContainer>

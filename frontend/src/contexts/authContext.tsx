@@ -123,6 +123,7 @@ export const BuserProvider = ({ children }: Props) => {
   const logout = () => {
     localStorage.removeItem('token')
     localStorage.removeItem('buser')
+    localStorage.removeItem('BuserUsername')
     setBuser(null)
     setToken('')
     navigate('/login')

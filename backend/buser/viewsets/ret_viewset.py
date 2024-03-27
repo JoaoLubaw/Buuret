@@ -26,6 +26,10 @@ class RetViewSet(ModelViewSet):
         serializer = self.get_serializer(timeline, many=True)
         return Response(serializer.data)
 
+    def perform_create(self, serializer):
+        # Associar o usuário logado ao Ret sendo criado
+        serializer.save(user=self.request.user)
+
     @action(detail=True, methods=['post'])
     def like(self, request, pk=None):
         ret = self.get_object()
