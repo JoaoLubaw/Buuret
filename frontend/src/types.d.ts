@@ -39,7 +39,7 @@ export declare type Ret = {
   replyto?: Ret | null
   rerets?: Buser[] | null
   isreret?: boolean
-  refbuu?: Buu | null
+  refbuu?: number | null | undefined
   likes_count?: number
   replies_count?: number
   reret_count?: number
@@ -47,8 +47,8 @@ export declare type Ret = {
 
 export declare type Buu = {
   id: number
-  sender: Buser
-  receiver: Buser
+  sender?: Buser | number | undefined
+  receiver?: Buser | number | undefined
   content: string
   opened: boolean
 }

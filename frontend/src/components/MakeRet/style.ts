@@ -24,6 +24,15 @@ export const MakeRetContainer = styled.div`
       font-size: 20px;
     }
 
+    .CarCounter {
+      font-size: 12px;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .CarCounter--MAX {
+      color: #ff3300;
+    }
+
     .SelectedImageDIV {
       width: 100%;
       margin-bottom: 16px;
@@ -83,6 +92,10 @@ export const MakeRetContainer = styled.div`
       border: none;
       border-radius: 20px;
       padding: 8px;
+    }
+
+    .Disabled {
+      background-color: #ff3300;
     }
   }
 `

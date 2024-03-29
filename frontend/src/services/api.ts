@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { Buser, Ret } from '../types'
+import { Buser, Buu, Ret } from '../types'
 import Cookies from 'js-cookie'
 
 const api = createApi({
@@ -29,6 +29,18 @@ const api = createApi({
         url: 'busers/sugg/'
       })
     }),
+    getaBuu: builder.query<Buu, number | undefined | null>({
+      query: (id) => {
+        if (typeof id === 'number') {
+          return {
+            url: `buus/${id}/`
+          }
+        } else {
+          return ''
+        }
+      }
+    }),
+
     getBuus: builder.query({
       query: () => ({
         url: 'buus/'
@@ -40,10 +52,12 @@ const api = createApi({
     getaBuser: builder.query<Buser, string>({
       query: (username) => `busers/${username}/`
     }),
+    getaRet: builder.query<Ret, string>({
+      query: (id) => `rets/${id}/`
+    }),
     getaBuserRets: builder.query<Ret[], string>({
       query: (username) =>
-        `https://joaolubaw.pythonanywhere.com/rets/?user__username=${username}/`,
-      transformResponse: (response: any) => response.results
+        `https://joaolubaw.pythonanywhere.com/rets/?user__username=${username}/`
     }),
     updateBuu: builder.mutation({
       query: ({ id, newData }) => ({
@@ -114,7 +128,9 @@ export const {
   useUnfollowMutation,
   useGetBuusQuery,
   useLikeRetMutation,
-  useGetaBuserRetsQuery
+  useGetaBuserRetsQuery,
+  useGetaBuuQuery,
+  useGetaRetQuery
 } = api
 
 export default api

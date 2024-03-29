@@ -17,26 +17,41 @@ const LeftSidebar = ({ openPopMakeRet, page }: Props) => {
   const { isLoggedIn, logout, buser } = useAuth()
   const navigate = useNavigate()
 
+  //Links
+  const goHome = () => {
+    navigate('/')
+    window.scrollTo(0, 0)
+  }
+
+  const goBuu = () => {
+    navigate('/buus')
+    window.scrollTo(0, 0)
+  }
+
+  const goProfile = () => {
+    navigate(`/${buser?.username}`)
+    window.scrollTo(0, 0)
+  }
+
+  //FimLinks
+
   return (
     <LeftContainer>
       <img className="logo" src={Logo} alt="Buuret" />
       <div className="buttons">
-        <button className="PageButton" onClick={() => navigate('/')}>
+        <button className="PageButton" onClick={goHome}>
           <img src={Home} alt="Home" />
           <span className={page === 'timeline' ? 'active' : ''}>
             Página Inicial
           </span>
         </button>
 
-        <button className="PageButton" onClick={() => navigate('/buus')}>
+        <button className="PageButton" onClick={goBuu}>
           <img src={Ghost} alt="Fantasma" />
           <span className={page === 'buus' ? 'active' : ''}>Meus Buus</span>
         </button>
 
-        <button
-          className="PageButton"
-          onClick={() => navigate(`/${buser?.username}`)}
-        >
+        <button className="PageButton" onClick={goProfile}>
           <img src={Profile} alt="Perfil" />
           <span className={page === 'profile' ? 'active' : ''}>Perfil</span>
         </button>

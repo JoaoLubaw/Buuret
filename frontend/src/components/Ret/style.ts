@@ -13,6 +13,7 @@ export const RetContainer = styled.div`
     width: 48px;
     object-fit: cover;
     border-radius: 50%;
+    cursor: pointer;
   }
 
   .header {
@@ -22,6 +23,7 @@ export const RetContainer = styled.div`
     h3 {
       margin-right: 4px;
       font-size: 16px;
+      cursor: pointer;
     }
 
     span {
@@ -49,17 +51,20 @@ export const RetContainer = styled.div`
   .buuResponse {
     width: 100%;
     align-items: center;
+    border-bottom: 1px solid RGB(1, 1, 1, 0.1);
+    margin-bottom: 8px;
   }
 
   .text {
     margin-top: 4px;
     width: 90%;
     font-size: 16px;
+    cursor: pointer;
   }
 
   .media {
     width: 90%;
-    max-height: 100%;
+    max-height: 50vh;
     object-fit: cover;
     border-radius: 50px;
     margin-top: 12px;
@@ -98,6 +103,8 @@ export const RetContainer = styled.div`
 
     .avatar {
       height: 56px;
+      width: 56px;
+      object-fit: cover;
       border-radius: 50%;
     }
 

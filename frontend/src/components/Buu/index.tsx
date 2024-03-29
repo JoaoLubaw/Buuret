@@ -2,21 +2,47 @@ import React, { useState } from 'react'
 import { BuuContainer } from './styles'
 import Ghost from '../../assets/images/ghost.svg'
 import Reply from '../../assets/images/reply.svg'
+import { Buser, Buu as Buutype } from '../../types' // Importe o tipo Buu
 
 type Props = {
   Response?: boolean
-  content?: string
+  content?: string | undefined
   openned?: boolean
   handleOpen?: () => void
-  id?: number // Adicione a propriedade "id" para identificar exclusivamente cada Buu
+  id?: number
+  openPopMakeRet?: (buu: Buutype) => void
+  sender?: number | Buser | undefined
+  receiver?: number | Buser | undefined
 }
 
-const Buu = ({ Response, content, openned = false, handleOpen, id }: Props) => {
+const Buu = ({
+  Response,
+  content,
+  openned = false,
+  handleOpen,
+  id,
+  openPopMakeRet,
+  receiver,
+  sender
+}: Props) => {
   const [opennedBuu, setOpennedBuu] = useState(openned)
 
   const toggleOpen = () => {
     setOpennedBuu(true)
-    handleOpen && handleOpen() // Chama a função para atualizar o estado na API
+    handleOpen && handleOpen()
+  }
+
+  const handleOpenPopMakeRet = () => {
+    if (content) {
+      const temporaryBuu: Buutype = {
+        id: id ?? 0, // Defina um valor padrão para id se for indefinido
+        content,
+        opened: openned,
+        receiver: receiver,
+        sender: sender
+      }
+      openPopMakeRet && openPopMakeRet(temporaryBuu)
+    }
   }
 
   return (
@@ -39,7 +65,7 @@ const Buu = ({ Response, content, openned = false, handleOpen, id }: Props) => {
               opennedBuu ? 'buttonWrapper' : 'toOpenButton buttonWrapper'
             }
           >
-            <button>
+            <button onClick={handleOpenPopMakeRet}>
               <img src={Reply} alt="Responda" /> Responder em Ret
             </button>
           </div>

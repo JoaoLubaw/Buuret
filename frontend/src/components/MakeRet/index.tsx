@@ -7,16 +7,27 @@ import React, { ReactEventHandler, useState } from 'react'
 import { useMakeRetMutation } from '../../services/api'
 import { Buser, Buu, Ret } from '../../types'
 import { toast } from 'react-toastify'
+import { customEventTarget } from '../../services/events'
 
 type Props = {
   Pop?: boolean
   Detail?: boolean
+  BuuToRespond?: Buu
+  closePopMakeRet?: () => void
+  ret?: Ret | null
 }
 
-const MakeRet = ({ Pop, Detail }: Props) => {
+const MakeRet = ({
+  Pop,
+  Detail,
+  BuuToRespond,
+  closePopMakeRet,
+  ret
+}: Props) => {
   const loggedBuser = JSON.parse(localStorage.getItem('buser') || '{}') as Buser
   const [makeRet, { isLoading, isError, error }] = useMakeRetMutation()
   const [text, setText] = useState('')
+  const maxCharacters = 300
   const [selectedImage, setSelectedImage] = useState<File | null>(null)
   const textareaRef = React.createRef<HTMLTextAreaElement>()
   const [retToPost, setRetToPost] = useState<Ret>({
@@ -27,7 +38,8 @@ const MakeRet = ({ Pop, Detail }: Props) => {
     replies: [],
     rerets: [],
     isreret: false,
-    refbuu: null
+    refbuu: null,
+    replyto: null
   })
 
   const handleChange = (e: {
@@ -68,6 +80,13 @@ const MakeRet = ({ Pop, Detail }: Props) => {
     if (selectedImage) {
       formData.append('media', selectedImage)
     }
+    if (BuuToRespond) {
+      formData.append('refbuu', BuuToRespond.id.toString())
+    }
+
+    if (ret && ret.id && ret.id !== null) {
+      formData.append('replyto', ret.id.toString())
+    }
 
     makeRet(formData)
       .then((response) => {
@@ -75,11 +94,16 @@ const MakeRet = ({ Pop, Detail }: Props) => {
         toast.success('Ret feito!')
         setText('')
         setSelectedImage(null)
+        customEventTarget.dispatchEvent(customEventTarget.newRetEvent)
       })
       .catch((error) => {
         console.error(error)
         toast.error('Erro ao enviar ret.')
       })
+
+    if (closePopMakeRet) {
+      closePopMakeRet()
+    }
   }
 
   return (
@@ -104,6 +128,15 @@ const MakeRet = ({ Pop, Detail }: Props) => {
             Detail ? 'O que você quer responder?' : 'No que você está pensando?'
           }
         ></textarea>
+        <div
+          className={
+            text.length > maxCharacters
+              ? 'CarCounter CarCounter--MAX'
+              : 'CarCounter'
+          }
+        >
+          {text.length}/{maxCharacters} caracteres
+        </div>
 
         {selectedImage && (
           <div className="SelectedImageDIV">
@@ -131,7 +164,13 @@ const MakeRet = ({ Pop, Detail }: Props) => {
             style={{ display: 'none' }}
           />
 
-          <button onClick={handleRetIT}>Ret-it</button>
+          <button
+            disabled={text.length === 0 || text.length > maxCharacters}
+            onClick={handleRetIT}
+            className={text.length > maxCharacters ? 'Disabled' : ''}
+          >
+            Ret-it
+          </button>
         </div>
       </form>
     </MakeRetContainer>

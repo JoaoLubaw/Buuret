@@ -8,15 +8,28 @@ import {
   useUnfollowMutation
 } from '../../services/api'
 import { Buser } from '../../types'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { customEventTarget } from '../../services/events'
 
 const RightSidebar = () => {
   const { data, error, isLoading } = useGetBusersQuery('')
   const [follow] = useFollowMutation()
   const [unfollow] = useUnfollowMutation()
   const [followingUsers, setFollowingUsers] = useState<string[]>([]) // Lista de usernames que o usuário está seguindo
+  const [hide, setHide] = useState(false)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const handleHide = () => {
+      setHide(!hide)
+    }
+    customEventTarget.addEventListener('popRet', handleHide)
+
+    return () => {
+      customEventTarget.removeEventListener('popRet', handleHide)
+    }
+  }, [hide])
 
   const handleFollow = async (username: string) => {
     try {
@@ -38,8 +51,13 @@ const RightSidebar = () => {
 
   const isFollowing = (username: string) => followingUsers.includes(username)
 
+  const goProfile = (username: string) => {
+    navigate(`/${username}`)
+    window.scrollTo(0, 0)
+  }
+
   return (
-    <RightSidebarContainer>
+    <RightSidebarContainer className={hide ? 'hide-right-sidebar' : ''}>
       <div className="content">
         <div className="search">
           <img src={Lupa} alt="Lupa" />
@@ -52,7 +70,7 @@ const RightSidebar = () => {
           {data &&
             data.map((user: Buser) => (
               <div
-                onClick={() => navigate(`/${user.username}`)}
+                onClick={() => goProfile(user.username)}
                 key={user.id}
                 className="user"
               >

@@ -3,6 +3,7 @@ import Layout from '../../components/Layout'
 import { ProfileContainer } from './styles'
 import DefaultProfile from '../../assets/images/DefaultProfile.jpg'
 import DefaultBackground from '../../assets/images/DefaultBackgound.jpg'
+import Back from '../../assets/images/arrow.svg'
 import Buu from '../../assets/images/ghost.svg'
 import Ret from '../../components/Ret'
 import { useParams } from 'react-router-dom'
@@ -17,6 +18,7 @@ import {
 import { Buser, Ret as RetType } from '../../types'
 import { toast } from 'react-toastify'
 import MediaZoom from '../../components/MediaZoom'
+import { customEventTarget } from '../../services/events'
 
 const Profile = () => {
   const { username } = useParams()
@@ -28,8 +30,8 @@ const Profile = () => {
   const [follow] = useFollowMutation()
   const [unfollow] = useUnfollowMutation()
   const { data: buser } = useGetaBuserQuery(username || '')
-  const { data: buserRets } = useGetaBuserRetsQuery(username || '')
-  console.log(buserRets)
+  const { data: buserRets, refetch } = useGetaBuserRetsQuery(username || '')
+  const reversedData = buserRets ? [...buserRets].reverse() : []
 
   const [buuText, setBuuText] = useState('')
   const [text, setText] = useState('')
@@ -40,6 +42,30 @@ const Profile = () => {
   const [selectedMedia, setSelectedMedia] = useState<string | null>(null)
   const [openMedia, setOpenMedia] = useState(false)
 
+  //Pop
+  const [showPopMakeRet, setShowPopMakeRet] = useState(false)
+  const [selectedRet, setSelectedRet] = useState<RetType | null>(null)
+
+  function bloquearScroll() {
+    document.body.style.overflow = 'hidden'
+  }
+
+  function desbloquearScroll() {
+    document.body.style.overflow = ''
+  }
+
+  const openPopMakeRet = () => {
+    setShowPopMakeRet(true)
+    bloquearScroll()
+  }
+
+  const closePopMakeRet = () => {
+    setShowPopMakeRet(false)
+    desbloquearScroll()
+  }
+
+  //Pop
+
   const openMediaZoom = (mediaUrl: string) => {
     setSelectedMedia(mediaUrl)
     setOpenMedia(true)
@@ -49,6 +75,18 @@ const Profile = () => {
     setSelectedMedia(null)
     setOpenMedia(false)
   }
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      refetch()
+    }
+
+    customEventTarget.addEventListener('newRet', handleUpdate)
+
+    return () => {
+      customEventTarget.removeEventListener('newRet', handleUpdate)
+    }
+  }, [refetch])
 
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -174,11 +212,18 @@ const Profile = () => {
     }
   }
 
+  const goBack = () => {
+    window.history.back()
+  }
+
   return (
     <Layout page="profile">
       {buser && (
         <ProfileContainer>
           <header>
+            <button>
+              <img onClick={goBack} src={Back} alt="Voltar" />
+            </button>
             <h2>@{buser.username}</h2>
           </header>
           <div className="hero">
@@ -347,9 +392,9 @@ const Profile = () => {
               <h3>Rets</h3>
             </div>
           </div>
-          {buserRets &&
-            buserRets &&
-            buserRets.map((ret) => (
+          {reversedData &&
+            reversedData &&
+            reversedData.map((ret) => (
               <Ret
                 openMediaZoom={openMediaZoom}
                 id={ret.id}
@@ -362,6 +407,8 @@ const Profile = () => {
                 reret_count={ret.reret_count}
                 likes={ret.likes}
                 Media={ret.media}
+                openPop={openPopMakeRet}
+                ret={ret}
               />
             ))}
           {selectedMedia && (

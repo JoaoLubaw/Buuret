@@ -48,29 +48,29 @@ export const RightSidebarContainer = styled.aside`
   }
 
   .followMore {
-    background-color: RGB(1,1,1,0.05);
+    background-color: RGB(1, 1, 1, 0.05);
     padding: 16px;
     border-radius: 24px;
 
     .user {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-top: 1px solid RGB(1, 1, 1, 0.05);
-    margin-bottom: 6px;
-    cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid RGB(1, 1, 1, 0.05);
+      margin-bottom: 6px;
+      cursor: pointer;
 
-    button {
-      background:none;
-      border: 1px solid ${colors.blue};
-      color: ${colors.blue};
-      font-weight: bold;
-      font-family: 'Roboto', sans-serif;
-      font-size: 14px;
-      border-radius: 50px;
-      width: 80px;
-      height: 33px;
-    }
+      button {
+        background: none;
+        border: 1px solid ${colors.blue};
+        color: ${colors.blue};
+        font-weight: bold;
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        border-radius: 50px;
+        width: 80px;
+        height: 33px;
+      }
     }
 
     .profile-infos {
@@ -90,8 +90,8 @@ export const RightSidebarContainer = styled.aside`
       .username {
         margin-left: 8px;
 
-        h4{
-          font-size;16px;
+        h4 {
+          font-size: 16px;
         }
 
         span {
@@ -100,5 +100,9 @@ export const RightSidebarContainer = styled.aside`
         }
       }
     }
+  }
+
+  &.hide-right-sidebar {
+    z-index: -1;
   }
 `

@@ -37,6 +37,12 @@ class RetSerializer(serializers.ModelSerializer):
     replies_count = serializers.ReadOnlyField()
     user = BuserSerializer(read_only=True)
     refbuu = serializers.PrimaryKeyRelatedField(queryset=Buu.objects.all(), allow_null=True, required=False)
+    replies = serializers.SerializerMethodField()
+
+    def get_replies(self, obj):
+        replies = Ret.objects.filter(replyto=obj)
+        serializer = self.__class__(replies, many=True)
+        return serializer.data
 
     class Meta:
         model = Ret

@@ -105,7 +105,6 @@ export const Overlay = styled.div`
   cursor: pointer;
   transition: opacity 0.3s ease;
   pointer-events: auto;
-  z-index: 990;
 `
 
 export const CreateAccount = styled.div`
