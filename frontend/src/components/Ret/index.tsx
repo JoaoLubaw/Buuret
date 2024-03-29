@@ -60,6 +60,12 @@ const Ret = ({
   const [respondedBuu, setRespondedBuu] = useState<Buutypes>()
   const [formatedContent, setFormatedContent] = useState('')
   const navigate = useNavigate()
+  const imageUrl = buser?.profile
+  const baseUrl = 'https://joaolubaw.pythonanywhere.com'
+
+  const prefixedImageUrl = imageUrl?.startsWith('/')
+    ? baseUrl + imageUrl
+    : imageUrl
 
   useEffect(() => {
     if (content) {
@@ -124,7 +130,7 @@ const Ret = ({
       {buser?.profile ? (
         <img
           onClick={() => ProfileLink(buser?.username)}
-          src={buser.profile}
+          src={prefixedImageUrl}
           alt="Imagem de Perfil"
           className="avatar"
         />

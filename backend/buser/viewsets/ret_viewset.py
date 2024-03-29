@@ -5,7 +5,6 @@ from rest_framework.decorators import action
 from buser.models import Ret
 from buser.serializers import RetSerializer
 
-
 class RetViewSet(ModelViewSet):
     serializer_class = RetSerializer
     queryset = Ret.objects.all()
@@ -41,3 +40,29 @@ class RetViewSet(ModelViewSet):
         else:
             ret.likes.add(user)
             return Response({'message': 'Post liked successfully.'}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['post'])
+    def reret(self, request, pk=None):
+        ret = self.get_object()
+        user = request.user
+
+        # Verificar se o usuário já reretweetou o ret
+        if ret.rerets.filter(pk=user.pk).exists():
+            return Response({'message': 'Você já fez reret deste ret.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Realizar o reret
+        ret.rerets.add(user)
+        return Response({'message': 'Reret realizado com sucesso.'}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['post'])
+    def undo_reret(self, request, pk=None):
+        ret = self.get_object()
+        user = request.user
+
+        # Verificar se o usuário reretweetou o ret
+        if not ret.rerets.filter(pk=user.pk).exists():
+            return Response({'message': 'Você ainda não fez reret deste ret.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Desreretar o ret
+        ret.rerets.remove(user)
+        return Response({'message': 'Reret desfeito com sucesso.'}, status=status.HTTP_200_OK)

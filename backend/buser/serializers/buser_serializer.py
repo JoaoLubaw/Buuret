@@ -38,6 +38,7 @@ class RetSerializer(serializers.ModelSerializer):
     user = BuserSerializer(read_only=True)
     refbuu = serializers.PrimaryKeyRelatedField(queryset=Buu.objects.all(), allow_null=True, required=False)
     replies = serializers.SerializerMethodField()
+    reret_by = serializers.CharField(source='reret_by.username', required=False)
 
     def get_replies(self, obj):
         replies = Ret.objects.filter(replyto=obj)
@@ -47,5 +48,5 @@ class RetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ret
         fields = ['id', 'user', 'likes', 'datetime', 'content', 'media', 'comret', 'replies', 'rerets',
-                  'isreret', 'refbuu', 'reret_count', 'likes_count', 'replies_count', 'replyto']
+                  'isreret', 'refbuu', 'reret_count', 'likes_count', 'replies_count', 'replyto', 'reret_by']
 

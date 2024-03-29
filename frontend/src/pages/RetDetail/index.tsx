@@ -8,11 +8,25 @@ import { useGetaRetQuery } from '../../services/api'
 import { useParams } from 'react-router-dom'
 import { Ret as RetType } from '../../types'
 import { useState, useEffect } from 'react'
+import { customEventTarget } from '../../services/events'
 
 const RetDetail = () => {
   const { id } = useParams<{ id?: string }>()
   const [retData, setRetData] = useState<RetType | null | undefined>(null)
-  const { data } = useGetaRetQuery(id ?? '')
+  const { data, refetch } = useGetaRetQuery(id ?? '')
+  const reversedReplies = data?.replies ? [...data.replies].reverse() : []
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      refetch()
+    }
+
+    customEventTarget.addEventListener('newRet', handleUpdate)
+
+    return () => {
+      customEventTarget.removeEventListener('newRet', handleUpdate)
+    }
+  }, [refetch])
 
   const goBack = () => {
     window.history.back()
@@ -55,9 +69,9 @@ const RetDetail = () => {
         ) : (
           <></>
         )}
-        <MakeRet Detail />
-        {retData?.replies &&
-          retData.replies.map((repRet) => (
+        <MakeRet Detail ret={retData} />
+        {reversedReplies &&
+          reversedReplies.map((repRet) => (
             <Ret
               key={repRet.id}
               datetime={repRet.datetime ? repRet.datetime : ''}
