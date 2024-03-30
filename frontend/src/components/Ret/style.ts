@@ -38,6 +38,13 @@ export const RetContainer = styled.div`
       color: ${colors.blue};
     }
 
+    .reretUsername {
+      margin-left: 2px;
+      font-size: 14px;
+      font-weight: bold;
+      color: ${colors.blue};
+    }
+
     .divisor {
       margin: 0 2px;
     }

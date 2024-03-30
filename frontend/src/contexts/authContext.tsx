@@ -92,7 +92,6 @@ export const BuserProvider = ({ children }: Props) => {
           rets: res?.data.rets,
           telephone: res?.data.telephone
         }
-        localStorage.setItem('buser', JSON.stringify(buserObj))
         if (res && res.data && res.data.token !== undefined) {
           setToken(res.data.token)
         }
@@ -112,6 +111,8 @@ export const BuserProvider = ({ children }: Props) => {
         fetchBuserData(res.data.access, username)
         toast.success('Bem vindo!')
         navigate('/')
+      } else {
+        toast.error('Usuário ou senha incorretos')
       }
     })
   }

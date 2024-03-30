@@ -34,7 +34,6 @@ type Props = {
   openMediaZoom?: (mediaUrl: string) => void | undefined
   openPop?: (ret: RetType) => void | undefined
   ret: RetType
-  update?: () => void
 }
 
 const Ret = ({
@@ -52,61 +51,77 @@ const Ret = ({
   likes,
   openMediaZoom,
   openPop,
-  ret,
-  update
+  ret
 }: Props) => {
   const formattedDatetime = datetime ? format(datetime, 'dd/MM/yyyy HH:mm') : ''
   const [likeRetMutation] = useLikeRetMutation()
   const [likesCount, setLikesCount] = useState(likes_count)
   const [commentCount, setCommentCount] = useState(replies_count)
-  const [reretCount, setReretCount] = useState(reret_count)
+  const [reretCount, setReretCount] = useState(ret.rerets)
   const loggedBuser = JSON.parse(localStorage.getItem('buser') || '{}') as Buser
   const [liked, setLiked] = useState(likes?.includes(loggedBuser.id))
   const { data, isSuccess } = useGetaBuuQuery(RefBuu)
   const [respondedBuu, setRespondedBuu] = useState<Buutypes>()
   const [formatedContent, setFormatedContent] = useState('')
-  const [reretUsernames, setReretUsernames] = useState<string[]>([])
-  const [isReret, setIsReret] = useState(false)
 
   const navigate = useNavigate()
-  const imageUrl = buser?.profile
+  const ProfileUrl = buser?.profile
+  const ImgUrl = ret.media
   const baseUrl = 'https://joaolubaw.pythonanywhere.com'
 
-  const [makeReret, { isLoading: makeReretLoading }] = useMakeReretMutation()
+  const prefixedProfileUrl = ProfileUrl?.startsWith('/')
+    ? baseUrl + ProfileUrl
+    : ProfileUrl
 
-  useEffect(() => {
-    if (Array.isArray(ret.reret_by) && loggedBuser && loggedBuser.following) {
-      // Filtrar os usernames dos usuários que o usuário logado segue
-      const followedUsernames = ret.reret_by.filter((username) =>
-        loggedBuser.following.includes(username)
-      )
+  const PrefixedImgUrl = ImgUrl?.startsWith('/') ? baseUrl + ImgUrl : ImgUrl
 
-      // Pegar os três primeiros usernames filtrados
-      const topThreeUsernames = followedUsernames.slice(0, 3)
-      setReretUsernames(topThreeUsernames)
-      setIsReret(true)
+  const [
+    makeReret,
+    { isLoading: makeReretLoading, isSuccess: makeReretSucess }
+  ] = useMakeReretMutation()
+
+  const getTopThreeUsernames = (
+    reretBy: string[] | undefined,
+    followingUsernames: string[] | undefined
+  ): string[] => {
+    if (!Array.isArray(reretBy) || !Array.isArray(followingUsernames)) {
+      return []
     }
-  }, [ret.reret_by, loggedBuser?.following]) // Aqui usamos o operador ?. para verificar a propriedade following
+
+    // Filtrar os usernames dos usuários que o usuário logado segue
+    const followedUsernames = reretBy.filter((username) =>
+      followingUsernames.includes(username)
+    )
+
+    // Pegar os três primeiros usernames filtrados
+    return followedUsernames.slice(0, 3)
+  }
+
+  const followingUsernames = loggedBuser?.following_usernames || []
+  const [reretUsernames, setReretUsernames] = useState<string[]>(() =>
+    getTopThreeUsernames(ret.reret_by, followingUsernames)
+  )
 
   const handleReret = async () => {
     try {
-      if (id && Array.isArray(ret.rerets) && !makeReretLoading && update) {
-        if (ret.rerets.includes(loggedBuser.id)) {
+      if (id && Array.isArray(reretCount) && !makeReretLoading) {
+        if (reretCount.includes(loggedBuser.id)) {
           await makeReret(id.toString()).unwrap()
+          setReretCount(
+            reretCount.filter((userId) => userId !== loggedBuser.id)
+          )
         } else {
           await makeReret(id.toString()).unwrap()
-          console.log('oi')
+          setReretCount([...reretCount, loggedBuser.id])
         }
-        update()
+        if (makeReretSucess) {
+          customEventTarget.dispatchEvent(customEventTarget.newRetEvent)
+        }
       }
     } catch (error) {
       console.error('Erro ao fazer/desfazer reret:', error)
     }
   }
-
-  const prefixedImageUrl = imageUrl?.startsWith('/')
-    ? baseUrl + imageUrl
-    : imageUrl
 
   useEffect(() => {
     if (content) {
@@ -127,7 +142,7 @@ const Ret = ({
 
   const handleMediaClick = () => {
     if (Media && openMediaZoom) {
-      openMediaZoom(Media)
+      openMediaZoom(PrefixedImgUrl)
     }
   }
 
@@ -171,7 +186,7 @@ const Ret = ({
       {buser?.profile ? (
         <img
           onClick={() => ProfileLink(buser?.username)}
-          src={prefixedImageUrl}
+          src={prefixedProfileUrl}
           alt="Imagem de Perfil"
           className="avatar"
         />
@@ -191,11 +206,13 @@ const Ret = ({
           <span className="username">@{buser?.username}</span>
           <span className="divisor">-</span>
           <span className="time">{formattedDatetime}</span>
-          {isReret && (
+          {reretUsernames.length > 0 && (
             <span className="reret">
               ReRetado por
               {reretUsernames.map((username, index) => (
-                <span key={index}>@{username}</span>
+                <span className="reretUsername" key={index}>
+                  @{username}
+                </span>
               ))}
             </span>
           )}
@@ -217,7 +234,7 @@ const Ret = ({
           <img
             onClick={handleMediaClick}
             className="media"
-            src={Media}
+            src={PrefixedImgUrl}
             alt="Imagem"
           />
         )}
@@ -246,7 +263,7 @@ const Ret = ({
                 alt="fazer Reret"
                 className="icon"
               />
-              <span>{reretCount}</span>
+              <span>{reretCount?.length}</span>
             </button>
             <button className="footer-item share">
               <img src={Share} alt="compartilhar" className="icon" />

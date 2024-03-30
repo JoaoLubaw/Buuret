@@ -10,6 +10,7 @@ export declare type Buser = {
   followers?: number[]
   followers_count?: number
   following_count?: number
+  following_usernames?: string[] | undefined
   buus_received_count?: number
   following?: number[]
   background?: string
@@ -44,7 +45,7 @@ export declare type Ret = {
   likes_count?: number
   replies_count?: number
   reret_count?: number
-  reret_by?: string[]
+  reret_by?: string[] | undefined
 }
 
 export declare type Buu = {

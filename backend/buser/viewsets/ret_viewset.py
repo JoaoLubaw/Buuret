@@ -23,9 +23,25 @@ class RetViewSet(ModelViewSet):
         # Recuperar os rereteds dos usuários seguidos
         following_rereteds = Ret.objects.filter(rerets__in=following_users).exclude(user=user)
 
-        # Combinar rets, rereteds e ordenar pela data
-        timeline = sorted(list(user_rets) + list(following_rets) + list(following_rereteds),
-                          key=lambda ret: ret.datetime, reverse=True)
+        # Criar um dicionário para armazenar os rets com mais rerets
+        rets_with_most_rerets = {}
+
+        # Percorrer os rets e adicionar aqueles com mais rerets ao dicionário
+        for ret in user_rets:
+            rets_with_most_rerets[ret.id] = ret
+
+        for ret in following_rets:
+            if ret.id not in rets_with_most_rerets or len(ret.rerets.all()) > len(
+                    rets_with_most_rerets[ret.id].rerets.all()):
+                rets_with_most_rerets[ret.id] = ret
+
+        for ret in following_rereteds:
+            if ret.id not in rets_with_most_rerets or len(ret.rerets.all()) > len(
+                    rets_with_most_rerets[ret.id].rerets.all()):
+                rets_with_most_rerets[ret.id] = ret
+
+        # Ordenar os rets com mais rerets por data
+        timeline = sorted(rets_with_most_rerets.values(), key=lambda ret: ret.datetime, reverse=True)
 
         # Serializar os rets e retornar a timeline
         serializer = self.get_serializer(timeline, many=True)
