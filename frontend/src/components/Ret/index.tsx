@@ -9,7 +9,6 @@ import Buu from '../Buu'
 import { Buser, Buu as Buutypes, Ret as RetType } from '../../types'
 import { format } from 'date-fns'
 import {
-  useDeleteReretMutation,
   useGetaBuuQuery,
   useLikeRetMutation,
   useMakeReretMutation
@@ -72,22 +71,14 @@ const Ret = ({
   const baseUrl = 'https://joaolubaw.pythonanywhere.com'
 
   const [makeReret, { isLoading: makeReretLoading }] = useMakeReretMutation()
-  const [deleteReret, { isLoading: deleteReretLoading }] =
-    useDeleteReretMutation()
 
   const handleReret = async () => {
     console.log('handleReret called')
     try {
-      if (
-        id &&
-        Array.isArray(ret.rerets) &&
-        !makeReretLoading &&
-        !deleteReretLoading &&
-        update
-      ) {
+      if (id && Array.isArray(ret.rerets) && !makeReretLoading && update) {
         console.log('Before reret operation')
         if (ret.rerets.includes(loggedBuser.id)) {
-          await deleteReret(id.toString()).unwrap()
+          await makeReret(id.toString()).unwrap()
           console.log('oi')
           update()
         } else {

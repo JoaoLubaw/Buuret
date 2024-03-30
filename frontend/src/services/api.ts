@@ -92,12 +92,6 @@ const api = createApi({
         method: 'POST'
       })
     }),
-    deleteReret: builder.mutation({
-      query: (retId) => ({
-        url: `delete-reret/${retId}/`,
-        method: 'DELETE'
-      })
-    }),
     updateUser: builder.mutation({
       query: ({ username, newData }) => ({
         url: `busers/${username}/`,
@@ -142,8 +136,7 @@ export const {
   useGetaBuserRetsQuery,
   useGetaBuuQuery,
   useGetaRetQuery,
-  useMakeReretMutation,
-  useDeleteReretMutation
+  useMakeReretMutation
 } = api
 
 export default api

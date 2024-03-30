@@ -13,6 +13,7 @@ class Buser(AbstractUser):
     background = models.ImageField(upload_to='busers_backgrounds', blank=True, null=True)
     profile = models.ImageField(upload_to='busers_profiles', blank=True, null=True)
     is_active = models.BooleanField(default=True)
+    rereteds = models.ManyToManyField('Ret', related_name='rereteds_users', blank=True)
 
     def save(self, *args, **kwargs):
         if self.password and not self.pk:

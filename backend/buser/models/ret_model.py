@@ -11,8 +11,8 @@ class Ret(models.Model):
     media = models.ImageField(upload_to='ret_media', blank=True, null=True)
     comret = models.BooleanField(default=False)
     replyto = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='replies')
-    rerets = models.ManyToManyField(Buser, related_name='rereteds', blank=True)
     refbuu = models.ForeignKey('buser.Buu', on_delete=models.SET_NULL, null=True, blank=True, related_name='ret_responses')
+    rerets = models.ManyToManyField(Buser, related_name='rereteds_rets', blank=True)
 
     def likes_count(self):
         return self.likes.count()
