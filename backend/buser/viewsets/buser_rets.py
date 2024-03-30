@@ -14,7 +14,7 @@ def user_rets(request, username):
         user_rets = Ret.objects.filter(user=user)
 
         # Filtrar os rets dos rereteds do usuário
-        rereted_rets = Ret.objects.filter(rereteds=user)
+        rereted_rets = Ret.objects.filter(rerets=user)
 
         # Combinar os rets do usuário e dos rereteds
         all_user_rets = user_rets | rereted_rets

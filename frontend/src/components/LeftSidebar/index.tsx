@@ -4,7 +4,9 @@ import Logo from '../../assets/images/logoComTexto.png'
 import Home from '../../assets/images/home.svg'
 import Ghost from '../../assets/images/ghost.svg'
 import Profile from '../../assets/images/user.svg'
+import Logout from '../../assets/images/logout.svg'
 import DefaultProfile from '../../assets/images/DefaultProfile.jpg'
+
 import { useAuth } from '../../contexts/authContext'
 import { useNavigate } from 'react-router-dom'
 
@@ -76,7 +78,9 @@ const LeftSidebar = ({ openPopMakeRet, page }: Props) => {
             <span>@{buser?.username}</span>
           </div>
         </div>
-        <button onClick={logout}>...</button>
+        <button className="logout" onClick={logout}>
+          <img src={Logout} alt="Sair" />
+        </button>
       </div>
     </LeftContainer>
   )

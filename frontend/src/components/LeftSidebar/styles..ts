@@ -69,6 +69,14 @@ export const LeftContainer = styled.aside`
       font-size: 24px;
     }
 
+    .logout {
+      height:16px;
+
+      img {
+        height:16px;
+      }
+    }
+
 
     .profile-infos {
       display: flex;

@@ -110,7 +110,7 @@ export const BuserProvider = ({ children }: Props) => {
         localStorage.setItem('BuserUsername', username)
         fetchBuserData(res.data.access, username)
         toast.success('Bem vindo!')
-        navigate('/')
+        window.location.reload()
       } else {
         toast.error('Usuário ou senha incorretos')
       }

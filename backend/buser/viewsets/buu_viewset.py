@@ -8,10 +8,14 @@ class BuuViewSet(viewsets.ModelViewSet):
     serializer_class = BuuSerializer
 
     def get_queryset(self):
-        # Obtém o usuário autenticado
-        user = self.request.user
+        if self.action == 'retrieve':
+            return Buu.objects.all()  # Retorna todos os Buus para solicitações de detalhes individuais
+        else:
+            # Filtra os Buus pelo receiver igual ao usuário autenticado
+            user = self.request.user
+            return Buu.objects.filter(receiver=user)
 
-        # Filtra os Buus pelo receiver igual ao usuário autenticado
-        queryset = Buu.objects.filter(receiver=user)
-
-        return queryset
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)

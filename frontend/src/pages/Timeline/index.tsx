@@ -20,6 +20,8 @@ const Timeline = () => {
   const [showPopMakeRet, setShowPopMakeRet] = useState(false)
   const [selectedRet, setSelectedRet] = useState<RetType | null>(null)
 
+  console.log(JSON.stringify(data))
+
   function bloquearScroll() {
     document.body.style.overflow = 'hidden'
   }
