@@ -38,15 +38,21 @@ class RetSerializer(serializers.ModelSerializer):
     user = BuserSerializer(read_only=True)
     refbuu = serializers.PrimaryKeyRelatedField(queryset=Buu.objects.all(), allow_null=True, required=False)
     replies = serializers.SerializerMethodField()
-    reret_by = serializers.CharField(source='reret_by.username', required=False)
+    reret_by = serializers.SerializerMethodField()  # Corrigido para representar os busers que fizeram reret
 
     def get_replies(self, obj):
         replies = Ret.objects.filter(replyto=obj)
         serializer = self.__class__(replies, many=True)
         return serializer.data
 
+    def get_reret_by(self, obj):
+        if obj.rerets.exists():
+            return obj.rerets.values_list('username', flat=True)
+        else:
+            return []
+
     class Meta:
         model = Ret
-        fields = ['id', 'user', 'likes', 'datetime', 'content', 'media', 'comret', 'replies', 'rerets',
-                  'isreret', 'refbuu', 'reret_count', 'likes_count', 'replies_count', 'replyto', 'reret_by']
+        fields = ['id', 'user', 'likes', 'datetime', 'content', 'media', 'comret', 'replies', 'rerets', 'refbuu', 'reret_count', 'likes_count', 'replies_count', 'replyto', 'reret_by']
+
 

@@ -2,7 +2,6 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
-from rest_framework.decorators import api_view
 from buser.models import Ret, Buser
 from buser.serializers import RetSerializer
 
@@ -12,15 +11,21 @@ class RetViewSet(ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def timeline(self, request):
+        user = request.user
+
         # Recuperar os rets do usuário logado
-        user_rets = Ret.objects.filter(user=request.user)
+        user_rets = Ret.objects.filter(user=user)
 
         # Recuperar os rets dos usuários seguidos
-        following_users = request.user.following.all()
+        following_users = user.following.all()
         following_rets = Ret.objects.filter(user__in=following_users)
 
-        # Combinar e ordenar os rets
-        timeline = sorted(list(user_rets) + list(following_rets), key=lambda ret: ret.datetime, reverse=True)
+        # Recuperar os rereteds dos usuários seguidos
+        following_rereteds = Ret.objects.filter(rerets__in=following_users).exclude(user=user)
+
+        # Combinar rets, rereteds e ordenar pela data
+        timeline = sorted(list(user_rets) + list(following_rets) + list(following_rereteds),
+                          key=lambda ret: ret.datetime, reverse=True)
 
         # Serializar os rets e retornar a timeline
         serializer = self.get_serializer(timeline, many=True)
@@ -50,20 +55,10 @@ class RetViewSet(ModelViewSet):
         # Verificar se o usuário já reretweetou o ret
         if ret.rerets.filter(pk=user.pk).exists():
             return Response({'message': 'Você já fez reret deste ret.'}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Realizar o reret
-        ret.rerets.add(user)
-        return Response({'message': 'Reret realizado com sucesso.'}, status=status.HTTP_200_OK)
-
-    @action(detail=True, methods=['post'])
-    def undo_reret(self, request, pk=None):
-        ret = self.get_object()
-        user = request.user
-
-        # Verificar se o usuário reretweetou o ret
-        if not ret.rerets.filter(pk=user.pk).exists():
-            return Response({'message': 'Você ainda não fez reret deste ret.'}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Desreretar o ret
-        ret.rerets.remove(user)
-        return Response({'message': 'Reret desfeito com sucesso.'}, status=status.HTTP_200_OK)
+        else:
+            # Realizar o reret
+            user.rerets.add(ret)  # Adiciona o ret à lista de rerets do usuário
+            ret.rereted.add(user)  # Adiciona o usuário à lista de rereted do ret original
+            user.save()
+            ret.save()
+            return Response({'message': 'Reret realizado com sucesso.'}, status=status.HTTP_200_OK)
