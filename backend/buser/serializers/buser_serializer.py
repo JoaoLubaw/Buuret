@@ -38,7 +38,7 @@ class RetSerializer(serializers.ModelSerializer):
     reret_count = serializers.ReadOnlyField()
     replies_count = serializers.ReadOnlyField()
     user = BuserSerializer(read_only=True)
-    refbuu = serializers.PrimaryKeyRelatedField(queryset=Buu.objects.all(), allow_null=True, required=False)
+    refbuu = serializers.StringRelatedField()
     replies = serializers.SerializerMethodField()
     reret_by = serializers.SerializerMethodField()  # Corrigido para representar os busers que fizeram reret
 

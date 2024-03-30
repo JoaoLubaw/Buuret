@@ -71,29 +71,24 @@ const Timeline = () => {
         </header>
         <MakeRet />
         {data &&
-          data.map((ret: RetType) => {
-            if (ret.reret_count && ret.reret_count > 0) {
-              return (
-                <Ret
-                  datetime={ret.datetime ? ret.datetime : ''}
-                  buser={ret.user}
-                  content={ret.content}
-                  key={ret.id}
-                  reret_count={ret.reret_count}
-                  likes_count={ret.likes_count}
-                  replies_count={ret.replies_count}
-                  id={ret.id}
-                  likes={ret.likes}
-                  Media={ret.media}
-                  openMediaZoom={openMediaZoom}
-                  RefBuu={ret.refbuu}
-                  openPop={openPopMakeRet}
-                  ret={ret}
-                />
-              )
-            }
-            return null // Ignorar retweets
-          })}
+          data.map((ret: RetType) => (
+            <Ret
+              datetime={ret.datetime ? ret.datetime : ''}
+              buser={ret.user}
+              content={ret.content}
+              key={ret.id}
+              reret_count={ret.reret_count}
+              likes_count={ret.likes_count}
+              replies_count={ret.replies_count}
+              id={ret.id}
+              likes={ret.likes}
+              Media={ret.media}
+              openMediaZoom={openMediaZoom} // Passar a função como prop
+              RefBuu={ret.refbuu}
+              openPop={openPopMakeRet}
+              ret={ret}
+            />
+          ))}
         <MediaZoom
           mediaURL={selectedMedia}
           Open={openMedia}

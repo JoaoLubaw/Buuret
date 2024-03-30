@@ -13,8 +13,14 @@ def user_rets(request, username):
         # Filtrar os rets pelo usuário específico
         user_rets = Ret.objects.filter(user=user)
 
+        # Filtrar os rets dos rereteds do usuário
+        rereted_rets = Ret.objects.filter(rereteds=user)
+
+        # Combinar os rets do usuário e dos rereteds
+        all_user_rets = user_rets | rereted_rets
+
         # Serializar os rets e retornar a resposta
-        serializer = RetSerializer(user_rets, many=True)
+        serializer = RetSerializer(all_user_rets, many=True)
         return Response(serializer.data)
     except Buser.DoesNotExist:
         return Response({'message': 'O usuário não existe'}, status=status.HTTP_404_NOT_FOUND)
