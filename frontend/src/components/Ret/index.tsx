@@ -8,7 +8,12 @@ import ReRet from '../../assets/images/retweet.svg'
 import Buu from '../Buu'
 import { Buser, Buu as Buutypes, Ret as RetType } from '../../types'
 import { format } from 'date-fns'
-import { useGetaBuuQuery, useLikeRetMutation } from '../../services/api'
+import {
+  useDeleteReretMutation,
+  useGetaBuuQuery,
+  useLikeRetMutation,
+  useMakeReretMutation
+} from '../../services/api'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { customEventTarget } from '../../services/events'
@@ -30,6 +35,7 @@ type Props = {
   openMediaZoom?: (mediaUrl: string) => void | undefined
   openPop?: (ret: RetType) => void | undefined
   ret: RetType
+  update?: () => void
 }
 
 const Ret = ({
@@ -48,12 +54,14 @@ const Ret = ({
   likes,
   openMediaZoom,
   openPop,
-  ret
+  ret,
+  update
 }: Props) => {
   const formattedDatetime = datetime ? format(datetime, 'dd/MM/yyyy HH:mm') : ''
   const [likeRetMutation] = useLikeRetMutation()
   const [likesCount, setLikesCount] = useState(likes_count)
   const [commentCount, setCommentCount] = useState(replies_count)
+  const [reretCount, setReretCount] = useState(reret_count)
   const loggedBuser = JSON.parse(localStorage.getItem('buser') || '{}') as Buser
   const [liked, setLiked] = useState(likes?.includes(loggedBuser.id))
   const { data, isSuccess } = useGetaBuuQuery(RefBuu)
@@ -62,6 +70,37 @@ const Ret = ({
   const navigate = useNavigate()
   const imageUrl = buser?.profile
   const baseUrl = 'https://joaolubaw.pythonanywhere.com'
+
+  const [makeReret, { isLoading: makeReretLoading }] = useMakeReretMutation()
+  const [deleteReret, { isLoading: deleteReretLoading }] =
+    useDeleteReretMutation()
+
+  const handleReret = async () => {
+    console.log('handleReret called')
+    try {
+      if (
+        id &&
+        Array.isArray(ret.rerets) &&
+        !makeReretLoading &&
+        !deleteReretLoading &&
+        update
+      ) {
+        console.log('Before reret operation')
+        if (ret.rerets.includes(loggedBuser.id)) {
+          await deleteReret(id.toString()).unwrap()
+          console.log('oi')
+          update()
+        } else {
+          await makeReret(id.toString()).unwrap()
+          console.log('oi')
+          update()
+        }
+        console.log('After reret operation')
+      }
+    } catch (error) {
+      console.error('Erro ao fazer/desfazer reret:', error)
+    }
+  }
 
   const prefixedImageUrl = imageUrl?.startsWith('/')
     ? baseUrl + imageUrl
@@ -192,8 +231,13 @@ const Ret = ({
               <span>{commentCount}</span>
             </button>
             <button className="footer-item reret">
-              <img src={ReRet} alt="fazer Reret" className="icon" />
-              <span>{reret_count}</span>
+              <img
+                onClick={handleReret}
+                src={ReRet}
+                alt="fazer Reret"
+                className="icon"
+              />
+              <span>{reretCount}</span>
             </button>
             <button className="footer-item share">
               <img src={Share} alt="compartilhar" className="icon" />

@@ -54,11 +54,16 @@ class RetViewSet(ModelViewSet):
 
         # Verificar se o usuário já reretweetou o ret
         if ret.rerets.filter(pk=user.pk).exists():
-            return Response({'message': 'Você já fez reret deste ret.'}, status=status.HTTP_400_BAD_REQUEST)
+            # Remover o usuário da lista de rereteds do ret
+            ret.rerets.remove(user)
+            # Remover o ret da lista de rereteds do usuário
+            user.rereteds.remove(ret)
+            return Response({'message': 'Reret desfeito com sucesso.'}, status=status.HTTP_200_OK)
         else:
             # Realizar o reret
-            user.rerets.add(ret)  # Adiciona o ret à lista de rerets do usuário
-            ret.rereted.add(user)  # Adiciona o usuário à lista de rereted do ret original
-            user.save()
-            ret.save()
+            ret.rerets.add(user)  # Adiciona o usuário à lista de rerets do ret
+            ret.save()  # Salva o ret
+            # Adicionar o ret à lista de rereteds do usuário
+            user.rereteds.add(ret)
+            user.save()  # Salva o usuário
             return Response({'message': 'Reret realizado com sucesso.'}, status=status.HTTP_200_OK)

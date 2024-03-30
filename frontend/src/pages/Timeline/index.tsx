@@ -42,6 +42,10 @@ const Timeline = () => {
 
   //Pop
 
+  const handleUpdateRet = () => {
+    refetch()
+  }
+
   const openMediaZoom = (mediaUrl: string) => {
     setSelectedMedia(mediaUrl)
     setOpenMedia(true)
@@ -74,6 +78,7 @@ const Timeline = () => {
         {filteredTimeline &&
           filteredTimeline.map((ret: RetType) => (
             <Ret
+              update={handleUpdateRet}
               datetime={ret.datetime ? ret.datetime : ''}
               buser={ret.user}
               content={ret.content}

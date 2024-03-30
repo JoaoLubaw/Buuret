@@ -76,6 +76,10 @@ const Profile = () => {
     setOpenMedia(false)
   }
 
+  const handleUpdateRet = () => {
+    refetch()
+  }
+
   useEffect(() => {
     const handleUpdate = () => {
       refetch()
@@ -396,6 +400,7 @@ const Profile = () => {
             reversedData &&
             reversedData.map((ret) => (
               <Ret
+                update={handleUpdateRet}
                 openMediaZoom={openMediaZoom}
                 id={ret.id}
                 datetime={ret.datetime ? ret.datetime : ''}

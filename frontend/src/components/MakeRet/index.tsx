@@ -37,7 +37,6 @@ const MakeRet = ({
     comret: false,
     replies: [],
     rerets: [],
-    isreret: false,
     refbuu: null,
     replyto: null
   })

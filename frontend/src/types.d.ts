@@ -15,6 +15,7 @@ export declare type Buser = {
   background?: string
   profile?: string
   rets?: Ret[]
+  rereteds?: number | null
   buus_received?: Buus[]
   liked?: Ret[]
   token?: string
@@ -37,8 +38,8 @@ export declare type Ret = {
   comret?: boolean | null
   replies?: Ret[] | null
   replyto?: Ret | null
-  rerets?: Buser[] | null
-  isreret?: boolean
+  rerets?: null | number[]
+  reretedby?: string | null
   refbuu?: number | null | undefined
   likes_count?: number
   replies_count?: number

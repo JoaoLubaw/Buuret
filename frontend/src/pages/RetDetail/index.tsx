@@ -16,6 +16,10 @@ const RetDetail = () => {
   const { data, refetch } = useGetaRetQuery(id ?? '')
   const reversedReplies = data?.replies ? [...data.replies].reverse() : []
 
+  const handleUpdateRet = () => {
+    refetch()
+  }
+
   useEffect(() => {
     const handleUpdate = () => {
       refetch()
@@ -52,6 +56,7 @@ const RetDetail = () => {
         {retData ? (
           <>
             <Ret
+              update={handleUpdateRet}
               Detail
               datetime={retData.datetime ? retData.datetime : ''}
               buser={retData.user}
@@ -73,6 +78,7 @@ const RetDetail = () => {
         {reversedReplies &&
           reversedReplies.map((repRet) => (
             <Ret
+              update={handleUpdateRet}
               key={repRet.id}
               datetime={repRet.datetime ? repRet.datetime : ''}
               buser={repRet.user}
