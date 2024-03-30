@@ -10,12 +10,14 @@ class BuserSerializer(serializers.ModelSerializer):
     buus_received = 'BuuSerializer'
     following = serializers.SerializerMethodField()
     followers = serializers.SerializerMethodField()
+    following_usernames = serializers.ReadOnlyField()
+
 
     class Meta:
         model = Buser
         fields = ['id', 'username', 'email', 'name', 'birthdate', 'telephone', 'description',
                   'followers_count', 'following_count', 'rets_count', 'buus_received_count', 'password', 'rets',
-                  'buus_received', 'following', 'followers', 'is_active', 'profile', 'background']
+                  'buus_received', 'following', 'followers', 'is_active', 'profile', 'background', 'following_usernames']
 
     def get_following(self, obj):
         return obj.following.values_list('id', flat=True)
