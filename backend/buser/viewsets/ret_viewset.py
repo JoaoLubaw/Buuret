@@ -2,7 +2,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
-from buser.models import Ret
+from rest_framework.decorators import api_view
+from buser.models import Ret, Buser
 from buser.serializers import RetSerializer
 
 class RetViewSet(ModelViewSet):
