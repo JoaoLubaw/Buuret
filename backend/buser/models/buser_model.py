@@ -42,3 +42,9 @@ class Buser(AbstractUser):
 
     def buus_received_count(self):
         return self.buus_received.count()
+
+    @property
+    def following_usernames(self):
+        # Retorna uma lista de usernames dos usuários seguidos
+        return list(
+            Buser.objects.filter(id__in=self.following.values_list('id', flat=True)).values_list('username', flat=True))

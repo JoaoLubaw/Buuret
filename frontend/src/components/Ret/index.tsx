@@ -39,7 +39,6 @@ type Props = {
 
 const Ret = ({
   id,
-  isReret,
   Media,
   RefBuu,
   Detail,
@@ -66,27 +65,39 @@ const Ret = ({
   const { data, isSuccess } = useGetaBuuQuery(RefBuu)
   const [respondedBuu, setRespondedBuu] = useState<Buutypes>()
   const [formatedContent, setFormatedContent] = useState('')
+  const [reretUsernames, setReretUsernames] = useState<string[]>([])
+  const [isReret, setIsReret] = useState(false)
+
   const navigate = useNavigate()
   const imageUrl = buser?.profile
   const baseUrl = 'https://joaolubaw.pythonanywhere.com'
 
   const [makeReret, { isLoading: makeReretLoading }] = useMakeReretMutation()
 
+  useEffect(() => {
+    if (Array.isArray(ret.reret_by) && loggedBuser && loggedBuser.following) {
+      // Filtrar os usernames dos usuários que o usuário logado segue
+      const followedUsernames = ret.reret_by.filter((username) =>
+        loggedBuser.following.includes(username)
+      )
+
+      // Pegar os três primeiros usernames filtrados
+      const topThreeUsernames = followedUsernames.slice(0, 3)
+      setReretUsernames(topThreeUsernames)
+      setIsReret(true)
+    }
+  }, [ret.reret_by, loggedBuser?.following]) // Aqui usamos o operador ?. para verificar a propriedade following
+
   const handleReret = async () => {
-    console.log('handleReret called')
     try {
       if (id && Array.isArray(ret.rerets) && !makeReretLoading && update) {
-        console.log('Before reret operation')
         if (ret.rerets.includes(loggedBuser.id)) {
           await makeReret(id.toString()).unwrap()
-          console.log('oi')
-          update()
         } else {
           await makeReret(id.toString()).unwrap()
           console.log('oi')
-          update()
         }
-        console.log('After reret operation')
+        update()
       }
     } catch (error) {
       console.error('Erro ao fazer/desfazer reret:', error)
@@ -180,7 +191,14 @@ const Ret = ({
           <span className="username">@{buser?.username}</span>
           <span className="divisor">-</span>
           <span className="time">{formattedDatetime}</span>
-          {isReret && <span className="reret">ReRetado por @joaolubaw</span>}
+          {isReret && (
+            <span className="reret">
+              ReRetado por
+              {reretUsernames.map((username, index) => (
+                <span key={index}>@{username}</span>
+              ))}
+            </span>
+          )}
         </div>
 
         <div className="text" onClick={() => RetLink(id?.toString())}>

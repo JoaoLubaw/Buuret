@@ -44,6 +44,7 @@ export declare type Ret = {
   likes_count?: number
   replies_count?: number
   reret_count?: number
+  reret_by?: string[]
 }
 
 export declare type Buu = {

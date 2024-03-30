@@ -17,6 +17,8 @@ const Timeline = () => {
   const [openMedia, setOpenMedia] = useState(false)
   const filteredTimeline = data?.filter((ret) => ret.replyto == null)
 
+  console.log(filteredTimeline)
+
   //Pop
   const [showPopMakeRet, setShowPopMakeRet] = useState(false)
   const [selectedRet, setSelectedRet] = useState<RetType | null>(null)
@@ -44,6 +46,7 @@ const Timeline = () => {
 
   const handleUpdateRet = () => {
     refetch()
+    console.log('estou tentando')
   }
 
   const openMediaZoom = (mediaUrl: string) => {
