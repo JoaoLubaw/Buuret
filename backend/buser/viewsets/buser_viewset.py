@@ -36,7 +36,7 @@ class BuserViewSet(ModelViewSet):
         lookup_field = 'username'
 
         filter_backends = [filters.SearchFilter]
-        search_fields = ['username', 'full_name']
+        search_fields = ['username', 'name']
 
     def get_queryset(self):
         username = self.kwargs.get('username', None)
@@ -54,7 +54,7 @@ class BuserViewSet(ModelViewSet):
         queryset = self.filter_queryset(self.get_queryset())
 
         # Aplicar filtro de pesquisa aos campos especificados
-        queryset = queryset.filter(Q(username__icontains=query) | Q(full_name__icontains=query))
+        queryset = queryset.filter(Q(username__icontains=query) | Q(name__icontains=query))
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
