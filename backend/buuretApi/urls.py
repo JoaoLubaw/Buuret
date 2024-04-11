@@ -42,6 +42,7 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('busers/sugg/', BuserViewSet.as_view({'get': 'suggested_users'}), name='suggested-users'),
+    path('busers/search/', BuserViewSet.as_view({'get': 'search'}), name='user-search'),
     path('busers/<str:username>/', BuserViewSet.as_view({'get': 'retrieve', 'put': 'update'}), name='buser-detail'),
     path('busers/<str:username>/follow/', BuserViewSet.as_view({'post': 'follow'}), name='follow-user'),  # Rota para seguir um usuário
     path('busers/<str:username>/unfollow/', BuserViewSet.as_view({'post': 'unfollow'}), name='unfollow-user'),  # Rota para parar de seguir um usuário

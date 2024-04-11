@@ -13,15 +13,15 @@ class RetViewSet(ModelViewSet):
     def timeline(self, request):
         user = request.user
 
-        # Recuperar os rerets do usuário logado
-        user_rerets = user.rereteds.all()
+        # Recuperar os rets do usuário logado
+        user_rets = Ret.objects.filter(user=user)
 
         # Recuperar os rerets dos usuários seguidos
         following_users = user.following.all()
-        following_rerets = Ret.objects.filter(rerets__in=following_users).exclude(user=user)
+        following_rerets = Ret.objects.filter(user__in=following_users).exclude(user=user)
 
         # Combine os rets normais e os rerets em uma única lista
-        all_rets = list(user_rerets) + list(following_rerets)
+        all_rets = list(user_rets) + list(following_rerets)
 
         # Criar um dicionário para armazenar os rets com mais rerets
         rets_with_most_rerets = {}
@@ -33,7 +33,7 @@ class RetViewSet(ModelViewSet):
                 rets_with_most_rerets[ret.id] = ret
 
         # Filtrar os rets que não são respostas a outros rets
-        filtered_rets = [ret for ret in rets_with_most_rerets.values() if ret.replyto is None]
+        filtered_rets = [ret for ret in rets_with_most_rerets.values() if ret.reply_to is None]
 
         # Ordenar os rets filtrados por data
         timeline = sorted(filtered_rets, key=lambda ret: ret.datetime, reverse=True)
