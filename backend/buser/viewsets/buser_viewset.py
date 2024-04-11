@@ -36,7 +36,7 @@ class BuserViewSet(ModelViewSet):
         username = self.kwargs.get('username', None)
         if username is not None:
             return Buser.objects.filter(username=username)
-        elif self.request.user.is_staff:
+        elif self.request.user.is_authenticated:
             return Buser.objects.all()
         else:
             return Buser.objects.none()
