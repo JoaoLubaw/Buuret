@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Buu as BuuType } from '../../types'
+import { Buser, Buu as BuuType } from '../../types'
 import Layout from '../../components/Layout'
 import { MyBuusContainer } from './styles'
 import Buu from '../../components/Buu'
 import { useUpdateBuuMutation, useGetBuusQuery } from '../../services/api'
 import PopMakeRet from '../../components/PopMakeRet'
+import DefaultProfile from '../../assets/images/DefaultProfile.jpg'
 
 const MyBuus = () => {
   const [buus, setBuus] = useState<BuuType[]>([])
@@ -13,6 +14,25 @@ const MyBuus = () => {
   const { data } = useGetBuusQuery(token)
   const [showPopMakeRet, setShowPopMakeRet] = useState(false)
   const [selectedBuu, setSelectedBuu] = useState<BuuType | null>(null)
+  const loggedBuser = JSON.parse(localStorage.getItem('buser') || '{}') as Buser
+
+  //Resize
+
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 425)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth <= 425)
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
+
+  //Resize
 
   function bloquearScroll() {
     document.body.style.overflow = 'hidden'
@@ -59,6 +79,15 @@ const MyBuus = () => {
       <MyBuusContainer>
         <header>
           <h2>Meus Buus</h2>
+          {isSmallScreen ? (
+            <img
+              src={loggedBuser?.profile ? loggedBuser.profile : DefaultProfile}
+              alt="Imagem de perfil"
+              className="avatar"
+            />
+          ) : (
+            <></>
+          )}
         </header>
         {buus.map((buu) => (
           <Buu

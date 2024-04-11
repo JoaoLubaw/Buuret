@@ -3,9 +3,11 @@ import Ret from '../../components/Ret'
 import Layout from '../../components/Layout'
 
 import { TimelineContainer } from './styles'
+import DefaultProfile from '../../assets/images/DefaultProfile.jpg'
+import Write from '../../assets/images/write.svg'
+
 import { useGetTimelineQuery, useMakeRetMutation } from '../../services/api'
-import { Ret as RetType } from '../../types'
-import { toast } from 'react-toastify'
+import { Buser, Ret as RetType } from '../../types'
 import { useEffect, useState } from 'react'
 import MediaZoom from '../../components/MediaZoom'
 import PopMakeRet from '../../components/PopMakeRet'
@@ -15,12 +17,29 @@ const Timeline = () => {
   const { data, isLoading, error, refetch } = useGetTimelineQuery('')
   const [selectedMedia, setSelectedMedia] = useState<string | null>(null) // Estado para controlar a imagem selecionada
   const [openMedia, setOpenMedia] = useState(false)
+  const loggedBuser = JSON.parse(localStorage.getItem('buser') || '{}') as Buser
+
+  //Resize
+
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 425)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth <= 425)
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
+
+  //Resize
 
   //Pop
   const [showPopMakeRet, setShowPopMakeRet] = useState(false)
   const [selectedRet, setSelectedRet] = useState<RetType | null>(null)
-
-  console.log(JSON.stringify(data))
 
   function bloquearScroll() {
     document.body.style.overflow = 'hidden'
@@ -36,13 +55,19 @@ const Timeline = () => {
     bloquearScroll()
   }
 
+  const openPopMakeRetSMALL = () => {
+    setShowPopMakeRet(true)
+    bloquearScroll()
+  }
+
   const closePopMakeRet = () => {
     setShowPopMakeRet(false)
     desbloquearScroll()
   }
 
-  //Pop
+  // /Pop
 
+  //OpenMedia
   const openMediaZoom = (mediaUrl: string) => {
     setSelectedMedia(mediaUrl)
     setOpenMedia(true)
@@ -52,6 +77,7 @@ const Timeline = () => {
     setSelectedMedia(null)
     setOpenMedia(false)
   }
+  // /OpenMedia
 
   useEffect(() => {
     const handleUpdate = () => {
@@ -70,10 +96,19 @@ const Timeline = () => {
       <TimelineContainer className="timeline">
         <header>
           <h2>Página Inicial</h2>
+          {isSmallScreen ? (
+            <img
+              src={loggedBuser?.profile ? loggedBuser.profile : DefaultProfile}
+              alt="Imagem de perfil"
+              className="avatar"
+            />
+          ) : (
+            <></>
+          )}
         </header>
         <MakeRet />
         {data &&
-          data.map((ret: RetType) => (
+          data.map((ret: RetType, index: number) => (
             <Ret
               datetime={ret.datetime ? ret.datetime : ''}
               buser={ret.user}
@@ -87,8 +122,11 @@ const Timeline = () => {
               Media={ret.media}
               openMediaZoom={openMediaZoom} // Passar a função como prop
               RefBuu={ret.refbuu}
-              openPop={openPopMakeRet}
+              openPop={(ret) => openPopMakeRet(ret)}
               ret={ret}
+              className={
+                index === data.length - 1 && isSmallScreen ? 'last-item' : ''
+              }
             />
           ))}
         <MediaZoom
@@ -96,7 +134,18 @@ const Timeline = () => {
           Open={openMedia}
           close={closeMediaZoom}
         />
-        {showPopMakeRet && (
+
+        {isSmallScreen && (
+          <div className="newRetButton">
+            <button onClick={() => openPopMakeRetSMALL()}>
+              <img src={Write} alt="Fazer Ret" />
+            </button>
+          </div>
+        )}
+
+        {showPopMakeRet && <PopMakeRet closePopMakeRet={closePopMakeRet} />}
+
+        {showPopMakeRet && selectedRet && (
           <PopMakeRet
             closePopMakeRet={closePopMakeRet}
             response

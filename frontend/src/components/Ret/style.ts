@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { colors } from '../../styles'
+import { breakpoints, colors } from '../../styles'
 
 export const RetContainer = styled.div`
   width: 100%;
@@ -14,11 +14,21 @@ export const RetContainer = styled.div`
     object-fit: cover;
     border-radius: 50%;
     cursor: pointer;
+
+    @media (max-width: ${breakpoints.mobileG}) {
+      height: 42px;
+      width: 42px;
+    }
   }
 
   .header {
     display: flex;
     align-items: center;
+
+    @media (max-width: ${breakpoints.tablet}) {
+      display: block;
+      margin-bottom: 8px;
+    }
 
     h3 {
       margin-right: 4px;
@@ -53,6 +63,10 @@ export const RetContainer = styled.div`
   .content {
     margin-left: 8px;
     width: 80%;
+
+    @media (max-width: ${breakpoints.tablet}) {
+      width: 95%;
+    }
   }
 
   .buuResponse {
@@ -71,11 +85,10 @@ export const RetContainer = styled.div`
 
   .media {
     width: 90%;
-    max-height: 50vh;
+    max-height: 25vh;
     object-fit: cover;
     border-radius: 50px;
     margin-top: 12px;
-
     cursor: zoom-in;
   }
 
@@ -101,6 +114,10 @@ export const RetContainer = styled.div`
     }
   }
 
+  &.last-item {
+    margin-bottom: 10vh;
+  }
+
   &.detail {
     .text {
       margin-top: 4px;
@@ -113,6 +130,11 @@ export const RetContainer = styled.div`
       width: 56px;
       object-fit: cover;
       border-radius: 50%;
+
+      @media (max-width: ${breakpoints.mobileG}) {
+        height: 36px;
+        width: 36px;
+      }
     }
 
     h3 {

@@ -13,39 +13,35 @@ class RetViewSet(ModelViewSet):
     def timeline(self, request):
         user = request.user
 
-        # Recuperar os rets do usuário logado
-        user_rets = Ret.objects.filter(user=user)
+        # Recuperar os rerets do usuário logado
+        user_rerets = user.rereteds.all()
 
-        # Recuperar os rets dos usuários seguidos
+        # Recuperar os rerets dos usuários seguidos
         following_users = user.following.all()
-        following_rets = Ret.objects.filter(user__in=following_users)
+        following_rerets = Ret.objects.filter(rerets__in=following_users).exclude(user=user)
 
-        # Recuperar os rereteds dos usuários seguidos
-        following_rereteds = Ret.objects.filter(rerets__in=following_users).exclude(user=user)
+        # Criar um dicionário para armazenar os rerets com mais rerets
+        rerets_with_most_rerets = {}
 
-        # Criar um dicionário para armazenar os rets com mais rerets
-        rets_with_most_rerets = {}
+        # Percorrer os rerets e adicionar aqueles com mais rerets ao dicionário
+        for reret in user_rerets:
+            rerets_with_most_rerets[reret.id] = reret
 
-        # Percorrer os rets e adicionar aqueles com mais rerets ao dicionário
-        for ret in user_rets:
-            rets_with_most_rerets[ret.id] = ret
+        for reret in following_rerets:
+            if reret.id not in rerets_with_most_rerets or len(reret.rerets.all()) > len(
+                    rerets_with_most_rerets[reret.id].rerets.all()):
+                rerets_with_most_rerets[reret.id] = reret
 
-        for ret in following_rets:
-            if ret.id not in rets_with_most_rerets or len(ret.rerets.all()) > len(
-                    rets_with_most_rerets[ret.id].rerets.all()):
-                rets_with_most_rerets[ret.id] = ret
+        # Filtrar os rerets que não são respostas a outros rets
+        filtered_rerets = [reret for reret in rerets_with_most_rerets.values() if reret.reply_to is None]
 
-        for ret in following_rereteds:
-            if ret.id not in rets_with_most_rerets or len(ret.rerets.all()) > len(
-                    rets_with_most_rerets[ret.id].rerets.all()):
-                rets_with_most_rerets[ret.id] = ret
+        # Ordenar os rerets filtrados por data
+        timeline = sorted(filtered_rerets, key=lambda reret: reret.datetime, reverse=True)
 
-        # Ordenar os rets com mais rerets por data
-        timeline = sorted(rets_with_most_rerets.values(), key=lambda ret: ret.datetime, reverse=True)
-
-        # Serializar os rets e retornar a timeline
+        # Serializar os rerets e retornar a timeline
         serializer = self.get_serializer(timeline, many=True)
         return Response(serializer.data)
+
 
     def perform_create(self, serializer):
         # Associar o usuário logado ao Ret sendo criado

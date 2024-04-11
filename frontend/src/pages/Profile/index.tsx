@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
-import Layout from '../../components/Layout'
-import { ProfileContainer } from './styles'
-import DefaultProfile from '../../assets/images/DefaultProfile.jpg'
-import DefaultBackground from '../../assets/images/DefaultBackgound.jpg'
-import Back from '../../assets/images/arrow.svg'
-import Buu from '../../assets/images/ghost.svg'
-import Ret from '../../components/Ret'
 import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
+
+import { Buser, Ret as RetType } from '../../types'
+
+import { customEventTarget } from '../../services/events'
 import {
   useFollowMutation,
   useGetaBuserQuery,
@@ -15,10 +13,17 @@ import {
   useUnfollowMutation,
   useUpdateUserMutation
 } from '../../services/api'
-import { Buser, Ret as RetType } from '../../types'
-import { toast } from 'react-toastify'
+
 import MediaZoom from '../../components/MediaZoom'
-import { customEventTarget } from '../../services/events'
+import Layout from '../../components/Layout'
+import Ret from '../../components/Ret'
+import { ProfileContainer } from './styles'
+
+import editIMG from '../../assets/images/Edit.svg'
+import DefaultProfile from '../../assets/images/DefaultProfile.jpg'
+import DefaultBackground from '../../assets/images/DefaultBackgound.jpg'
+import Back from '../../assets/images/arrow.svg'
+import Buu from '../../assets/images/ghost.svg'
 
 const Profile = () => {
   const { username } = useParams()
@@ -42,6 +47,24 @@ const Profile = () => {
   const [selectedMedia, setSelectedMedia] = useState<string | null>(null)
   const [openMedia, setOpenMedia] = useState(false)
 
+  //Resize
+
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 425)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth <= 425)
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
+
+  //Resize
+
   //Pop
   const [showPopMakeRet, setShowPopMakeRet] = useState(false)
   const [selectedRet, setSelectedRet] = useState<RetType | null>(null)
@@ -54,8 +77,9 @@ const Profile = () => {
     document.body.style.overflow = ''
   }
 
-  const openPopMakeRet = () => {
+  const openPopMakeRet = (selRec: RetType) => {
     setShowPopMakeRet(true)
+    setSelectedRet(selRec)
     bloquearScroll()
   }
 
@@ -66,6 +90,7 @@ const Profile = () => {
 
   //Pop
 
+  //OpenMedia
   const openMediaZoom = (mediaUrl: string) => {
     setSelectedMedia(mediaUrl)
     setOpenMedia(true)
@@ -75,6 +100,7 @@ const Profile = () => {
     setSelectedMedia(null)
     setOpenMedia(false)
   }
+  // /OpenMedia
 
   useEffect(() => {
     const handleUpdate = () => {
@@ -96,7 +122,6 @@ const Profile = () => {
 
   const handleProfileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
-      console.log('Arquivo selecionado:', event.target.files[0])
       setProfileImage(event.target.files[0])
     } else {
       console.log('Nenhum arquivo selecionado.')
@@ -174,7 +199,7 @@ const Profile = () => {
     buuText: string,
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
-    event.preventDefault() // Evita o comportamento padrão de recarregar a página
+    event.preventDefault()
 
     try {
       await sendBuu({
@@ -185,6 +210,7 @@ const Profile = () => {
       })
       setBuuText('')
       toast.success('Buu enviado!')
+      window.location.reload()
     } catch (error) {
       console.error('Erro ao enviar o Buu:', error)
     }
@@ -221,10 +247,23 @@ const Profile = () => {
       {buser && (
         <ProfileContainer>
           <header>
-            <button>
-              <img onClick={goBack} src={Back} alt="Voltar" />
-            </button>
-            <h2>@{buser.username}</h2>
+            <div className="division">
+              <button>
+                <img onClick={goBack} src={Back} alt="Voltar" />
+              </button>
+              <h2>@{buser.username}</h2>
+            </div>
+            {isSmallScreen ? (
+              <img
+                src={
+                  loggedBuser?.profile ? loggedBuser.profile : DefaultProfile
+                }
+                alt="Imagem de perfil"
+                className="avatar"
+              />
+            ) : (
+              <></>
+            )}
           </header>
           <div className="hero">
             {edit ? (
@@ -242,11 +281,19 @@ const Profile = () => {
                     className="background"
                   />
                 )}
+                <label htmlFor="imageUpload">
+                  <img
+                    src={editIMG}
+                    alt="Importar Imagens"
+                    className="labelIMG labelIMG--back"
+                  />
+                </label>
                 <input
                   type="file"
-                  placeholder="Escolher"
-                  className="change-background-button"
+                  id="imageUpload"
                   onChange={handleBackgroundChange}
+                  accept="image/*"
+                  style={{ display: 'none' }}
                 />
               </>
             ) : (
@@ -271,29 +318,52 @@ const Profile = () => {
               {edit ? (
                 <>
                   {buser.profile ? (
-                    <img src={buser.profile} alt="Avatar" className="profile" />
+                    <img
+                      src={buser.profile}
+                      alt="Avatar"
+                      className="profile"
+                      onClick={() =>
+                        buser.profile && openMediaZoom(buser.profile)
+                      }
+                    />
                   ) : (
                     <img
                       src={DefaultProfile}
                       alt="Avatar"
                       className="profile"
+                      onClick={() => openMediaZoom(DefaultProfile)}
                     />
                   )}
+                  <label htmlFor="imageUpload" className="labelIMG">
+                    <img src={editIMG} alt="Importar Imagens" />
+                  </label>
                   <input
                     type="file"
-                    placeholder="Escolher foto de perfil"
+                    id="imageUpload"
                     onChange={handleProfileChange}
+                    accept="image/*"
+                    style={{ display: 'none' }}
                   />
                 </>
               ) : (
                 <>
                   {buser.profile ? (
-                    <img src={buser.profile} alt="Avatar" className="profile" />
+                    <img
+                      src={buser.profile}
+                      alt="Avatar"
+                      className="profile"
+                      onClick={() =>
+                        buser.profile && openMediaZoom(buser.profile)
+                      }
+                    />
                   ) : (
                     <img
                       src={DefaultProfile}
                       alt="Avatar"
                       className="profile"
+                      onClick={() =>
+                        buser.profile && openMediaZoom(DefaultProfile)
+                      }
                     />
                   )}
                 </>
@@ -320,7 +390,10 @@ const Profile = () => {
                 {buser.username === loggedBuser.username && (
                   <>
                     {!edit ? (
-                      <button onClick={() => setEdit(true)}>
+                      <button
+                        className="EditButton"
+                        onClick={() => setEdit(true)}
+                      >
                         Editar Perfil
                       </button>
                     ) : (
@@ -345,6 +418,7 @@ const Profile = () => {
                     onChange={handleChangeDesc}
                     value={text}
                     maxLength={100}
+                    className="edditing"
                   ></textarea>
                 )}
               </div>
@@ -384,7 +458,7 @@ const Profile = () => {
                 onChange={handleBuuTextChange}
               ></textarea>
               <button onClick={(event) => handleSendBuu(buuText, event)}>
-                Enviar Buu <img src={Buu} alt="Fantasma" />
+                <span>Enviar Buu</span> <img src={Buu} alt="Fantasma" />
               </button>
             </form>
 
@@ -407,11 +481,11 @@ const Profile = () => {
                 reret_count={ret.reret_count}
                 likes={ret.likes}
                 Media={ret.media}
-                openPop={openPopMakeRet}
+                openPop={() => openPopMakeRet(ret)}
                 ret={ret}
               />
             ))}
-          {selectedMedia && (
+          {selectedMedia && showPopMakeRet && (
             <MediaZoom
               mediaURL={selectedMedia}
               Open={openMedia}

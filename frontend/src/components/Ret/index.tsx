@@ -5,6 +5,7 @@ import LikeIsLiked from '../../assets/images/filledHeart.svg'
 import Comment from '../../assets/images/comment.svg'
 import Share from '../../assets/images/share.svg'
 import ReRet from '../../assets/images/retweet.svg'
+import ReRetedIMG from '../../assets/images/rereted.svg'
 import Buu from '../Buu'
 import { Buser, Buu as Buutypes, Ret as RetType } from '../../types'
 import { format } from 'date-fns'
@@ -34,6 +35,7 @@ type Props = {
   openMediaZoom?: (mediaUrl: string) => void | undefined
   openPop?: (ret: RetType) => void | undefined
   ret: RetType
+  className?: string
 }
 
 const Ret = ({
@@ -51,7 +53,8 @@ const Ret = ({
   likes,
   openMediaZoom,
   openPop,
-  ret
+  ret,
+  className
 }: Props) => {
   const formattedDatetime = datetime ? format(datetime, 'dd/MM/yyyy HH:mm') : ''
   const [likeRetMutation] = useLikeRetMutation()
@@ -97,6 +100,10 @@ const Ret = ({
     return followedUsernames.slice(0, 3)
   }
 
+  const yourReRet = (reretBy: string[] | undefined) => {
+    if (reretBy?.includes(loggedBuser.username)) return true
+  }
+
   const followingUsernames = loggedBuser?.following_usernames || []
   const [reretUsernames, setReretUsernames] = useState<string[]>(() =>
     getTopThreeUsernames(ret.reret_by, followingUsernames)
@@ -114,10 +121,8 @@ const Ret = ({
           await makeReret(id.toString()).unwrap()
           setReretCount([...reretCount, loggedBuser.id])
         }
-        if (makeReretSucess) {
-          customEventTarget.dispatchEvent(customEventTarget.newRetEvent)
-        }
       }
+      customEventTarget.dispatchEvent(customEventTarget.newRetEvent)
     } catch (error) {
       console.error('Erro ao fazer/desfazer reret:', error)
     }
@@ -182,7 +187,7 @@ const Ret = ({
   // Fim Links
 
   return (
-    <RetContainer className={Detail ? 'detail' : ''}>
+    <RetContainer className={`${Detail ? 'detail ' : ''}${className}`}>
       {buser?.profile ? (
         <img
           onClick={() => ProfileLink(buser?.username)}
@@ -206,16 +211,32 @@ const Ret = ({
           <span className="username">@{buser?.username}</span>
           <span className="divisor">-</span>
           <span className="time">{formattedDatetime}</span>
-          {reretUsernames.length > 0 && (
-            <span className="reret">
-              ReRetado por
-              {reretUsernames.map((username, index) => (
-                <span className="reretUsername" key={index}>
-                  @{username}
-                </span>
-              ))}
-            </span>
-          )}
+          <div className="reretsList">
+            {reretUsernames.length > 0 && !yourReRet(ret.reret_by) && (
+              <span className="reret">
+                ReRetado por
+                {reretUsernames.map((username, index) => (
+                  <span className="reretUsername" key={index}>
+                    @{username}
+                  </span>
+                ))}
+              </span>
+            )}
+            {reretUsernames.length > 0 && yourReRet(ret.reret_by) && (
+              <span className="reret">
+                ReRetado por
+                {reretUsernames.map((username, index) => (
+                  <span className="reretUsername" key={index}>
+                    @{username}
+                  </span>
+                ))}
+                <span className="reretUsername">e você</span>
+              </span>
+            )}
+            {yourReRet(ret.reret_by) && reretUsernames.length == 0 && (
+              <span className="reret">ReRetado por você</span>
+            )}
+          </div>
         </div>
 
         <div className="text" onClick={() => RetLink(id?.toString())}>
@@ -257,12 +278,24 @@ const Ret = ({
               <span>{commentCount}</span>
             </button>
             <button className="footer-item reret">
-              <img
-                onClick={handleReret}
-                src={ReRet}
-                alt="fazer Reret"
-                className="icon"
-              />
+              {yourReRet(ret.reret_by) ? (
+                <img
+                  onClick={handleReret}
+                  src={ReRetedIMG}
+                  alt="fazer Reret"
+                  className="icon"
+                />
+              ) : (
+                <>
+                  <img
+                    onClick={handleReret}
+                    src={ReRet}
+                    alt="fazer Reret"
+                    className="icon"
+                  />
+                </>
+              )}
+
               <span>{reretCount?.length}</span>
             </button>
             <button className="footer-item share">

@@ -9,6 +9,8 @@ import {
 } from '../services/auth'
 import { toast } from 'react-toastify'
 import axios from 'axios'
+import { SyncLoader } from 'react-spinners'
+import { colors } from '../styles'
 
 type BuserContextType = {
   buser: Buser | null
@@ -23,7 +25,9 @@ type BuserContextType = {
     description: string,
     liked: Ret[],
     rets: Ret[],
-    telephone?: string | undefined
+    telephone?: string | undefined,
+    resetForm?: () => void,
+    closeCreate?: () => void
   ) => void
   loginBuser: (username: string, password: string) => void
   logout: () => void
@@ -39,6 +43,7 @@ export const BuserProvider = ({ children }: Props) => {
   const [token, setToken] = useState<string | null>(null)
   const [isReady, setIsReady] = useState(false)
   const [buser, setBuser] = useState<Buser | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const buser = localStorage.getItem('buser')
@@ -61,9 +66,11 @@ export const BuserProvider = ({ children }: Props) => {
     description: string,
     liked: Ret[],
     rets: Ret[],
-    telephone?: string | undefined
+    telephone?: string | undefined,
+    resetForm?: () => void,
+    closeCreate?: () => void
   ) => {
-    await registerAPI(
+    const res = await registerAPI(
       email,
       password,
       name,
@@ -74,59 +81,55 @@ export const BuserProvider = ({ children }: Props) => {
       liked,
       rets,
       telephone
-    ).then((res) => {
-      if (res) {
-        if (res && res.data && res.data.token) {
-          localStorage.setItem('token', res.data.token)
-        }
-
-        const buserObj = {
-          email: res?.data.email,
-          password: res?.data.password,
-          name: res?.data.name,
-          username: res?.data.username,
-          birthdate: res?.data.birthdate,
-          buus_received: res?.data.buus_received,
-          description: res?.data.description,
-          liked: res?.data.liked,
-          rets: res?.data.rets,
-          telephone: res?.data.telephone
-        }
-        if (res && res.data && res.data.token !== undefined) {
-          setToken(res.data.token)
-        }
-        toast.success('Cadastro pronto! Agora é só entrar.')
-        navigate('/login')
-      }
-    })
+    )
+    if (res && res.data && resetForm && closeCreate) {
+      toast.success('Cadastro pronto! Agora é só entrar.')
+      resetForm()
+      closeCreate()
+    } else {
+      toast.error('O nome de usuário já está em uso. Por favor, escolha outro.')
+    }
   }
 
-  const loginBuser = async (username: string, password: string) => {
-    await loginAPI(username, password).then((res) => {
-      if (res && res.data) {
-        localStorage.setItem('token', res.data.access)
-        setToken(res.data.access)
-
-        localStorage.setItem('BuserUsername', username)
-        fetchBuserData(res.data.access, username)
-        toast.success('Bem vindo!')
-        window.location.reload()
-      } else {
-        toast.error('Usuário ou senha incorretos')
-      }
-    })
+  const fetchUserData = async (token: string, username: string) => {
+    try {
+      const userData = await fetchBuserData(token, username)
+      setBuser(userData)
+    } catch (error) {
+      console.error('Erro ao buscar dados do usuário:', error)
+    }
   }
 
   const isLoggedIn = () => {
     return !!buser
   }
 
+  const loginBuser = async (username: string, password: string) => {
+    try {
+      const res = await loginAPI(username, password)
+      if (res && res.data) {
+        setIsLoading(true) // Ativar carregamento
+        localStorage.setItem('token', res.data.access)
+        setToken(res.data.access)
+        await fetchUserData(res.data.access, username)
+        setIsLoading(false) // Desativar carregamento
+        toast.success('Bem vindo!')
+        navigate('/')
+      } else {
+        toast.error('Usuário ou senha incorretos')
+      }
+    } catch (error) {
+      setIsLoading(false) // Desativar carregamento em caso de erro
+      toast.error('Erro ao fazer login. Tente novamente mais tarde.')
+      console.error('Erro ao fazer login:', error)
+    }
+  }
+
   const logout = () => {
     localStorage.removeItem('token')
     localStorage.removeItem('buser')
-    localStorage.removeItem('BuserUsername')
     setBuser(null)
-    setToken('')
+    setToken(null)
     navigate('/login')
   }
 
@@ -141,7 +144,20 @@ export const BuserProvider = ({ children }: Props) => {
         registerBuser
       }}
     >
-      {isReady ? children : null}
+      {isLoading ? (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100vh'
+          }}
+        >
+          <SyncLoader color={colors.blue} />
+        </div>
+      ) : (
+        isReady && children
+      )}
     </BuserContext.Provider>
   )
 }

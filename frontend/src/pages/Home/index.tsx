@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
-
-import * as Yup from 'yup'
-import { useFormik } from 'formik'
 import InputMask from 'react-input-mask'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+
+import { useAuth } from '../../contexts/authContext'
+import { Buu, Ret } from '../../types'
 
 import {
   Form,
@@ -18,22 +20,20 @@ import OpenEye from '../../assets/images/eye-open.svg'
 import CloseEye from '../../assets/images/eye-close.svg'
 import LogoNT from '../../assets/images/logoSemTexto.png'
 import Close from '../../assets/images/x.svg'
-import { useAuth } from '../../contexts/authContext'
-import { Buu, Ret } from '../../types'
-import { useNavigate } from 'react-router-dom'
 
 const Home = () => {
   const [showPassword, setShowPassword] = useState(false)
+  const { loginBuser, registerBuser } = useAuth() // Adicione isLoggedIn aqui
   const [isOpen, setIsOpen] = useState(false)
-  const { loginBuser, registerBuser } = useAuth()
-  const { isLoggedIn } = useAuth()
-  const navigate = useNavigate()
 
   const closeCreate = () => {
     setIsOpen(false)
   }
 
-  const togglePasswordVisibility = () => {
+  const togglePasswordVisibility = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event?.preventDefault()
     setShowPassword(!showPassword)
   }
 
@@ -59,6 +59,7 @@ const Home = () => {
       username: Yup.string()
         .min(5, 'O username precisa ter entre 5-20 caracteres')
         .max(20, 'O username precisa ter entre 5-20 caracteres')
+        .notOneOf(['login', 'ret', 'buus'], 'Username inválido')
         .required('As pessoas vão te achar por este username'),
       email: Yup.string()
         .email('E-mail inválido')
@@ -103,8 +104,8 @@ const Home = () => {
         .required('Você deve concordar com os termos')
     }),
 
-    onSubmit: (values) => {
-      registerBuser(
+    onSubmit: async (values, { resetForm }) => {
+      await registerBuser(
         values.email,
         values.password,
         values.name,
@@ -114,10 +115,10 @@ const Home = () => {
         values.description,
         values.liked,
         values.rets,
-        values.telephone
+        values.telephone,
+        resetForm,
+        closeCreate
       )
-
-      closeCreate()
     }
   })
 
@@ -135,10 +136,11 @@ const Home = () => {
       username: '',
       password: ''
     },
-    onSubmit: (values) => {
-      loginBuser(values.username, values.password)
-      if (isLoggedIn() == true) {
-        navigate('/')
+    onSubmit: async (values) => {
+      try {
+        await loginBuser(values.username, values.password)
+      } catch (error) {
+        console.error('Erro ao fazer login:', error)
       }
     }
   })
@@ -146,7 +148,9 @@ const Home = () => {
   return (
     <>
       <HomeContainer>
-        <img src={Logo} alt="Buuret" />
+        <div className="BuuretImg">
+          <img className="BuuretImg" src={Logo} alt="Buuret" />
+        </div>
         <Form>
           <h2>
             Nos permita <span>descobrir</span> você <br />
@@ -172,7 +176,7 @@ const Home = () => {
                 onChange={loginForm.handleChange}
                 placeholder="Senha"
               />
-              <button onClick={togglePasswordVisibility}>
+              <button onClick={(event) => togglePasswordVisibility(event)}>
                 <img
                   src={showPassword ? CloseEye : OpenEye}
                   alt="Exibir ou ocultar senha"
@@ -240,7 +244,7 @@ const Home = () => {
                     type="text"
                     name="username"
                     id="username"
-                    placeholder="Nome de usuário"
+                    placeholder="Username"
                   />
                   {newUserForm.errors.username &&
                     newUserForm.touched.username && (

@@ -4,9 +4,10 @@ import { RetDetailContainer } from './styles'
 import Ret from '../../components/Ret'
 
 import Back from '../../assets/images/arrow.svg'
+import DefaultProfile from '../../assets/images/DefaultProfile.jpg'
 import { useGetaRetQuery } from '../../services/api'
 import { useParams } from 'react-router-dom'
-import { Ret as RetType } from '../../types'
+import { Buser, Ret as RetType } from '../../types'
 import { useState, useEffect } from 'react'
 import { customEventTarget } from '../../services/events'
 
@@ -15,6 +16,25 @@ const RetDetail = () => {
   const [retData, setRetData] = useState<RetType | null | undefined>(null)
   const { data, refetch } = useGetaRetQuery(id ?? '')
   const reversedReplies = data?.replies ? [...data.replies].reverse() : []
+  const loggedBuser = JSON.parse(localStorage.getItem('buser') || '{}') as Buser
+
+  //Resize
+
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 425)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth <= 425)
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
+
+  //Resize
 
   useEffect(() => {
     const handleUpdate = () => {
@@ -32,8 +52,6 @@ const RetDetail = () => {
     window.history.back()
   }
 
-  console.log(data)
-
   useEffect(() => {
     if (data) {
       setRetData(data)
@@ -44,10 +62,21 @@ const RetDetail = () => {
     <Layout page="timeline">
       <RetDetailContainer>
         <header>
-          <button>
-            <img onClick={goBack} src={Back} alt="Voltar" />
-          </button>
-          <h2>Ret</h2>
+          <div className="division">
+            <button>
+              <img onClick={goBack} src={Back} alt="Voltar" />
+            </button>
+            <h2>Ret</h2>
+          </div>
+          {isSmallScreen ? (
+            <img
+              src={loggedBuser?.profile ? loggedBuser.profile : DefaultProfile}
+              alt="Imagem de perfil"
+              className="avatar"
+            />
+          ) : (
+            <></>
+          )}
         </header>
         {retData ? (
           <>

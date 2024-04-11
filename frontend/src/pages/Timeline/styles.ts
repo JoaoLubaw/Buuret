@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { colors } from '../../styles'
 
 export const TimelineContainer = styled.div`
   display: flex;
@@ -15,5 +16,35 @@ export const TimelineContainer = styled.div`
     font-weight: bold;
     padding: 8px;
     border-bottom: 1px solid RGB(1, 1, 1, 0.1);
+    display: flex;
+    justify-content: space-between;
+
+    .avatar {
+      height: 32px;
+      width: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+  }
+
+  .newRetButton {
+    height: 48px;
+    width: 48px;
+    position: fixed;
+    bottom: 12vh;
+    right: 2vw;
+
+    button {
+      height: 100%;
+      width: 100%;
+      border: none;
+      background-color: ${colors.blue};
+      border-radius: 50%;
+
+      img {
+        height: 80%;
+        width: 80%;
+      }
+    }
   }
 `

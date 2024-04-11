@@ -1,9 +1,11 @@
 import styled, { createGlobalStyle } from 'styled-components'
 
 export const breakpoints = {
-  desktopG: '1440px',
+  desktopG: '1439px',
   desktop: '1024px',
-  tablet: '768px'
+  tablet: '768px',
+  mobileG: '426px',
+  mobile: '375px'
 }
 
 export const colors = {
@@ -15,8 +17,21 @@ export const colors = {
 
 export const MainContainer = styled.div`
   position: relative;
-  margin-left: 20%;
-  margin-right: 20%;
+
+  @media (min-width: ${breakpoints.mobileG}) and (max-width: ${breakpoints.desktop}) {
+    margin-left: 12%;
+    margin-right: 0;
+  }
+
+  @media (min-width: ${breakpoints.desktop}) {
+    margin-left: 12%;
+    margin-right: 30%;
+  }
+
+  @media (min-width: ${breakpoints.desktopG}) {
+    margin-left: 20%;
+    margin-right: 30%;
+  }
 `
 
 export const GlobalCss = createGlobalStyle`

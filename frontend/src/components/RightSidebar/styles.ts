@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { colors } from '../../styles'
+import { breakpoints, colors } from '../../styles'
 
 export const RightSidebarContainer = styled.aside`
   position: fixed;
@@ -100,6 +100,15 @@ export const RightSidebarContainer = styled.aside`
         }
       }
     }
+  }
+
+  @media (max-width: 1023px) {
+    display: none;
+    width: 30%;
+  }
+
+  @media (min-width: ${breakpoints.desktop}) {
+    width: 30%;
   }
 
   &.hide-right-sidebar {

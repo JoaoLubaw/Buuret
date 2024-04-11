@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { colors } from '../../styles'
+import { breakpoints, colors } from '../../styles'
 
 export const ProfileContainer = styled.div`
   display: flex;
@@ -17,6 +17,20 @@ export const ProfileContainer = styled.div`
     padding: 8px;
     border-bottom: 1px solid RGB(1, 1, 1, 0.1);
 
+    justify-content: space-between;
+    align-items: center;
+
+    .division {
+      display: flex;
+    }
+
+    .avatar {
+      height: 32px;
+      width: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
     button {
       background: none;
       border: none;
@@ -31,36 +45,55 @@ export const ProfileContainer = styled.div`
 
   .hero {
     .background {
-      height: 10vw;
+      height: 16vw;
       width: 100%;
       object-fit: cover;
     }
 
-    .change-background-button {
-      position: absolute; /* Adiciona posicionamento absoluto */
-      top: 10px; /* Define a distância do topo */
-      right: 10px; /* Define a distância da direita */
+    .labelIMG,
+    .labelIMG img {
+      width: 22px;
+    }
+
+    .labelIMG--back,
+    .labelIMG--back img {
+      position: absolute;
+      top: 8vh;
+      right: 10px;
     }
 
     .profile-info {
       margin-left: 2vw;
 
       .profile {
-        height: 8vw;
-        width: 8vw;
+        height: 15vw;
+        width: 15vw;
         background-size: cover; /* faz a imagem preencher todo o contêiner */
         border-radius: 50%;
         margin-top: -4vw;
         border: 1px solid ${colors.white};
         object-fit: cover;
+
+        @media (max-width: ${breakpoints.tablet}) {
+          height: 32vw;
+          width: 32vw;
+        }
       }
 
       .user-edit {
         display: flex;
         justify-content: space-between;
 
+        @media (max-width: ${breakpoints.tablet}) {
+          .EditButton {
+            height: 48px;
+          }
+        }
+
         button {
           margin-right: 2vw;
+          margin-top: 4px;
+
           height: 32px;
           font-weight: bold;
           color: ${colors.blue};
@@ -69,6 +102,10 @@ export const ProfileContainer = styled.div`
           border: 1px solid ${colors.blue};
           border-radius: 50px;
           padding: 4px;
+
+          @media (max-width: ${breakpoints.tablet}) {
+            height: 24px;
+          }
         }
       }
 
@@ -88,9 +125,13 @@ export const ProfileContainer = styled.div`
           font-weight: bold;
           resize: none;
           border: none;
-          width: 100%;
-          height: 24px;
+          width: 90%;
+          height: 28px;
           margin-bottom: 0;
+          margin-right: 10%;
+          border: 1px solid RGB(0, 124, 205, 0.1);
+          padding: 2px;
+          overflow: hidden;
         }
 
         span {
@@ -103,7 +144,7 @@ export const ProfileContainer = styled.div`
       .description {
         margin-top: 8px;
         padding-bottom: 24px;
-        min-height: 64px; /* Defina uma altura mínima */
+        min-height: 64px;
         width: 100%;
 
         textarea {
@@ -112,6 +153,11 @@ export const ProfileContainer = styled.div`
           resize: none;
           border: none;
           width: 90%;
+        }
+
+        .edditing {
+          border: 1px solid RGB(0, 124, 205, 0.1);
+          padding: 2px;
         }
       }
 
@@ -169,9 +215,27 @@ export const ProfileContainer = styled.div`
         padding: 4px;
         align-items: center;
 
+        span {
+          color: ${colors.blue};
+        }
+
         img {
           height: 12px;
           fill: ${colors.blue};
+        }
+
+        @media (max-width: ${breakpoints.tablet}) {
+          border-radius: 50%;
+          height: 32px;
+          width: 32px;
+
+          span {
+            display: none;
+          }
+
+          img {
+            height: 18px;
+          }
         }
       }
     }

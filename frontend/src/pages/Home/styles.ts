@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { colors } from '../../styles'
+import { breakpoints, colors } from '../../styles'
 
 export const HomeContainer = styled.div`
   font-family: 'Roboto Condensed', sans-serif;
@@ -8,6 +8,23 @@ export const HomeContainer = styled.div`
   max-width: 1024px;
   width: 100%;
   margin: 6% auto;
+  position: relative;
+
+  @media (max-width: ${breakpoints.desktop}) {
+    width: 80%;
+  }
+
+  @media (max-width: ${breakpoints.tablet}) {
+    display: block;
+    width: 80%;
+    justify-content: center;
+    margin: 4% auto;
+
+    .BuuretImg {
+      max-width: 100%;
+      text-align: center;
+    }
+  }
 `
 
 export const HomeButton = styled.button`
@@ -23,7 +40,7 @@ export const Form = styled.div`
   max-width: 400px;
 
   h2 {
-    font-weight: regular;
+    font-weight: normal;
     font-size: 32px;
 
     span {
@@ -82,14 +99,47 @@ export const Form = styled.div`
       margin-bottom: 8px;
     }
   }
+
+  @media (max-width: ${breakpoints.tablet}) {
+    max-width: 100%;
+
+    h2 {
+      text-align: center;
+      margin-top: 8%;
+    }
+
+    .create {
+      text-align: end;
+    }
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    .create {
+      margin-bottom: 8%;
+    }
+  }
 `
 
 export const Footer = styled.footer`
   text-align: center;
   margin-bottom: 4px;
+
   h4 {
     font-family: 'Libre Barcode 39 Extended Text', system-ui;
     font-size: 48px;
+    font-weight: normal;
+  }
+
+  @media (max-width: ${breakpoints.tablet}) {
+    margin: 3% 0px;
+
+    h4 {
+      font-size: 32px;
+    }
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    display: none;
   }
 `
 
@@ -105,6 +155,7 @@ export const Overlay = styled.div`
   cursor: pointer;
   transition: opacity 0.3s ease;
   pointer-events: auto;
+  z-index: 1;
 `
 
 export const CreateAccount = styled.div`
@@ -113,6 +164,7 @@ export const CreateAccount = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 2;
 
   transition:
     opacity 0.3s ease,
@@ -224,6 +276,28 @@ export const CreateAccount = styled.div`
     .button {
       display: flex;
       justify-content: flex-end;
+    }
+  }
+
+  @media (max-width: ${breakpoints.tablet}) {
+    width: 80%;
+
+    form {
+      width: 100%;
+
+      input {
+        font-size: 16px;
+      }
+
+      .checkbox {
+        margin: 8px 0;
+      }
+    }
+  }
+
+  @media (max-width: ${breakpoints.mobile}) {
+    form input {
+      font-size: 12px;
     }
   }
 `

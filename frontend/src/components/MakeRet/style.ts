@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { colors } from '../../styles'
+import { breakpoints, colors } from '../../styles'
 
 export const MakeRetContainer = styled.div`
   width: 100%;
@@ -70,6 +70,11 @@ export const MakeRetContainer = styled.div`
     width: 56px;
     object-fit: cover;
     border-radius: 50%;
+
+    @media (max-width: ${breakpoints.tablet}) {
+      height: 32px;
+      width: 32px;
+    }
   }
 
   .footer {

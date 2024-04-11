@@ -69,12 +69,11 @@ const RightSidebar = () => {
 
           {data &&
             data.map((user: Buser) => (
-              <div
-                onClick={() => goProfile(user.username)}
-                key={user.id}
-                className="user"
-              >
-                <div className="profile-infos">
+              <div key={user.id} className="user">
+                <div
+                  className="profile-infos"
+                  onClick={() => goProfile(user.username)}
+                >
                   {user.profile ? (
                     <img src={user.profile} alt="Imagem de perfil" />
                   ) : (

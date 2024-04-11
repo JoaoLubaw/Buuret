@@ -6,6 +6,8 @@ from buser.models import Buser
 from buser.serializers import BuserSerializer
 from rest_framework import permissions
 from django.db.models import Q
+from rest_framework import filters
+
 
 
 class IsFollowingOrReadOnly(permissions.BasePermission):
@@ -31,6 +33,9 @@ class BuserViewSet(ModelViewSet):
         serializer_class = BuserSerializer
         permission_classes = [IsAuthenticated]
         lookup_field = 'username'
+
+        filter_backends = [filters.SearchFilter]
+        search_fields = ['username', 'full_name']
 
     def get_queryset(self):
         username = self.kwargs.get('username', None)

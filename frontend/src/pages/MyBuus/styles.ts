@@ -16,5 +16,15 @@ export const MyBuusContainer = styled.div`
     padding: 8px;
     border-bottom: 1px solid RGB(1, 1, 1, 0.1);
     margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .avatar {
+      height: 32px;
+      width: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
   }
 `

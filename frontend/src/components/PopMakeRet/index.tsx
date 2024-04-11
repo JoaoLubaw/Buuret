@@ -55,9 +55,9 @@ const PopMakeRet = ({
         <MakeRet
           closePopMakeRet={closePopMakeRet}
           Pop
-          Detail
           BuuToRespond={buu}
           ret={ret}
+          Detail
         />
       </PopMakeRetContainer>
     </>

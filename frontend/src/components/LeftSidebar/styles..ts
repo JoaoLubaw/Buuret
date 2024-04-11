@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { colors } from '../../styles'
+import { breakpoints, colors } from '../../styles'
 
 export const LeftContainer = styled.aside`
   position: fixed;
@@ -12,8 +12,7 @@ export const LeftContainer = styled.aside`
   align-items: flex-end;
   justify-content: space-between;
   padding-right: 16px;
-
-  border-right: 1px solid RGB(1,1,1,0.1);
+  border-right: 1px solid rgba(1, 1, 1, 0.1);
 
   .logo {
     position: absolute;
@@ -63,20 +62,19 @@ export const LeftContainer = styled.aside`
     width: 100%;
 
     button {
-      border:none;
-      background:none;
+      border: none;
+      background: none;
       font-weight: bold;
       font-size: 24px;
     }
 
     .logout {
-      height:16px;
+      height: 16px;
 
       img {
-        height:16px;
+        height: 16px;
       }
     }
-
 
     .profile-infos {
       display: flex;
@@ -87,8 +85,8 @@ export const LeftContainer = styled.aside`
       .username {
         margin-left: 8px;
 
-        h4{
-          font-size;16px;
+        h4 {
+          font-size: 16px;
         }
 
         span {
@@ -98,15 +96,63 @@ export const LeftContainer = styled.aside`
       }
 
       img {
-        height: 56px;
-        width: 56px;
+        margin-left: 8px;
+        height: 48px;
+        width: 48px;
         object-fit: cover;
         border-radius: 50%;
       }
     }
   }
-}
+
+  @media (max-width: ${breakpoints.mobileG}) {
+    display: none;
+  }
+
+  @media (max-width: ${breakpoints.desktopG}) {
+    max-width: 12%;
+    padding-right: 12px;
+
+    .logo {
+      position: relative;
+      left: 0;
+      top: 0;
+      margin: 16px auto;
+    }
+
+    .buttons {
+      margin-top: 16px;
+
+      .PageButton {
+        margin: 0 auto;
+
+        span {
+          display: none;
+        }
+      }
+    }
+
+    .profile {
+      flex-direction: column;
+      margin: 32px auto;
+
+      button {
+        margin-top: 8px;
+      }
+
+      .username {
+        display: none;
+      }
+
+      .profile-infos img {
+        margin-left: 0;
+        height: 32px;
+        width: 32px;
+      }
+    }
+  }
 `
+
 export const RetButton = styled.button`
   width: 100%;
   background-color: ${colors.blue};
@@ -118,4 +164,13 @@ export const RetButton = styled.button`
   font-weight: bold;
   font-size: 16px;
   padding: 8px;
+
+  img {
+    height: 14px;
+    width: 14px;
+  }
+
+  @media (max-width: ${breakpoints.tablet}) {
+    border-radius: 50%;
+  }
 `

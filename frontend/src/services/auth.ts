@@ -11,8 +11,6 @@ export const loginAPI = async (username: string, password: string) => {
       password: password
     })
 
-    console.log(data)
-
     return data
   } catch (error) {
     handleError(error)
@@ -26,8 +24,6 @@ export const fetchBuserData = async (token: string, username: string) => {
         Authorization: `Bearer ${token}`
       }
     })
-
-    console.log('response:', response)
 
     const userData = response.data
 
@@ -47,7 +43,6 @@ export const getBuserData = async (token: string, username: string) => {
     })
 
     const buserData = response.data
-    console.log('buserData:', buserData)
 
     return buserData
   } catch (error) {

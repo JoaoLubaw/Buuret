@@ -83,13 +83,13 @@ const MakeRet = ({
       formData.append('refbuu', BuuToRespond.id.toString())
     }
 
-    if (ret && ret.id && ret.id !== null) {
+    if (ret && ret.id) {
       formData.append('replyto', ret.id.toString())
     }
 
     makeRet(formData)
       .then((response) => {
-        console.log(response)
+        response
         toast.success('Ret feito!')
         setText('')
         setSelectedImage(null)

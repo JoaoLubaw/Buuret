@@ -10,8 +10,6 @@ const api = createApi({
       const token = localStorage.getItem('token')
       const csrftoken = Cookies.get('csrftoken')
 
-      console.log('csrf:   ' + csrftoken)
-
       // Se houver um token, adicione-o ao cabeçalho de autorização
       if (token) {
         headers.set('Authorization', `Bearer ${token}`)
