@@ -33,7 +33,7 @@ class RetViewSet(ModelViewSet):
                 rets_with_most_rerets[ret.id] = ret
 
         # Filtrar os rets que não são respostas a outros rets
-        filtered_rets = [ret for ret in rets_with_most_rerets.values() if ret.reply_to is None]
+        filtered_rets = [ret for ret in rets_with_most_rerets.values() if ret.replyto is None]
 
         # Ordenar os rets filtrados por data
         timeline = sorted(filtered_rets, key=lambda ret: ret.datetime, reverse=True)
