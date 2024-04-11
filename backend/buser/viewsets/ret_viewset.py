@@ -20,25 +20,25 @@ class RetViewSet(ModelViewSet):
         following_users = user.following.all()
         following_rerets = Ret.objects.filter(rerets__in=following_users).exclude(user=user)
 
-        # Criar um dicionário para armazenar os rerets com mais rerets
-        rerets_with_most_rerets = {}
+        # Combine os rets normais e os rerets em uma única lista
+        all_rets = list(user_rerets) + list(following_rerets)
 
-        # Percorrer os rerets e adicionar aqueles com mais rerets ao dicionário
-        for reret in user_rerets:
-            rerets_with_most_rerets[reret.id] = reret
+        # Criar um dicionário para armazenar os rets com mais rerets
+        rets_with_most_rerets = {}
 
-        for reret in following_rerets:
-            if reret.id not in rerets_with_most_rerets or len(reret.rerets.all()) > len(
-                    rerets_with_most_rerets[reret.id].rerets.all()):
-                rerets_with_most_rerets[reret.id] = reret
+        # Iterar sobre os rets e adicionar aqueles com mais rerets ao dicionário
+        for ret in all_rets:
+            if ret.id not in rets_with_most_rerets or len(ret.rerets.all()) > len(
+                    rets_with_most_rerets[ret.id].rerets.all()):
+                rets_with_most_rerets[ret.id] = ret
 
-        # Filtrar os rerets que não são respostas a outros rets
-        filtered_rerets = [reret for reret in rerets_with_most_rerets.values() if reret.replyto is None]
+        # Filtrar os rets que não são respostas a outros rets
+        filtered_rets = [ret for ret in rets_with_most_rerets.values() if ret.replyto is None]
 
-        # Ordenar os rerets filtrados por data
-        timeline = sorted(filtered_rerets, key=lambda reret: reret.datetime, reverse=True)
+        # Ordenar os rets filtrados por data
+        timeline = sorted(filtered_rets, key=lambda ret: ret.datetime, reverse=True)
 
-        # Serializar os rerets e retornar a timeline
+        # Serializar os rets e retornar a timeline
         serializer = self.get_serializer(timeline, many=True)
         return Response(serializer.data)
 

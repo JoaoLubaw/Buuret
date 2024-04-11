@@ -1,4 +1,5 @@
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -46,6 +47,17 @@ class BuserViewSet(ModelViewSet):
                 return Buser.objects.all()
             else:
                 return Buser.objects.none()
+
+    @action(detail=False, methods=['get'])
+    def search(self, request):
+        query = request.query_params.get('q', '')
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Aplicar filtro de pesquisa aos campos especificados
+        queryset = queryset.filter(Q(username__icontains=query) | Q(full_name__icontains=query))
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
     def get_permissions(self):
         if self.action == 'create':
