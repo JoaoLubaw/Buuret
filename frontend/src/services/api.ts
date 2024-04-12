@@ -158,7 +158,6 @@ axios.interceptors.response.use(
     return response
   },
   (error) => {
-    // Verifique se o erro é uma resposta 401
     if (error.response.status === 401) {
       const navigate = useNavigate()
       logoutBuser(navigate)

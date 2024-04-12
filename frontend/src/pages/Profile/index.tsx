@@ -28,6 +28,7 @@ import Buu from '../../assets/images/ghost.svg'
 import { SyncLoader } from 'react-spinners'
 import { LoaderContainer, colors } from '../../styles'
 import Error from '../Error'
+import { fetchBuserData } from '../../services/auth'
 
 const Profile = () => {
   const { username } = useParams()
@@ -191,12 +192,28 @@ const Profile = () => {
       }
 
       await updateBuser({ username: buser?.username, newData: formData })
-      window.location.reload()
       setEdit(false)
+      window.location.reload()
+      customEventTarget.dispatchEvent(customEventTarget.updateBuserEvent)
     } catch (error) {
       console.error('Erro ao editar o Buser:', error)
     }
   }
+
+  useEffect(() => {
+    const handleUpdateBuser = async () => {
+      const token = localStorage.getItem('token')
+      if (token) {
+        await fetchBuserData(token, loggedBuser.username)
+      }
+    }
+
+    customEventTarget.addEventListener('updateBuser', handleUpdateBuser)
+
+    return () => {
+      customEventTarget.removeEventListener('updateBuser', handleUpdateBuser)
+    }
+  }, [loggedBuser])
 
   const handleCancelProfileImage = () => {
     setSelectedProfileImage(null)
