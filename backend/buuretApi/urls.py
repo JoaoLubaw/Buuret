@@ -46,7 +46,7 @@ urlpatterns = [
     path('busers/<str:username>/', BuserViewSet.as_view({'get': 'retrieve', 'put': 'update'}), name='buser-detail'),
     path('busers/<str:username>/follow/', BuserViewSet.as_view({'post': 'follow'}), name='follow-user'),  # Rota para seguir um usuário
     path('busers/<str:username>/unfollow/', BuserViewSet.as_view({'post': 'unfollow'}), name='unfollow-user'),  # Rota para parar de seguir um usuário
-    path('rets/user/<str:username>/', user_rets, name='user-rets'),
+    path('rets/user_rets/<str:username>/', RetViewSet.as_view({'get': 'user_rets'}), name='user-rets'),
     path("update_server/", views.update, name="update"),
     path('', include(router.urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

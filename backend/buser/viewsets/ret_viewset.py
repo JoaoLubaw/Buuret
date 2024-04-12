@@ -47,6 +47,18 @@ class RetViewSet(ModelViewSet):
         # Associar o usuário logado ao Ret sendo criado
         serializer.save(user=self.request.user)
 
+    @action(detail=False, methods=['get'])
+    def user_rets(self, request, username=None):
+        if username is None:
+            return Response({"message": "Username not provided."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Filtrar os rets do usuário que não são respostas a outros rets
+        user_rets = Ret.objects.filter(user__username=username, replyto=None)
+
+        # Serializar os rets e retornar
+        serializer = self.get_serializer(user_rets, many=True)
+        return Response(serializer.data)
+
     @action(detail=True, methods=['post'])
     def like(self, request, pk=None):
         ret = self.get_object()
