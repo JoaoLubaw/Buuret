@@ -24,6 +24,16 @@ class IsFollowingOrReadOnly(permissions.BasePermission):
         return obj != request.user
 
 
+class IsSelfOrReadOnly(permissions.BasePermission):
+    """
+    Permissão personalizada que permite que um usuário edite apenas o próprio perfil.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        # Permite que usuários autenticados editem seus próprios perfis
+        return obj == request.user
+
+
 class BuserViewSet(ModelViewSet):
     serializer_class = BuserSerializer
     permission_classes = [IsAuthenticated]
@@ -55,7 +65,9 @@ class BuserViewSet(ModelViewSet):
     def get_permissions(self):
         if self.action == 'create':
             return [AllowAny()]
-        elif self.action in ['update', 'partial_update', 'destroy', 'follow', 'unfollow']:
+        elif self.action in ['update', 'partial_update', 'destroy']:
+            return [IsSelfOrReadOnly()]
+        elif self.action in ['follow', 'unfollow']:
             return [IsFollowingOrReadOnly()]
         else:
             return [IsAuthenticated()]

@@ -57,13 +57,19 @@ export const ProfileContainer = styled.div`
     .labelIMG,
     .labelIMG img {
       width: 22px;
+      cursor: pointer;
+    }
+
+    .changeDescArea {
+      display: flex;
+      width: 100%;
+      justify-content: flex-end;
     }
 
     .labelIMG--back,
     .labelIMG--back img {
-      position: absolute;
-      top: 8vh;
-      right: 10px;
+      margin-left: 2px;
+      cursor: pointer;
     }
 
     .profile-info {

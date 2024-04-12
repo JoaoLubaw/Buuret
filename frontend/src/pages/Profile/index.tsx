@@ -59,6 +59,13 @@ const Profile = () => {
   const [selectedMedia, setSelectedMedia] = useState<string | null>(null)
   const [openMedia, setOpenMedia] = useState(false)
 
+  const [selectedProfileImage, setSelectedProfileImage] = useState<
+    string | null
+  >(null)
+  const [selectedBackgroundImage, setSelectedBackgroundImage] = useState<
+    string | null
+  >(null)
+
   //Resize
 
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 425)
@@ -134,6 +141,8 @@ const Profile = () => {
 
   const handleProfileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
+      const imageURL = URL.createObjectURL(event.target.files[0])
+      setSelectedProfileImage(imageURL)
       setProfileImage(event.target.files[0])
     } else {
       console.log('Nenhum arquivo selecionado.')
@@ -144,6 +153,8 @@ const Profile = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (event.target.files && event.target.files[0]) {
+      const imageURL = URL.createObjectURL(event.target.files[0])
+      setSelectedBackgroundImage(imageURL)
       setBackgroundImage(event.target.files[0])
     } else {
       console.log('Nenhum arquivo selecionado.')
@@ -187,9 +198,21 @@ const Profile = () => {
     }
   }
 
+  const handleCancelProfileImage = () => {
+    setSelectedProfileImage(null)
+    setProfileImage(null)
+  }
+
+  const handleCancelBackgroundImage = () => {
+    setSelectedBackgroundImage(null)
+    setBackgroundImage(null)
+  }
+
   const handleCancel = () => {
     setText(buser?.description || '')
     setEdit(false)
+    handleCancelBackgroundImage()
+    handleCancelProfileImage()
   }
 
   const handleChangeDesc = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -308,33 +331,45 @@ const Profile = () => {
           <div className="hero">
             {edit ? (
               <>
-                {buser.background ? (
+                {backgroundImage ? (
                   <img
-                    src={buser.background}
+                    src={URL.createObjectURL(backgroundImage)}
                     alt="background"
                     className="background"
                   />
                 ) : (
-                  <img
-                    src={DefaultBackground}
-                    alt="background"
-                    className="background"
-                  />
+                  <>
+                    {buser.background ? (
+                      <img
+                        src={buser.background}
+                        alt="background"
+                        className="background"
+                      />
+                    ) : (
+                      <img
+                        src={DefaultBackground}
+                        alt="background"
+                        className="background"
+                      />
+                    )}
+                  </>
                 )}
-                <label htmlFor="imageUpload">
-                  <img
-                    src={editIMG}
-                    alt="Importar Imagens"
-                    className="labelIMG labelIMG--back"
+                <div className="changeDescArea">
+                  <label htmlFor="backgroundUpload">
+                    <img
+                      src={editIMG}
+                      alt="Importar Imagens"
+                      className="labelIMG labelIMG--back"
+                    />
+                  </label>
+                  <input
+                    type="file"
+                    id="backgroundUpload"
+                    onChange={handleBackgroundChange}
+                    accept="image/*"
+                    style={{ display: 'none' }}
                   />
-                </label>
-                <input
-                  type="file"
-                  id="imageUpload"
-                  onChange={handleBackgroundChange}
-                  accept="image/*"
-                  style={{ display: 'none' }}
-                />
+                </div>
               </>
             ) : (
               <>
@@ -357,29 +392,39 @@ const Profile = () => {
             <div className="profile-info">
               {edit ? (
                 <>
-                  {buser.profile ? (
+                  {profileImage ? (
                     <img
-                      src={buser.profile}
+                      src={URL.createObjectURL(profileImage)}
                       alt="Avatar"
                       className="profile"
-                      onClick={() =>
-                        buser.profile && openMediaZoom(buser.profile)
-                      }
                     />
                   ) : (
-                    <img
-                      src={DefaultProfile}
-                      alt="Avatar"
-                      className="profile"
-                      onClick={() => openMediaZoom(DefaultProfile)}
-                    />
+                    <>
+                      {buser.profile ? (
+                        <img
+                          src={buser.profile}
+                          alt="Avatar"
+                          className="profile"
+                          onClick={() =>
+                            buser.profile && openMediaZoom(buser.profile)
+                          }
+                        />
+                      ) : (
+                        <img
+                          src={DefaultProfile}
+                          alt="Avatar"
+                          className="profile"
+                          onClick={() => openMediaZoom(DefaultProfile)}
+                        />
+                      )}
+                    </>
                   )}
-                  <label htmlFor="imageUpload" className="labelIMG">
+                  <label htmlFor="profileUpload" className="labelIMG">
                     <img src={editIMG} alt="Importar Imagens" />
                   </label>
                   <input
                     type="file"
-                    id="imageUpload"
+                    id="profileUpload"
                     onChange={handleProfileChange}
                     accept="image/*"
                     style={{ display: 'none' }}
@@ -401,9 +446,7 @@ const Profile = () => {
                       src={DefaultProfile}
                       alt="Avatar"
                       className="profile"
-                      onClick={() =>
-                        buser.profile && openMediaZoom(DefaultProfile)
-                      }
+                      onClick={() => openMediaZoom(DefaultProfile)}
                     />
                   )}
                 </>
