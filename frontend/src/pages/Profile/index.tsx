@@ -608,6 +608,11 @@ const Profile = () => {
               ret={selectedRet}
             />
           )}
+          <MediaZoom
+            mediaURL={selectedMedia}
+            Open={openMedia}
+            close={closeMediaZoom}
+          />
         </ProfileContainer>
       )}
     </Layout>
