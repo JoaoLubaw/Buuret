@@ -120,6 +120,7 @@ const Profile = () => {
   const closeMediaZoom = () => {
     setSelectedMedia(null)
     setOpenMedia(false)
+    desbloquearScroll()
   }
   // /OpenMedia
 
@@ -592,6 +593,7 @@ const Profile = () => {
                 Media={ret.media}
                 openPop={() => openPopMakeRet(ret)}
                 ret={ret}
+                RefBuu={ret.refbuu}
               />
             ))}
           {selectedMedia && showPopMakeRet && (
