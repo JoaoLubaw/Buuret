@@ -29,6 +29,7 @@ import { SyncLoader } from 'react-spinners'
 import { LoaderContainer, colors } from '../../styles'
 import Error from '../Error'
 import { fetchBuserData } from '../../services/auth'
+import PopMakeRet from '../../components/PopMakeRet'
 
 const Profile = () => {
   const { username } = useParams()
@@ -598,6 +599,13 @@ const Profile = () => {
               mediaURL={selectedMedia}
               Open={openMedia}
               close={closeMediaZoom}
+            />
+          )}
+          {showPopMakeRet && selectedRet && (
+            <PopMakeRet
+              closePopMakeRet={closePopMakeRet}
+              response
+              ret={selectedRet}
             />
           )}
         </ProfileContainer>
