@@ -1,6 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { Buser, Buu, Ret } from '../types'
 import Cookies from 'js-cookie'
+import axios from 'axios'
+import { useAuth } from '../contexts/authContext'
+import { useNavigate } from 'react-router-dom'
 
 const api = createApi({
   baseQuery: fetchBaseQuery({
@@ -114,6 +117,12 @@ const api = createApi({
         url: `rets/${retID}/like/`,
         method: 'POST'
       })
+    }),
+    searchBuser: builder.query({
+      query: (search) => ({
+        url: `busers/search/?q=${search}`,
+        method: 'GET'
+      })
     })
   })
 })
@@ -134,7 +143,28 @@ export const {
   useGetaBuserRetsQuery,
   useGetaBuuQuery,
   useGetaRetQuery,
-  useMakeReretMutation
+  useMakeReretMutation,
+  useSearchBuserQuery
 } = api
+
+const logoutBuser = (navigate: any) => {
+  localStorage.removeItem('token')
+  localStorage.removeItem('buser')
+  navigate('/login')
+}
+
+axios.interceptors.response.use(
+  (response) => {
+    return response
+  },
+  (error) => {
+    // Verifique se o erro é uma resposta 401
+    if (error.response.status === 401) {
+      const navigate = useNavigate()
+      logoutBuser(navigate)
+    }
+    return Promise.reject(error)
+  }
+)
 
 export default api

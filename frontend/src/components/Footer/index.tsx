@@ -8,12 +8,14 @@ import GhostOP from '../../assets/images/ghostOP.svg'
 import Profile from '../../assets/images/user.svg'
 import ProfileOP from '../../assets/images/userOP.svg'
 import Logout from '../../assets/images/logout.svg'
+import Lupa from '../../assets/images/lupa.svg'
+import LupaOP from '../../assets/images/lupaOP.svg'
 
 import { Buser } from '../../types'
 import { useAuth } from '../../contexts/authContext'
 
 export type Props = {
-  page: 'timeline' | 'buus' | 'profile'
+  page: 'timeline' | 'buus' | 'profile' | 'search'
 }
 
 const Footer = ({ page }: Props) => {
@@ -34,6 +36,11 @@ const Footer = ({ page }: Props) => {
 
   const goProfile = () => {
     navigate(`/${loggedBuser?.username}`)
+    window.scrollTo(0, 0)
+  }
+
+  const goSearch = () => {
+    navigate(`/search`)
     window.scrollTo(0, 0)
   }
 
@@ -69,11 +76,23 @@ const Footer = ({ page }: Props) => {
         <button className="PageButton" onClick={goProfile}>
           {page === 'profile' ? (
             <>
-              <img src={ProfileOP} alt="Home" />
+              <img src={ProfileOP} alt="Perfil" />
             </>
           ) : (
             <>
-              <img src={Profile} alt="Home" />
+              <img src={Profile} alt="Perfil" />
+            </>
+          )}
+        </button>
+
+        <button className="PageButton" onClick={goSearch}>
+          {page === 'search' ? (
+            <>
+              <img src={LupaOP} alt="Pesquisa" />
+            </>
+          ) : (
+            <>
+              <img src={Lupa} alt="Pesquisa" />
             </>
           )}
         </button>

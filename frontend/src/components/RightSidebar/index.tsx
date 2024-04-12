@@ -1,6 +1,5 @@
 import { RightSidebarContainer } from './styles'
 
-import Lupa from '../../assets/images/lupa.svg'
 import DefaultProfile from '../../assets/images/DefaultProfile.jpg'
 import {
   useFollowMutation,
@@ -11,6 +10,7 @@ import { Buser } from '../../types'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { customEventTarget } from '../../services/events'
+import SearchField from '../SearchField'
 
 const RightSidebar = () => {
   const { data, error, isLoading } = useGetBusersQuery('')
@@ -59,10 +59,7 @@ const RightSidebar = () => {
   return (
     <RightSidebarContainer className={hide ? 'hide-right-sidebar' : ''}>
       <div className="content">
-        <div className="search">
-          <img src={Lupa} alt="Lupa" />
-          <input type="text" />
-        </div>
+        <SearchField />
 
         <div className="followMore">
           <h2>Siga também</h2>

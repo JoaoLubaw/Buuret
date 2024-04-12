@@ -9,7 +9,7 @@ import Footer from '../Footer'
 
 type Props = {
   children: ReactNode
-  page: 'timeline' | 'buus' | 'profile'
+  page: 'timeline' | 'buus' | 'profile' | 'search'
 }
 
 const Layout: React.FC<Props> = ({ children, page }: Props) => {
@@ -22,7 +22,6 @@ const Layout: React.FC<Props> = ({ children, page }: Props) => {
     const handleResize = () => {
       const smallScreen = window.innerWidth <= 425
       setIsSmallScreen(smallScreen)
-      console.log('isSmallScreen:', smallScreen)
     }
 
     window.addEventListener('resize', handleResize)

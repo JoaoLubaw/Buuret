@@ -10,11 +10,14 @@ import { useParams } from 'react-router-dom'
 import { Buser, Ret as RetType } from '../../types'
 import { useState, useEffect } from 'react'
 import { customEventTarget } from '../../services/events'
+import { LoaderContainer, colors } from '../../styles'
+import { SyncLoader } from 'react-spinners'
+import Error from '../Error'
 
 const RetDetail = () => {
   const { id } = useParams<{ id?: string }>()
   const [retData, setRetData] = useState<RetType | null | undefined>(null)
-  const { data, refetch } = useGetaRetQuery(id ?? '')
+  const { data, refetch, isError, isLoading } = useGetaRetQuery(id ?? '')
   const reversedReplies = data?.replies ? [...data.replies].reverse() : []
   const loggedBuser = JSON.parse(localStorage.getItem('buser') || '{}') as Buser
 
@@ -78,6 +81,12 @@ const RetDetail = () => {
             <></>
           )}
         </header>
+        {isLoading && (
+          <LoaderContainer>
+            <SyncLoader className="loader" color={colors.blue} />
+          </LoaderContainer>
+        )}
+        {isError && <Error />}
         {retData ? (
           <>
             <Ret
@@ -94,11 +103,12 @@ const RetDetail = () => {
               RefBuu={retData.refbuu}
               ret={retData}
             />
+            <MakeRet Detail ret={retData} />
           </>
         ) : (
           <></>
         )}
-        <MakeRet Detail ret={retData} />
+
         {reversedReplies &&
           reversedReplies.map((repRet) => (
             <Ret

@@ -7,6 +7,7 @@ import MyBuus from './pages/MyBuus'
 import RetDetail from './pages/RetDetail'
 import ProtectedRoute from './routesProtected'
 import React, { useState } from 'react'
+import SearchPage from './pages/SearchPage'
 
 const Rotas = () => {
   return (
@@ -41,6 +42,14 @@ const Rotas = () => {
         element={
           <ProtectedRoute>
             <Profile />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/search"
+        element={
+          <ProtectedRoute>
+            <SearchPage />
           </ProtectedRoute>
         }
       />

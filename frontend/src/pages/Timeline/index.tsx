@@ -12,6 +12,8 @@ import { useEffect, useState } from 'react'
 import MediaZoom from '../../components/MediaZoom'
 import PopMakeRet from '../../components/PopMakeRet'
 import { customEventTarget } from '../../services/events'
+import { LoaderContainer, colors } from '../../styles'
+import { SyncLoader } from 'react-spinners'
 
 const Timeline = () => {
   const { data, isLoading, error, refetch } = useGetTimelineQuery('')
@@ -107,6 +109,11 @@ const Timeline = () => {
           )}
         </header>
         <MakeRet />
+        {isLoading && (
+          <LoaderContainer>
+            <SyncLoader className="loader" color={colors.blue} />
+          </LoaderContainer>
+        )}
         {data &&
           data.map((ret: RetType, index: number) => (
             <Ret

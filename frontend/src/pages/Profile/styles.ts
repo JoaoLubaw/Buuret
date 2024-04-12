@@ -8,6 +8,10 @@ export const ProfileContainer = styled.div`
   position: relative;
   font-family: 'Roboto', sans-serif;
 
+  .loader {
+    margin: 0 auto;
+  }
+
   header {
     width: 100%;
     display: flex;

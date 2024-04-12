@@ -64,4 +64,20 @@ input:focus, textarea:focus, select:focus {
   button {
     cursor: pointer;
   }
+
+
+`
+
+export const LoaderContainer = styled.div`
+  width: 100%;
+  height: 100vh;
+  align-items: center;
+  position: relative;
+
+  .loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%);
+  }
 `

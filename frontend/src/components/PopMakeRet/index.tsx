@@ -49,7 +49,7 @@ const PopMakeRet = ({
         )}
         {buuResponse && buu && (
           <div className="buuVisualizer">
-            <Buu Response content={buu.content} openned={true} />
+            <Buu Response content={buu.content} opened={true} />
           </div>
         )}
         <MakeRet

@@ -78,10 +78,7 @@ const Ret = ({
 
   const PrefixedImgUrl = ImgUrl?.startsWith('/') ? baseUrl + ImgUrl : ImgUrl
 
-  const [
-    makeReret,
-    { isLoading: makeReretLoading, isSuccess: makeReretSucess }
-  ] = useMakeReretMutation()
+  const [makeReret, { isLoading: makeReretLoading }] = useMakeReretMutation()
 
   const getTopThreeUsernames = (
     reretBy: string[] | undefined,
@@ -242,7 +239,7 @@ const Ret = ({
         <div className="text" onClick={() => RetLink(id?.toString())}>
           {respondedBuu && typeof RefBuu === 'number' && (
             <div className="buuResponse">
-              <Buu Response content={respondedBuu.content} openned={true} />
+              <Buu Response content={respondedBuu.content} opened={true} />
             </div>
           )}
           <div

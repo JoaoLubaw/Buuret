@@ -11,6 +11,8 @@ import Ghost from '../../assets/images/ghost.svg'
 import GhostOP from '../../assets/images/ghostOP.svg'
 import Profile from '../../assets/images/user.svg'
 import ProfileOP from '../../assets/images/userOP.svg'
+import Lupa from '../../assets/images/lupa.svg'
+import LupaOP from '../../assets/images/lupaOP.svg'
 import Logout from '../../assets/images/logout.svg'
 import Write from '../../assets/images/write.svg'
 import DefaultProfile from '../../assets/images/DefaultProfile.jpg'
@@ -19,7 +21,7 @@ import { Buser } from '../../types'
 
 export type Props = {
   openPopMakeRet: () => void
-  page: 'timeline' | 'buus' | 'profile'
+  page: 'timeline' | 'buus' | 'profile' | 'search'
 }
 
 const LeftSidebar = ({ openPopMakeRet, page }: Props) => {
@@ -56,6 +58,11 @@ const LeftSidebar = ({ openPopMakeRet, page }: Props) => {
 
   const goProfile = () => {
     navigate(`/${loggedBuser?.username}`)
+    window.scrollTo(0, 0)
+  }
+
+  const goSearch = () => {
+    navigate(`/search`)
     window.scrollTo(0, 0)
   }
 
@@ -106,6 +113,22 @@ const LeftSidebar = ({ openPopMakeRet, page }: Props) => {
             </>
           )}
         </button>
+
+        {isSmallScreen ? (
+          <button className="PageButton" onClick={goSearch}>
+            {page === 'search' ? (
+              <>
+                <img src={LupaOP} alt="Pesquisa" />
+              </>
+            ) : (
+              <>
+                <img src={Lupa} alt="Pesquisa" />
+              </>
+            )}
+          </button>
+        ) : (
+          <></>
+        )}
 
         {isSmallScreen ? (
           <>

@@ -6,12 +6,14 @@ import Buu from '../../components/Buu'
 import { useUpdateBuuMutation, useGetBuusQuery } from '../../services/api'
 import PopMakeRet from '../../components/PopMakeRet'
 import DefaultProfile from '../../assets/images/DefaultProfile.jpg'
+import { SyncLoader } from 'react-spinners'
+import { colors } from '../../styles'
 
 const MyBuus = () => {
   const [buus, setBuus] = useState<BuuType[]>([])
   const token: string | null = localStorage.getItem('token')
   const [updateBuuMutation] = useUpdateBuuMutation()
-  const { data } = useGetBuusQuery(token)
+  const { data, isLoading } = useGetBuusQuery(token)
   const [showPopMakeRet, setShowPopMakeRet] = useState(false)
   const [selectedBuu, setSelectedBuu] = useState<BuuType | null>(null)
   const loggedBuser = JSON.parse(localStorage.getItem('buser') || '{}') as Buser
@@ -89,12 +91,13 @@ const MyBuus = () => {
             <></>
           )}
         </header>
+        {isLoading ? <SyncLoader color={colors.blue} /> : <> </>}
         {buus.map((buu) => (
           <Buu
             key={buu.id}
             content={buu.content}
             handleOpen={() => handleOpenBuu(buu.id)}
-            openned={buu.opened}
+            opened={buu.opened}
             id={buu.id}
             openPopMakeRet={openPopMakeRet}
             receiver={buu.receiver}

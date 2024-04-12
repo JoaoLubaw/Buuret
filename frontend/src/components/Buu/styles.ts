@@ -4,7 +4,7 @@ import { colors } from '../../styles'
 import Ghost from '../../assets/images/ghost.svg'
 
 type Props = {
-  openned: boolean
+  opened: boolean
 }
 
 export const BuuContainer = styled.div<Props>`
@@ -22,7 +22,7 @@ export const BuuContainer = styled.div<Props>`
     padding: 24px;
     transition: background-color 0.5s ease; /* Adiciona transição de cor de fundo */
     background-color: ${(props) =>
-      props.openned
+      props.opened
         ? 'transparent'
         : colors.blue}; /* Altera a cor de fundo com base no estado */
   }
@@ -35,7 +35,7 @@ export const BuuContainer = styled.div<Props>`
     transform: translate(-50%, -50%);
     transition: opacity 1s ease; /* Adiciona transição para a opacidade */
     opacity: ${(props) =>
-      props.openned ? '0' : '1'}; /* Define a opacidade com base no estado */
+      props.opened ? '0' : '1'}; /* Define a opacidade com base no estado */
   }
 
   span {

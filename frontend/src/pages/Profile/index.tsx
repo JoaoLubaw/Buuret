@@ -25,6 +25,10 @@ import DefaultBackground from '../../assets/images/DefaultBackgound.jpg'
 import Back from '../../assets/images/arrow.svg'
 import Buu from '../../assets/images/ghost.svg'
 
+import { SyncLoader } from 'react-spinners'
+import { LoaderContainer, colors } from '../../styles'
+import Error from '../Error'
+
 const Profile = () => {
   const { username } = useParams()
   const [updateBuser] = useUpdateUserMutation()
@@ -34,8 +38,16 @@ const Profile = () => {
 
   const [follow] = useFollowMutation()
   const [unfollow] = useUnfollowMutation()
-  const { data: buser } = useGetaBuserQuery(username || '')
-  const { data: buserRets, refetch } = useGetaBuserRetsQuery(username || '')
+  const {
+    data: buser,
+    isLoading: buserIsLoading,
+    error
+  } = useGetaBuserQuery(username || '')
+  const {
+    data: buserRets,
+    isLoading: buserRetsIsLoading,
+    refetch
+  } = useGetaBuserRetsQuery(username || '')
   const reversedData = buserRets ? [...buserRets].reverse() : []
 
   const [buuText, setBuuText] = useState('')
@@ -132,7 +144,6 @@ const Profile = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (event.target.files && event.target.files[0]) {
-      console.log('Arquivo selecionado:', event.target.files[0])
       setBackgroundImage(event.target.files[0])
     } else {
       console.log('Nenhum arquivo selecionado.')
@@ -244,6 +255,35 @@ const Profile = () => {
 
   return (
     <Layout page="profile">
+      {buserIsLoading && (
+        <LoaderContainer>
+          <SyncLoader className="loader" color={colors.blue} />
+        </LoaderContainer>
+      )}
+      {error && (
+        <ProfileContainer>
+          <header>
+            <div className="division">
+              <button>
+                <img onClick={goBack} src={Back} alt="Voltar" />
+              </button>
+              <h2>@{username}</h2>
+            </div>
+            {isSmallScreen ? (
+              <img
+                src={
+                  loggedBuser?.profile ? loggedBuser.profile : DefaultProfile
+                }
+                alt="Imagem de perfil"
+                className="avatar"
+              />
+            ) : (
+              <></>
+            )}
+          </header>
+          <Error />
+        </ProfileContainer>
+      )}
       {buser && (
         <ProfileContainer>
           <header>
@@ -466,6 +506,14 @@ const Profile = () => {
               <h3>Rets</h3>
             </div>
           </div>
+          {buserRetsIsLoading ? (
+            <LoaderContainer>
+              <SyncLoader className="loader" color={colors.blue} />
+            </LoaderContainer>
+          ) : (
+            <> </>
+          )}
+
           {reversedData &&
             reversedData &&
             reversedData.map((ret) => (

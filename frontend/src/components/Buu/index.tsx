@@ -7,7 +7,7 @@ import { Buser, Buu as Buutype } from '../../types' // Importe o tipo Buu
 type Props = {
   Response?: boolean
   content?: string | undefined
-  openned?: boolean
+  opened?: boolean
   handleOpen?: () => void
   id?: number
   openPopMakeRet?: (buu: Buutype) => void
@@ -18,17 +18,17 @@ type Props = {
 const Buu = ({
   Response,
   content,
-  openned = false,
+  opened = false,
   handleOpen,
   id,
   openPopMakeRet,
   receiver,
   sender
 }: Props) => {
-  const [opennedBuu, setOpennedBuu] = useState(openned)
+  const [openedBuu, setOpenedBuu] = useState(opened) // Corrigido de 'setopenedBuu' para 'setOpenedBuu'
 
   const toggleOpen = () => {
-    setOpennedBuu(true)
+    setOpenedBuu(true)
     handleOpen && handleOpen()
   }
 
@@ -37,7 +37,7 @@ const Buu = ({
       const temporaryBuu: Buutype = {
         id: id ?? 0, // Defina um valor padrão para id se for indefinido
         content,
-        opened: openned,
+        opened: opened,
         receiver: receiver,
         sender: sender
       }
@@ -46,15 +46,15 @@ const Buu = ({
   }
 
   return (
-    <BuuContainer className={Response ? 'Response' : ''} openned={opennedBuu}>
+    <BuuContainer className={Response ? 'Response' : ''} opened={openedBuu}>
       <div
         onClick={toggleOpen}
-        className={opennedBuu ? 'oppened card' : 'toOpen card'}
+        className={openedBuu ? 'oppened card' : 'toOpen card'}
       >
         <span>{content}</span>
         <img
           src={Ghost}
-          className={opennedBuu ? 'oppenedIMG ghost' : 'ghost'}
+          className={openedBuu ? 'oppenedIMG ghost' : 'ghost'}
           alt="Buu"
         />
       </div>
@@ -62,7 +62,7 @@ const Buu = ({
         <>
           <div
             className={
-              opennedBuu ? 'buttonWrapper' : 'toOpenButton buttonWrapper'
+              openedBuu ? 'buttonWrapper' : 'toOpenButton buttonWrapper'
             }
           >
             <button onClick={handleOpenPopMakeRet}>
