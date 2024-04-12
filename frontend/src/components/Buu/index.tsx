@@ -30,7 +30,6 @@ const Buu = ({
   const toggleOpen = () => {
     setOpenedBuu(true)
     handleOpen && handleOpen()
-    window.location.reload()
   }
 
   const handleOpenPopMakeRet = () => {
