@@ -9,6 +9,10 @@ export const RetDetailContainer = styled.div`
   position: relative;
   font-family: 'Roboto', sans-serif;
 
+  .last-item {
+    padding-bottom: 10vh;
+  }
+
   header {
     width: 100%;
     font-family: 'Roboto Condensed', sans-serif;

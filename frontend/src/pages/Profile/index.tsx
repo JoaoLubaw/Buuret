@@ -578,7 +578,7 @@ const Profile = () => {
 
           {reversedData &&
             reversedData &&
-            reversedData.map((ret) => (
+            reversedData.map((ret, index) => (
               <Ret
                 openMediaZoom={openMediaZoom}
                 id={ret.id}
@@ -594,6 +594,11 @@ const Profile = () => {
                 openPop={() => openPopMakeRet(ret)}
                 ret={ret}
                 RefBuu={ret.refbuu}
+                className={
+                  index === reversedData.length - 1 && isSmallScreen
+                    ? 'last-item'
+                    : ''
+                }
               />
             ))}
           {selectedMedia && showPopMakeRet && (

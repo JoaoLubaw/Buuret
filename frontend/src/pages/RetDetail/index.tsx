@@ -13,6 +13,7 @@ import { customEventTarget } from '../../services/events'
 import { LoaderContainer, colors } from '../../styles'
 import { SyncLoader } from 'react-spinners'
 import Error from '../Error'
+import MediaZoom from '../../components/MediaZoom'
 
 const RetDetail = () => {
   const { id } = useParams<{ id?: string }>()
@@ -38,6 +39,21 @@ const RetDetail = () => {
   }, [])
 
   //Resize
+
+  //OpenMedia
+  const [selectedMedia, setSelectedMedia] = useState<string | null>(null)
+  const [openMedia, setOpenMedia] = useState(false)
+
+  const openMediaZoom = (mediaUrl: string) => {
+    setSelectedMedia(mediaUrl)
+    setOpenMedia(true)
+  }
+
+  const closeMediaZoom = () => {
+    setSelectedMedia(null)
+    setOpenMedia(false)
+  }
+  // /OpenMedia
 
   useEffect(() => {
     const handleUpdate = () => {
@@ -102,6 +118,7 @@ const RetDetail = () => {
               Media={retData.media}
               RefBuu={retData.refbuu}
               ret={retData}
+              openMediaZoom={openMediaZoom}
             />
             <MakeRet Detail ret={retData} />
           </>
@@ -110,7 +127,7 @@ const RetDetail = () => {
         )}
 
         {reversedReplies &&
-          reversedReplies.map((repRet) => (
+          reversedReplies.map((repRet, index) => (
             <Ret
               key={repRet.id}
               datetime={repRet.datetime ? repRet.datetime : ''}
@@ -124,8 +141,19 @@ const RetDetail = () => {
               Media={repRet.media}
               RefBuu={repRet.refbuu}
               ret={repRet}
+              className={
+                index === reversedReplies.length - 1 && isSmallScreen
+                  ? 'last-item'
+                  : ''
+              }
             />
           ))}
+
+        <MediaZoom
+          mediaURL={selectedMedia}
+          Open={openMedia}
+          close={closeMediaZoom}
+        />
       </RetDetailContainer>
     </Layout>
   )
