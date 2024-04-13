@@ -27,13 +27,6 @@ const RightSidebar = () => {
   const [isSessionExpiredToastShown, setIsSessionExpiredToastShown] =
     useState(false)
 
-  if (error && !isSessionExpiredToastShown) {
-    toast.error('Sua sessão expirou. Faça login novamente.')
-    logout()
-    setIsSessionExpiredToastShown(true)
-    return null
-  }
-
   useEffect(() => {
     const handleHide = () => {
       setHide(!hide)

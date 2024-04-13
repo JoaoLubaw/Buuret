@@ -6,10 +6,13 @@ import Comment from '../../assets/images/comment.svg'
 import Share from '../../assets/images/share.svg'
 import ReRet from '../../assets/images/retweet.svg'
 import ReRetedIMG from '../../assets/images/rereted.svg'
+import Trash from '../../assets/images/trash.svg'
+
 import Buu from '../Buu'
 import { Buser, Buu as Buutypes, Ret as RetType } from '../../types'
 import { format } from 'date-fns'
 import {
+  useDeleteRetMutation,
   useGetaBuuQuery,
   useLikeRetMutation,
   useMakeReretMutation
@@ -17,6 +20,7 @@ import {
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { customEventTarget } from '../../services/events'
+import { toast } from 'react-toastify'
 
 type Props = {
   id: number | undefined
@@ -58,6 +62,7 @@ const Ret = ({
 }: Props) => {
   const formattedDatetime = datetime ? format(datetime, 'dd/MM/yyyy HH:mm') : ''
   const [likeRetMutation] = useLikeRetMutation()
+  const [deleteRetMutation] = useDeleteRetMutation()
   const [likesCount, setLikesCount] = useState(likes_count)
   const [commentCount, setCommentCount] = useState(replies_count)
   const [reretCount, setReretCount] = useState(ret.rerets)
@@ -146,6 +151,17 @@ const Ret = ({
     if (Media && openMediaZoom) {
       openMediaZoom(PrefixedImgUrl)
     }
+  }
+
+  const handleShare = (id: number) => {
+    navigator.clipboard.writeText(`https://buuret.vercel.app/ret/${id}`)
+    toast.success('Link copiado')
+  }
+
+  const handleDelete = async (id: number) => {
+    await deleteRetMutation(id)
+    toast.success('Ret excluído!')
+    customEventTarget.dispatchEvent(customEventTarget.newRetEvent)
   }
 
   const handleLike = () => {
@@ -295,9 +311,24 @@ const Ret = ({
 
               <span>{reretCount?.length}</span>
             </button>
-            <button className="footer-item share">
-              <img src={Share} alt="compartilhar" className="icon" />
-            </button>
+
+            {id && (
+              <button
+                className="footer-item share"
+                onClick={() => handleShare(id)}
+              >
+                <img src={Share} alt="compartilhar" className="icon" />
+              </button>
+            )}
+
+            {loggedBuser.username == buser?.username && id && (
+              <button
+                className="footer-item delete"
+                onClick={() => handleDelete(id)}
+              >
+                <img src={Trash} alt="Deletar Ret" />
+              </button>
+            )}
           </div>
         )}
       </div>

@@ -9,6 +9,18 @@ export const MyBuusContainer = styled.div`
   position: relative;
   font-family: 'Roboto', sans-serif;
 
+  .noBuus {
+    text-align: center;
+    padding: 16px;
+    font-size: 22px;
+    display: block;
+
+    img {
+      margin-top: 2vh;
+      width: 30%;
+    }
+  }
+
   header {
     width: 100%;
     font-family: 'Roboto Condensed', sans-serif;

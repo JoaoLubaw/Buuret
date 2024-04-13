@@ -30,6 +30,7 @@ import { LoaderContainer, colors } from '../../styles'
 import Error from '../Error'
 import { fetchBuserData } from '../../services/auth'
 import PopMakeRet from '../../components/PopMakeRet'
+import MakeRet from '../../components/MakeRet'
 
 const Profile = () => {
   const { username } = useParams()
@@ -567,6 +568,7 @@ const Profile = () => {
               <h3>Rets</h3>
             </div>
           </div>
+          {loggedBuser.username == buser.username && <MakeRet />}
           {buserRetsIsLoading ? (
             <LoaderContainer>
               <SyncLoader className="loader" color={colors.blue} />

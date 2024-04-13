@@ -7,6 +7,8 @@ import { SearchContainer } from './styles'
 import { Buser } from '../../types'
 import { useNavigate } from 'react-router-dom'
 
+import { useAuth } from '../../contexts/authContext'
+
 const SearchField = () => {
   const [search, setSearch] = useState('')
   const { data } = useSearchBuserQuery(search)

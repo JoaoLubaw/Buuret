@@ -6,6 +6,7 @@ import Buu from '../../components/Buu'
 import { useUpdateBuuMutation, useGetBuusQuery } from '../../services/api'
 import PopMakeRet from '../../components/PopMakeRet'
 import DefaultProfile from '../../assets/images/DefaultProfile.jpg'
+import Ghost from '../../assets/images/ghost.svg'
 import { SyncLoader } from 'react-spinners'
 import { colors } from '../../styles'
 
@@ -92,6 +93,14 @@ const MyBuus = () => {
           )}
         </header>
         {isLoading ? <SyncLoader color={colors.blue} /> : <> </>}
+
+        {!isLoading && buus.length == 0 && (
+          <div className="noBuus">
+            <p>Ops, parece que você ainda não recebeu nenhum Buu...</p>
+            <img src={Ghost} alt="Fantasma" />
+          </div>
+        )}
+
         {buus.map((buu) => (
           <Buu
             key={buu.id}

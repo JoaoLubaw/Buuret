@@ -1,17 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { Buser, Buu, Ret } from '../types'
 import Cookies from 'js-cookie'
-import axios from 'axios'
-import { useAuth } from '../contexts/authContext'
-import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
-
-import { isRejectedWithValue } from '@reduxjs/toolkit'
-import type {
-  MiddlewareAPI,
-  Middleware,
-  SerializedError
-} from '@reduxjs/toolkit'
 
 const api = createApi({
   baseQuery: fetchBaseQuery({
@@ -49,7 +38,6 @@ const api = createApi({
         }
       }
     }),
-
     getBuus: builder.query({
       query: () => ({
         url: 'buus/'
@@ -126,6 +114,12 @@ const api = createApi({
         method: 'POST'
       })
     }),
+    deleteRet: builder.mutation({
+      query: (retID: number) => ({
+        url: `rets/${retID}/`,
+        method: 'DELETE'
+      })
+    }),
     searchBuser: builder.query({
       query: (search) => ({
         url: `busers/search/?q=${search}`,
@@ -152,7 +146,8 @@ export const {
   useGetaBuuQuery,
   useGetaRetQuery,
   useMakeReretMutation,
-  useSearchBuserQuery
+  useSearchBuserQuery,
+  useDeleteRetMutation
 } = api
 
 export default api
