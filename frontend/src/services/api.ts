@@ -57,7 +57,7 @@ const api = createApi({
       query: (id) => `rets/${id}/`
     }),
     getaBuserRets: builder.query<Ret[], string>({
-      query: (username) => `rets/user_rets/${username}/`
+      query: (username) => `/busers/${username}/rets/`
     }),
     updateBuu: builder.mutation({
       query: ({ id, newData }) => ({
