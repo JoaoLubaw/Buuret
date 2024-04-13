@@ -124,7 +124,7 @@ class BuserViewSet(ModelViewSet):
         if user is None:
             return Response({"message": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
-        user_rets = Ret.objects.filter(user=user)
+        user_rets = Ret.objects.filter(user__username=username, replyto=None)
         rerets = Ret.objects.filter(rerets__user=user)
 
         all_rets = list(user_rets) + list(rerets)
