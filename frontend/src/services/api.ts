@@ -64,7 +64,7 @@ const api = createApi({
     }),
     createUser: builder.mutation({
       query: (buser) => ({
-        url: 'users/',
+        url: 'busers/',
         method: 'POST',
         body: buser
       })
