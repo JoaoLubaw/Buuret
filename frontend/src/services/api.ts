@@ -4,6 +4,14 @@ import Cookies from 'js-cookie'
 import axios from 'axios'
 import { useAuth } from '../contexts/authContext'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+
+import { isRejectedWithValue } from '@reduxjs/toolkit'
+import type {
+  MiddlewareAPI,
+  Middleware,
+  SerializedError
+} from '@reduxjs/toolkit'
 
 const api = createApi({
   baseQuery: fetchBaseQuery({
@@ -146,24 +154,5 @@ export const {
   useMakeReretMutation,
   useSearchBuserQuery
 } = api
-
-const logoutBuser = (navigate: any) => {
-  localStorage.removeItem('token')
-  localStorage.removeItem('buser')
-  navigate('/login')
-}
-
-axios.interceptors.response.use(
-  (response) => {
-    return response
-  },
-  (error) => {
-    if (error.response.status === 401) {
-      const navigate = useNavigate()
-      logoutBuser(navigate)
-    }
-    return Promise.reject(error)
-  }
-)
 
 export default api

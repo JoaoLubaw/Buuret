@@ -11,6 +11,9 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { customEventTarget } from '../../services/events'
 import SearchField from '../SearchField'
+import { toast } from 'react-toastify'
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { useAuth } from '../../contexts/authContext'
 
 const RightSidebar = () => {
   const { data, error, isLoading } = useGetBusersQuery('')
@@ -19,6 +22,17 @@ const RightSidebar = () => {
   const [followingUsers, setFollowingUsers] = useState<string[]>([]) // Lista de usernames que o usuário está seguindo
   const [hide, setHide] = useState(false)
   const navigate = useNavigate()
+  const { logout } = useAuth()
+
+  const [isSessionExpiredToastShown, setIsSessionExpiredToastShown] =
+    useState(false)
+
+  if (error && !isSessionExpiredToastShown) {
+    toast.error('Sua sessão expirou. Faça login novamente.')
+    logout()
+    setIsSessionExpiredToastShown(true)
+    return null
+  }
 
   useEffect(() => {
     const handleHide = () => {
