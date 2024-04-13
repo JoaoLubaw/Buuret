@@ -47,18 +47,6 @@ class RetViewSet(ModelViewSet):
         # Associar o usuário logado ao Ret sendo criado
         serializer.save(user=self.request.user)
 
-    @action(detail=False, methods=['get'])
-    def user_rets(self, request, username=None):
-        if username is None:
-            return Response({"message": "Username not provided."}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Filtrar os rets do usuário que não são respostas a outros rets
-        user_rets = Ret.objects.filter(user__username=username, replyto=None)
-
-        # Serializar os rets e retornar
-        serializer = self.get_serializer(user_rets, many=True)
-        return Response(serializer.data)
-
     @action(detail=True, methods=['post'])
     def like(self, request, pk=None):
         ret = self.get_object()
@@ -91,3 +79,14 @@ class RetViewSet(ModelViewSet):
             user.rereteds.add(ret)
             user.save()  # Salva o usuário
             return Response({'message': 'Reret realizado com sucesso.'}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['delete'])
+    def delete_ret(self, request, pk=None):
+        ret = self.get_object()
+        user = request.user
+
+        if user == ret.user:
+            ret.delete()
+            return Response({'message': 'Ret deleted successfully.'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'You are not authorized to delete this ret.'}, status=status.HTTP_403_FORBIDDEN)

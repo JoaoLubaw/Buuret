@@ -18,7 +18,7 @@ import debug_toolbar
 from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 from buser import views
-from buser.viewsets import BuserViewSet, RetViewSet, BuuViewSet, user_rets
+from buser.viewsets import BuserViewSet, RetViewSet, BuuViewSet
 from django.urls import path, include
 
 from rest_framework_simplejwt.views import (
@@ -46,7 +46,8 @@ urlpatterns = [
     path('busers/<str:username>/', BuserViewSet.as_view({'get': 'retrieve', 'put': 'update'}), name='buser-detail'),
     path('busers/<str:username>/follow/', BuserViewSet.as_view({'post': 'follow'}), name='follow-user'),  # Rota para seguir um usuário
     path('busers/<str:username>/unfollow/', BuserViewSet.as_view({'post': 'unfollow'}), name='unfollow-user'),  # Rota para parar de seguir um usuário
-    path('rets/user_rets/<str:username>/', RetViewSet.as_view({'get': 'user_rets'}), name='user-rets'),
+    path('busers/<str:username>/rets/', BuserViewSet.as_view({'get': 'user_rets'}), name='user-rets'),
+    path('rets/<int:pk>/delete/', RetViewSet.as_view({'delete': 'delete_ret'}), name='delete-ret'),
     path("update_server/", views.update, name="update"),
     path('', include(router.urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

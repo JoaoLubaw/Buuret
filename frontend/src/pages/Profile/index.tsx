@@ -263,7 +263,6 @@ const Profile = () => {
       })
       setBuuText('')
       toast.success('Buu enviado!')
-      window.location.reload()
     } catch (error) {
       console.error('Erro ao enviar o Buu:', error)
     }

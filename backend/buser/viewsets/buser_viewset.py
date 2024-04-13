@@ -3,8 +3,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from buser.models import Buser
-from buser.serializers import BuserSerializer
+from buser.models import Buser, Ret
+from buser.serializers import BuserSerializer, RetSerializer
 from rest_framework import permissions
 from django.db.models import Q
 from rest_framework import filters
@@ -113,4 +113,21 @@ class BuserViewSet(ModelViewSet):
         ).order_by('?')[:4]  # Ordenar aleatoriamente e pegar os primeiros 4
 
         serializer = self.get_serializer(suggested_users, many=True)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['get'])
+    def user_rets(self, request, username=None):
+        if username is None:
+            return Response({"message": "Username not provided."}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = Buser.objects.filter(username=username).first()
+        if user is None:
+            return Response({"message": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        user_rets = Ret.objects.filter(user=user)
+        rerets = Ret.objects.filter(rerets__user=user)
+
+        all_rets = list(user_rets) + list(rerets)
+
+        serializer = RetSerializer(all_rets, many=True)
         return Response(serializer.data)
