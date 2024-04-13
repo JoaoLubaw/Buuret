@@ -28,7 +28,7 @@ def generate_secret_key():
 
 SECRET_KEY = generate_secret_key()
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['joaolubaw.pythonanywhere.com', 'localhost', 'https://buuret.vercel.app', 'http://localhost:3000', '127.0.0.1']
 
